@@ -321,7 +321,7 @@ export default function Home() {
               Featured Projects
             </h2>
             <p className="text-slate-400 text-base sm:text-lg max-w-2xl mx-auto">
-              Showcasing enterprise-scale solutions and architectural implementations.
+              Showcasing enterprise-scale solutions and architectural implementations. Select a project to explore technical details.
             </p>
           </div>
 
