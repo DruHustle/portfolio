@@ -208,7 +208,7 @@ export default function Home() {
                   <ChevronRight className="w-4 h-4" />
                 </a>
                 <a
-                  href="/resume.pdf"
+                  href="/resume_download.pdf"
                   className="inline-flex items-center justify-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 border-2 border-white text-white font-semibold text-sm sm:text-base rounded-lg hover:bg-white hover:text-slate-900 transition-all duration-300 hover:scale-105 flex-1 xs:flex-none"
                 >
                   Download Resume
