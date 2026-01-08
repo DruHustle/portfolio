@@ -1,5 +1,5 @@
 import { Link } from "wouter";
-import { ArrowLeft, ExternalLink, Github, Server, Shield, Zap, BarChart3, Database, Globe } from "lucide-react";
+import { ArrowLeft, ExternalLink, Github, Server, Shield, Zap, BarChart3, Database, Globe, FileText } from "lucide-react";
 import { useMemo, useEffect } from "react";
 
 export default function IMSOPDetail() {
@@ -108,9 +108,14 @@ export default function IMSOPDetail() {
                 <a href="https://github.com/andrewgotora/imsop" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-6 py-3 bg-cyan-500 text-white font-bold rounded-xl hover:bg-cyan-400 transition-all hover:scale-105">
                   <Github className="w-5 h-5" /> Source Code
                 </a>
-                <a href="https://andrewgotora.github.io/imsop/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-6 py-3 border-2 border-cyan-500 text-cyan-400 font-bold rounded-xl hover:bg-cyan-500/10 transition-all hover:scale-105">
-                  <ExternalLink className="w-5 h-5" /> Live Demo
-                </a>
+<a href="https://andrewgotora.github.io/imsop/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-6 py-3 border-2 border-cyan-500 text-cyan-400 font-bold rounded-xl hover:bg-cyan-500/10 transition-all hover:scale-105">
+	                  <ExternalLink className="w-5 h-5" /> Live Demo
+	                </a>
+	                <Link href="/projects/imsop/documentation">
+	                  <a className="inline-flex items-center gap-2 px-6 py-3 bg-slate-800 text-white font-bold rounded-xl hover:bg-slate-700 transition-all hover:scale-105 border border-slate-700">
+	                    <FileText className="w-5 h-5 text-cyan-400" /> Project Documentation
+	                  </a>
+	                </Link>
               </div>
             </div>
             <div className="grid gap-4">

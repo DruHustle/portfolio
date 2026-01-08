@@ -10,6 +10,7 @@ import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
 import IMSOPDetail from "./pages/IMSOPDetail";
 import SAPBTPAIHubDetail from "./pages/SAPBTPAIHubDetail";
+import Documentation from "./pages/Documentation";
 
 
 function AppRouter() {
@@ -18,6 +19,7 @@ function AppRouter() {
       <Switch>
         <Route path="/" component={Home} />
         <Route path="/projects/imsop" component={IMSOPDetail} />
+        <Route path="/projects/imsop/documentation" component={Documentation} />
         <Route path="/projects/sap-btp-ai-hub" component={SAPBTPAIHubDetail} />
         <Route path="/404" component={NotFound} />
         <Route component={NotFound} />
@@ -38,4 +40,3 @@ export default function App() {
     </ErrorBoundary>
   );
 }
-
