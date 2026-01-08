@@ -111,6 +111,15 @@ export default function Home() {
           "Governance Automation",
         ],
       },
+      {
+        title: "IoT & Edge Computing",
+        skills: [
+          "Azure IoT Hub & IoT Edge",
+          "MQTT & AMQP Protocols",
+          "Raspberry Pi & ESP32 Development",
+          "Edge Analytics & Telemetry",
+        ],
+      },
     ],
     []
   );
@@ -234,6 +243,14 @@ export default function Home() {
                 tech: ["React", "TypeScript", "SAP BTP", "AI/ML", "GitHub Pages"],
                 link: "/projects/sap-btp-ai-hub",
                 color: "from-blue-500 to-indigo-500"
+              },
+              {
+                title: "Azure Smart Guardian",
+                sub: "Edge-to-Cloud IoT Security System",
+                desc: "Integrated security and environmental monitoring system using Raspberry Pi 5 and ESP32, powered by Azure IoT Edge and Stream Analytics.",
+                tech: ["Azure IoT", "Python", "C++", "MQTT", "Terraform"],
+                link: "/projects/azure-smart-guardian",
+                color: "from-orange-500 to-red-500"
               }
             ].map((p, i) => (
               <Link key={i} href={p.link}>
