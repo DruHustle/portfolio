@@ -1,98 +1,176 @@
 # Portfolio for Andrew Gotora
 
-This is the repository for a personal portfolio website built with React, TypeScript, and Vite. It showcases a collection of projects with detailed descriptions, technology stacks, and links to live demos and source code.
+A professional, interactive personal portfolio website built with React, TypeScript, and Vite. This site showcases a collection of projects with detailed descriptions, technology stacks, and links to live demos and source code.
 
+## 🎯 Features
 
-## Features
+*   **Dynamic Project Showcase**: Features a variety of projects, each with its own detailed page.
+*   **Modern Dark Theme**: A sleek and professional dark theme UI built for a modern look.
+*   **Responsive Layout**: Fully responsive design that works seamlessly on all devices, from mobile to desktop.
+*   **Smooth Animations**: Engaging user experience with smooth transitions powered by Framer Motion.
+*   **Detailed Project Pages**: Dedicated pages for each project including problem statements, architecture, and business impact.
+*   **Production-Ready**: Built with React 19, Tailwind CSS 4, and shadcn/ui.
 
-- **Dynamic Project Showcase**: The portfolio features a variety of projects, each with its own detailed page.
-- **Dark Theme UI**: A sleek and modern dark theme is used throughout the application for a professional look.
-- **Responsive Design**: The layout is fully responsive and works on all devices, from mobile phones to desktops.
-- **Smooth Animations**: Framer Motion is used to create smooth and engaging animations and page transitions.
-- **Detailed Project Pages**: Each project has a dedicated page with a problem statement, core requirements, system architecture, technology ecosystem, implementation roadmap, and business impact.
-- **Consistent Styling**: The UI is built with Tailwind CSS and shadcn/ui for a consistent and professional design.
-
-## Tech Stack
-
-### Frontend
-
-- **Framework**: [React 19](https://react.dev/)
-- **Language**: [TypeScript](https://www.typescriptlang.org/)
-- **Build Tool**: [Vite](https://vitejs.dev/)
-- **Styling**: [Tailwind CSS 4](https://tailwindcss.com/) & [shadcn/ui](https://ui.shadcn.com/)
-- **Animations**: [Framer Motion](https://www.framer.com/motion/)
-- **Routing**: [Wouter](https://github.com/molefrog/wouter)
-- **UI Components**: Radix UI, Lucide React
-- **Data Fetching**: tRPC, TanStack Query
-
-### Backend
-
-- **Runtime**: [Node.js](https://nodejs.org/)
-- **Framework**: [Express](https://expressjs.com/)
-- **Language**: [TypeScript](https://www.typescriptlang.org/)
-
-## Project Structure
-
-```
-/portifolio
-├── client/                # Frontend React application
-│   ├── src/
-│   │   ├── components/    # Reusable UI components
-│   │   ├── pages/         # Page components (Home, ProjectDetail, etc.)
-│   │   ├── App.tsx        # Main application component with routing
-│   │   └── main.tsx       # Entry point for the React app
-├── server/                # Backend Express server
-│   └── index.ts           # Main server file
-├── public/                # Static assets
-├── package.json           # Project dependencies and scripts
-├── vite.config.ts         # Vite configuration
-└── README.md              # This file
-```
-
-## Getting Started
-
-To get a local copy up and running, follow these simple steps.
+## 🚀 Quick Start
 
 ### Prerequisites
 
-- [Node.js](https://nodejs.org/) (v18 or later)
-- [pnpm](https://pnpm.io/)
+*   Node.js 18+ and pnpm
+*   Git
+*   GitHub account
 
-### Installation
+### Local Development
 
-1. Clone the repo
-   ```sh
-   git clone https://github.com/DruHustle/portifolio.git
-   ```
-2. Navigate to the project directory
-   ```sh
-   cd portifolio
-   ```
-3. Install dependencies
-   ```sh
-   pnpm install
-   ```
+1.  **Clone the repository**
 
-### Running the Development Server
+```shell
+git clone https://github.com/DruHustle/portifolio.git
+cd portifolio
+```
 
-To start the development server, run:
+2.  **Install dependencies**
 
-```sh
+```shell
+pnpm install
+```
+
+3.  **Start development server**
+
+```shell
 pnpm dev
 ```
 
-This will start the Vite development server at `http://localhost:3000`.
+4.  **Open in browser** Navigate to `http://localhost:3000`
 
-## Available Scripts
+### Build for Production
 
-- `pnpm dev`: Starts the development server.
-- `pnpm build`: Builds the application for production.
-- `pnpm start`: Starts the production server.
-- `pnpm preview`: Previews the production build locally.
-- `pnpm check`: Runs TypeScript to check for type errors.
-- `pnpm test`: Runs tests with Vitest.
-- `pnpm format`: Formats code with Prettier.
+```shell
+pnpm build
+```
 
-## License
+This creates an optimized production build in the `dist/public` directory.
 
-Distributed under the MIT License. See `LICENSE` for more information.
+## 📖 GitHub Pages Deployment Guide
+
+### Step 1: Create a GitHub Repository
+
+1.  Go to [github.com/new](https://github.com/new)
+2.  Enter repository name: `portifolio`
+3.  Choose "Public" (required for free GitHub Pages)
+4.  Click "Create repository"
+
+### Step 2: Configure GitHub Pages
+
+1.  Go to your repository settings
+2.  Navigate to **Settings** → **Pages**
+3.  Under "Source", select **Deploy from a branch**
+4.  Select branch: **gh-pages** (created by the deployment action)
+5.  Select folder: **/(root)**
+6.  Click "Save"
+
+### Step 3: Prepare Your Project
+
+1.  **Update package.json** to include the homepage:
+
+```json
+{
+  "name": "portfolio",
+  "homepage": "https://DruHustle.github.io/portifolio",
+  "type": "module",
+  ...
+}
+```
+
+2.  **Install gh-pages package** (if not already installed):
+
+```shell
+pnpm add -D gh-pages
+```
+
+3.  **Update package.json scripts**:
+
+```json
+{
+  "scripts": {
+    "dev": "vite --host",
+    "build": "vite build && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outfile=dist/index.js",
+    "predeploy": "pnpm build",
+    "deploy": "gh-pages -d dist",
+    "preview": "vite preview --host"
+  }
+}
+```
+
+### Step 4: Build and Deploy
+
+1.  **Build the project**:
+
+```shell
+pnpm build
+```
+
+2.  **Deploy to GitHub Pages**:
+
+```shell
+pnpm deploy
+```
+
+This command:
+
+*   Builds your project (via predeploy script)
+*   Pushes the `dist` folder to the `gh-pages` branch
+*   GitHub Pages automatically serves the content
+
+### Step 5: Verify Deployment
+
+1.  Go to your repository on GitHub
+2.  Navigate to **Settings** → **Pages**
+3.  You should see a message: "Your site is published at `https://DruHustle.github.io/portifolio`"
+4.  Click the link to view your live website
+
+## 🔄 Continuous Updates
+
+The portfolio is regularly updated with new projects and improvements. To stay current:
+
+1.  **Check for updates**: `git pull origin master`
+2.  **Review changes**: See commit history for recent updates
+3.  **Report issues**: Use GitHub Issues to report bugs or suggest improvements
+
+## 🤝 Contributing
+
+We welcome contributions! To contribute:
+
+1.  Fork the repository
+2.  Create a feature branch: `git checkout -b feature/your-feature`
+3.  Make your changes
+4.  Commit: `git commit -m "Add your feature"`
+5.  Push: `git push origin feature/your-feature`
+6.  Open a Pull Request
+
+## 🛠️ Technology Stack
+
+*   **Frontend Framework**: React 19
+*   **Styling**: Tailwind CSS 4 & shadcn/ui
+*   **Animations**: Framer Motion
+*   **Routing**: Wouter
+*   **Build Tool**: Vite
+*   **Package Manager**: pnpm
+*   **Language**: TypeScript
+*   **Backend**: Node.js & Express
+
+## 📄 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## 🙋 Support
+
+*   **Issues**: Open an issue on GitHub
+*   **Discussions**: Use GitHub Discussions for questions
+
+## 👨‍💻 Author
+
+Developed by **Andrew Gotora**
+
+**Last Updated**: January 2026
+
+For the latest updates and announcements, follow this repository or check the [Releases](https://github.com/DruHustle/portifolio/releases) page.
