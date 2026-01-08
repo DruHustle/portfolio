@@ -154,13 +154,13 @@ export default function Home() {
             </a>
           </Link>
           <div className="hidden md:flex items-center gap-6 lg:gap-8">
-            <a href="#/projects" className="text-sm font-medium hover:text-teal-400 transition-all duration-300">
+            <a href="#projects" className="text-sm font-medium hover:text-teal-400 transition-all duration-300">
               Projects
             </a>
-            <a href="#/skills" className="text-sm font-medium hover:text-teal-400 transition-all duration-300">
+            <a href="#skills" className="text-sm font-medium hover:text-teal-400 transition-all duration-300">
               Skills
             </a>
-            <a href="#/about" className="text-sm font-medium hover:text-teal-400 transition-all duration-300">
+            <a href="#about" className="text-sm font-medium hover:text-teal-400 transition-all duration-300">
               About
             </a>
           </div>
@@ -185,7 +185,7 @@ export default function Home() {
                 A comprehensive demonstration of full-stack cloud architecture, microservices design, and enterprise-scale system engineering across multi-cloud platforms.
               </p>
               <div className="flex flex-wrap gap-4">
-                <a href="#/projects" className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-teal-500 text-white font-semibold rounded-lg hover:bg-teal-600 transition-all hover:shadow-lg hover:shadow-teal-500/50 hover:scale-105">
+                <a href="#projects" className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-teal-500 text-white font-semibold rounded-lg hover:bg-teal-600 transition-all hover:shadow-lg hover:shadow-teal-500/50 hover:scale-105">
                   View Projects <ChevronRight className="w-4 h-4" />
                 </a>
                 <a href="resume/resume_download.pdf" className="inline-flex items-center justify-center gap-2 px-6 py-3 border-2 border-white text-white font-semibold rounded-lg hover:bg-white hover:text-slate-900 transition-all hover:scale-105">
@@ -263,38 +263,23 @@ export default function Home() {
       {/* Skills Section - Light Ocean Blue Background */}
       <section id="skills" className="py-20 bg-[#F0F9FF]">
         <div className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
-          <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center text-gray-900">Technical Expertise</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {skills.map((cat, i) => (
-              <div key={i} className="p-8 rounded-2xl bg-white border border-blue-100 hover:border-teal-500/30 transition-all group shadow-sm">
-                <h3 className="text-xl font-bold mb-6 text-gray-900 border-b-2 border-teal-500 pb-3 inline-block">{cat.title}</h3>
-                <ul className="space-y-3">
-                  {cat.skills.map((skill, j) => (
-                    <li key={j} className="flex items-center gap-3 text-gray-700 text-sm">
-                      <div className="w-1.5 h-1.5 rounded-full bg-teal-500 shrink-0" />
-                      {skill}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Technical Expertise</h2>
+            <p className="text-gray-700 text-lg max-w-2xl mx-auto">Specialized in cloud-native architectures and enterprise systems.</p>
           </div>
-        </div>
-      </section>
-
-      {/* Principles Section */}
-      <section className="py-20 bg-white">
-        <div className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
-          <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center">Engineering Principles</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {principles.map((p, i) => (
-              <div key={i} className="flex gap-6 p-6 rounded-2xl hover:bg-slate-50 transition-colors">
-                <div className="w-12 h-12 rounded-xl bg-teal-500/10 flex items-center justify-center shrink-0">
-                  <p.icon className="w-6 h-6 text-teal-600" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-bold mb-2">{p.title}</h3>
-                  <p className="text-gray-600 text-sm leading-relaxed">{p.desc}</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {skills.map((category, i) => (
+              <div key={i} className="p-6 bg-white rounded-xl border border-blue-50 shadow-sm hover:shadow-md transition-all">
+                <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                  <div className="w-2 h-2 bg-teal-500 rounded-full"></div>
+                  {category.title}
+                </h3>
+                <div className="flex flex-wrap gap-2">
+                  {category.skills.map((skill, j) => (
+                    <span key={j} className="px-3 py-1.5 bg-blue-50/50 text-blue-700 text-xs font-semibold rounded-lg border border-blue-100">
+                      {skill}
+                    </span>
+                  ))}
                 </div>
               </div>
             ))}
@@ -303,74 +288,76 @@ export default function Home() {
       </section>
 
       {/* About Section */}
-      <section id="about" className="py-20 bg-slate-900 text-white">
+      <section id="about" className="py-20 bg-white">
         <div className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div className="space-y-8">
-              <h2 className="text-3xl md:text-4xl font-bold">About the Architect</h2>
-              <p className="text-lg text-gray-300 leading-relaxed">
-                Passionate about bridging the gap between complex enterprise technology and practical business value. With extensive experience in the SAP ecosystem and cloud-native development, I focus on helping organizations leverage AI and multi-cloud architectures to drive innovation and efficiency.
-              </p>
-              <div className="grid gap-6">
-                {businessImpact.map((item, i) => (
-                  <div key={i} className="flex gap-6">
-                    <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center shrink-0">
-                      <item.icon className="w-6 h-6 text-teal-400" />
+              <div>
+                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">Architecting the Future of Cloud</h2>
+                <p className="text-gray-700 text-lg leading-relaxed mb-6">
+                  With over a decade of experience in enterprise software engineering, I specialize in building resilient, scalable, and cost-effective cloud platforms. My approach combines deep technical expertise with a focus on business value and operational excellence.
+                </p>
+                <p className="text-gray-700 text-lg leading-relaxed">
+                  I am passionate about microservices, event-driven architectures, and the transformative power of cloud-native technologies.
+                </p>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                {principles.map((p, i) => (
+                  <div key={i} className="flex gap-4">
+                    <div className="w-10 h-10 rounded-lg bg-teal-50 flex items-center justify-center shrink-0">
+                      <p.icon className="w-5 h-5 text-teal-600" />
                     </div>
                     <div>
-                      <h3 className="text-lg font-bold mb-1">{item.title}</h3>
-                      <p className="text-gray-400 text-sm leading-relaxed">{item.desc}</p>
+                      <h4 className="font-bold text-gray-900 mb-1">{p.title}</h4>
+                      <p className="text-sm text-gray-600 leading-snug">{p.desc}</p>
                     </div>
                   </div>
                 ))}
               </div>
             </div>
-            <div className="relative">
-              <div className="absolute -inset-4 bg-gradient-to-r from-teal-500 to-blue-500 rounded-[2.5rem] blur-2xl opacity-20"></div>
-              <div className="relative bg-slate-800 rounded-[2rem] p-8 border border-white/10">
-                <div className="flex items-center gap-6 mb-8">
-                  <img
-                    src="images/profile.jpg"
-                    alt="Andrew Gotora"
-                    className="w-20 h-20 rounded-2xl border-2 border-teal-500 object-cover"
-                  />
-                  <div>
-                    <h3 className="text-2xl font-bold">Andrew Gotora</h3>
-                    <p className="text-teal-400 font-medium">Cloud Platform Engineer</p>
+            <div className="grid gap-6">
+              {businessImpact.map((impact, i) => (
+                <div key={i} className="p-8 bg-slate-900 text-white rounded-2xl border border-slate-800 hover:border-teal-500/50 transition-all group">
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="w-12 h-12 rounded-xl bg-teal-500/10 flex items-center justify-center group-hover:bg-teal-500/20 transition-all">
+                      <impact.icon className="w-6 h-6 text-teal-400" />
+                    </div>
+                    <h3 className="text-xl font-bold">{impact.title}</h3>
                   </div>
+                  <p className="text-gray-400 leading-relaxed">{impact.desc}</p>
                 </div>
-                <div className="space-y-4 mb-8">
-                  <a href="mailto:andrewgotora@yahoo.com" className="flex items-center gap-4 text-gray-300 hover:text-white transition-colors">
-                    <div className="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center">
-                      <Mail className="w-5 h-5" />
-                    </div>
-                    andrewgotora@yahoo.com
-                  </a>
-                  <a href="https://www.linkedin.com/in/andrew-gotora-72966068" target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 text-gray-300 hover:text-white transition-colors">
-                    <div className="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center">
-                      <Linkedin className="w-5 h-5" />
-                    </div>
-                    LinkedIn Profile
-                  </a>
-                  <a href="https://github.com/andrewgotora" target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 text-gray-300 hover:text-white transition-colors">
-                    <div className="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center">
-                      <Github className="w-5 h-5" />
-                    </div>
-                    GitHub Profile
-                  </a>
-                </div>
-                <Button className="w-full bg-teal-500 hover:bg-teal-600 text-white py-6 rounded-xl font-bold text-lg">
-                  Let's Collaborate
-                </Button>
-              </div>
+              ))}
             </div>
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="py-12 border-t border-gray-800 bg-slate-900 text-center">
-        <p className="text-gray-500 font-medium">© 2026 Andrew Gotora. All rights reserved.</p>
+      <footer className="bg-gray-900 text-white py-12 border-t border-gray-800">
+        <div className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-8">
+            <div className="flex items-center gap-3">
+              <img
+                src="images/profile.jpg"
+                alt="Andrew Gotora"
+                className="w-10 h-10 rounded-full border-2 border-teal-500 object-cover"
+              />
+              <span className="text-xl font-bold tracking-tight">Andrew Gotora</span>
+            </div>
+            <div className="flex gap-6">
+              <a href="https://github.com/DruHustle" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-teal-400 transition-colors">
+                <Github className="w-6 h-6" />
+              </a>
+              <a href="https://linkedin.com/in/andrewgotora" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-teal-400 transition-colors">
+                <Linkedin className="w-6 h-6" />
+              </a>
+              <a href="mailto:andrewgotora@yahoo.com" className="text-gray-400 hover:text-teal-400 transition-colors">
+                <Mail className="w-6 h-6" />
+              </a>
+            </div>
+            <p className="text-gray-500 text-sm">© 2026 Andrew Gotora. All rights reserved.</p>
+          </div>
+        </div>
       </footer>
     </div>
   );

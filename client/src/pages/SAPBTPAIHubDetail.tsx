@@ -81,11 +81,11 @@ export default function SAPBTPAIHubDetail() {
         <div className="px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16 md:h-20 max-w-7xl mx-auto w-full">
           <Link href="/">
             <a className="flex items-center gap-3 hover:opacity-80 transition-opacity">
-              <img src="../../images/profile.jpg" alt="Andrew Gotora" className="w-10 h-10 rounded-full border-2 border-blue-500 object-cover" />
+              <img src="images/profile.jpg" alt="Andrew Gotora" className="w-10 h-10 rounded-full border-2 border-blue-500 object-cover" />
               <span className="text-lg font-bold tracking-tight hidden sm:inline">Andrew Gotora</span>
             </a>
           </Link>
-          <a href="/#projects" className="flex items-center gap-2 text-sm font-semibold text-slate-300 hover:text-blue-400 transition-colors">
+          <a href="#projects" className="flex items-center gap-2 text-sm font-semibold text-slate-300 hover:text-blue-400 transition-colors">
             <ArrowLeft className="w-4 h-4" /> Back to Projects
           </a>
         </div>
@@ -105,10 +105,10 @@ export default function SAPBTPAIHubDetail() {
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold mb-6 tracking-tight leading-tight">{projectData.title}</h1>
               <p className="text-xl font-medium text-slate-300 mb-8 leading-relaxed">{projectData.subtitle}</p>
               <div className="flex flex-wrap gap-4">
-                <a href="https://github.com/andrewgotora/sap-btp-ai-hub" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-6 py-3 bg-blue-500 text-white font-bold rounded-xl hover:bg-blue-400 transition-all hover:scale-105">
+                <a href="https://github.com/DruHustle/sap-btp-ai-hub" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-6 py-3 bg-blue-500 text-white font-bold rounded-xl hover:bg-blue-400 transition-all hover:scale-105">
                   <Github className="w-5 h-5" /> Source Code
                 </a>
-                <a href="https://andrewgotora.github.io/sap-btp-ai-hub/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-6 py-3 border-2 border-blue-500 text-blue-400 font-bold rounded-xl hover:bg-blue-500/10 transition-all hover:scale-105">
+                <a href="https://DruHustle.github.io/sap-btp-ai-hub/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-6 py-3 border-2 border-blue-500 text-blue-400 font-bold rounded-xl hover:bg-blue-500/10 transition-all hover:scale-105">
                   <ExternalLink className="w-5 h-5" /> Live Demo
                 </a>
               </div>
