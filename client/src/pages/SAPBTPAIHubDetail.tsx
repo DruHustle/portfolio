@@ -314,7 +314,7 @@ export default function SAPBTPAIHubDetail() {
               href="https://github.com/andrewgotora/sap-btp-ai-hub"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-3 px-8 py-4 bg-slate-800 text-white font-bold rounded-2xl hover:bg-slate-700 hover:-translate-y-1 transition-all duration-300 shadow-lg shadow-slate-900/20 border border-slate-700/50"
+              className="inline-flex items-center justify-center gap-3 px-8 py-4 bg-cyan-500 text-white font-bold rounded-2xl hover:bg-cyan-400 hover:-translate-y-1 transition-all duration-300 shadow-lg shadow-cyan-600/20"
             >
               <Github className="w-5 h-5" />
               Source Code
@@ -323,10 +323,10 @@ export default function SAPBTPAIHubDetail() {
               href="https://andrewgotora.github.io/sap-btp-ai-hub/"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-3 px-8 py-4 bg-blue-600 text-white font-bold rounded-2xl hover:bg-blue-500 hover:-translate-y-1 transition-all duration-300 shadow-lg shadow-blue-600/20"
+              className="inline-flex items-center justify-center gap-3 px-8 py-4 bg-cyan-500 text-white font-bold rounded-2xl hover:bg-cyan-400 hover:-translate-y-1 transition-all duration-300 shadow-lg shadow-cyan-600/20"
             >
               <ExternalLink className="w-5 h-5" />
-              Live Demonstration
+              Live Demo
             </a>
           </div>
         </section>
