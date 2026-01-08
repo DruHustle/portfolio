@@ -81,7 +81,7 @@ export default function SAPBTPAIHubDetail() {
         <div className="px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16 md:h-20 max-w-7xl mx-auto w-full">
           <Link href="/">
             <a className="flex items-center gap-3 hover:opacity-80 transition-opacity">
-              <img src="images/profile.jpg" alt="Andrew Gotora" className="w-10 h-10 rounded-full border-2 border-blue-500 object-cover" />
+              <img src={`${import.meta.env.BASE_URL}images/profile.jpg`} alt="Andrew Gotora" className="w-10 h-10 rounded-full border-2 border-blue-500 object-cover" />
               <span className="text-lg font-bold tracking-tight hidden sm:inline">Andrew Gotora</span>
             </a>
           </Link>

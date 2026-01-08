@@ -153,7 +153,7 @@ export default function Home() {
           <Link href="/">
             <a className="flex items-center gap-2 sm:gap-3 hover:opacity-80 transition-opacity min-w-0">
               <img
-                src="images/profile.jpg"
+                src={`${import.meta.env.BASE_URL}images/profile.jpg`}
                 alt="Andrew Gotora"
                 className="w-10 h-10 md:w-12 md:h-12 rounded-full border-2 border-cyan-400 object-cover flex-shrink-0"
               />
@@ -355,7 +355,7 @@ export default function Home() {
           <div className="flex flex-col md:flex-row justify-between items-center gap-8">
             <div className="flex items-center gap-3">
               <img
-                src="images/profile.jpg"
+                src={`${import.meta.env.BASE_URL}images/profile.jpg`}
                 alt="Andrew Gotora"
                 className="w-10 h-10 rounded-full border-2 border-teal-500 object-cover"
               />
