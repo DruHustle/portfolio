@@ -1,8 +1,11 @@
 import { Link } from "wouter";
 import { ArrowLeft, ExternalLink, Github, BookOpen, Code2, Layers, Award, Zap, Smartphone } from "lucide-react";
 import { useMemo, useEffect } from "react";
+import { useNavigationState } from "@/hooks/useNavigationState";
 
 export default function SAPBTPAIHubDetail() {
+  const { showBackButton } = useNavigationState();
+  
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -85,9 +88,13 @@ export default function SAPBTPAIHubDetail() {
               <span className="text-lg font-bold tracking-tight hidden sm:inline">Andrew Gotora</span>
             </a>
           </Link>
-          <a href="#projects" className="flex items-center gap-2 text-sm font-semibold text-slate-300 hover:text-blue-400 transition-colors">
-            <ArrowLeft className="w-4 h-4" /> Back to Projects
-          </a>
+          {showBackButton && (
+            <Link href="/#projects">
+              <a className="flex items-center gap-2 text-sm font-semibold text-slate-300 hover:text-blue-400 transition-colors">
+                <ArrowLeft className="w-4 h-4" /> Back to Projects
+              </a>
+            </Link>
+          )}
         </div>
       </nav>
 

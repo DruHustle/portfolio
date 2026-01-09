@@ -17,6 +17,7 @@ import {
   TrendingUp,
 } from "lucide-react";
 import { useMemo } from "react";
+import { NavigationService } from "@/services/navigationService";
 
 export default function Home() {
   const principles = useMemo(
@@ -271,7 +272,10 @@ export default function Home() {
               }
             ].map((p, i) => (
               <Link key={i} href={p.link}>
-                <a className="group relative flex flex-col h-full rounded-2xl overflow-hidden bg-white border border-blue-100 hover:border-teal-500/50 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer will-change-transform">
+                <a 
+                  onClick={() => NavigationService.setFromFeaturedProjects()}
+                  className="group relative flex flex-col h-full rounded-2xl overflow-hidden bg-white border border-blue-100 hover:border-teal-500/50 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer will-change-transform"
+                >
                   <div className={`absolute top-0 left-0 w-full h-1 bg-gradient-to-r ${p.color}`}></div>
                   <div className="p-8 flex flex-col flex-grow">
                     <div className="flex items-center justify-between mb-4">
