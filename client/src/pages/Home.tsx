@@ -262,11 +262,11 @@ export default function Home() {
                 color: "from-blue-500 to-indigo-500"
               },
               {
-                title: "Azure Smart Guardian",
-                sub: "Edge-to-Cloud IoT Security System",
-                desc: "Integrated security and environmental monitoring system using Raspberry Pi 5 and ESP32, powered by Azure IoT Edge and Stream Analytics.",
-                tech: ["Azure IoT", "Python", "C++", "MQTT", "Terraform"],
-                link: "/projects/azure-smart-guardian",
+                title: "Smart Factory IoT Dashboard",
+                sub: "Real-Time Industrial IoT Monitoring",
+                desc: "Comprehensive IoT dashboard with real-time WebSocket updates, automated email/SMS alerts, and device grouping for smart manufacturing environments.",
+                tech: ["React", "TypeScript", "WebSocket", "Node.js", "MySQL"],
+                link: "/projects/smart-factory-iot",
                 color: "from-orange-500 to-red-500"
               }
             ].map((p, i) => (

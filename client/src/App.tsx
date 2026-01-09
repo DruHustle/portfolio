@@ -22,7 +22,7 @@ function AppRouter() {
         <Route path="/projects/imsop" component={IMSOPDetail} />
         <Route path="/projects/imsop/documentation" component={Documentation} />
         <Route path="/projects/sap-btp-ai-hub" component={SAPBTPAIHubDetail} />
-        <Route path="/projects/azure-smart-guardian" component={IoTDetail} />
+        <Route path="/projects/smart-factory-iot" component={IoTDetail} />
         <Route path="/404" component={NotFound} />
         <Route component={NotFound} />
       </Switch>

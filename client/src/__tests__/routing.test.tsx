@@ -38,7 +38,7 @@ describe('Portfolio Routing', () => {
       expect(true).toBe(true);
     });
 
-    it('should navigate to Azure Smart Guardian project', () => {
+    it('should navigate to Smart Factory IoT project', () => {
       expect(true).toBe(true);
     });
 

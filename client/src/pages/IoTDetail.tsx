@@ -1,5 +1,5 @@
 import { Link } from "wouter";
-import { ArrowLeft, ExternalLink, Github, Cpu, Shield, Zap, BarChart3, Cloud, Globe, Camera } from "lucide-react";
+import { ArrowLeft, ExternalLink, Github, Cpu, Shield, Zap, BarChart3, Cloud, Globe, Database } from "lucide-react";
 import { useMemo, useEffect } from "react";
 
 export default function IoTDetail() {
@@ -9,66 +9,66 @@ export default function IoTDetail() {
 
   const projectData = useMemo(
     () => ({
-      title: "Azure Smart Guardian",
-      subtitle: "Edge-to-Cloud IoT Security & Environmental Monitoring",
+      title: "Smart Factory IoT Dashboard",
+      subtitle: "Real-Time Industrial IoT Monitoring & Analytics Platform",
       description:
-        "A sophisticated IoT ecosystem leveraging Raspberry Pi 5 as an Edge Gateway and ESP32 nodes for remote sensing and surveillance. The system integrates with Azure IoT Hub for real-time telemetry, automated alerting, and cloud-based image storage.",
+        "A comprehensive IoT dashboard for smart manufacturing environments featuring real-time sensor data streaming, automated alert notifications, and device grouping capabilities. Built with modern web technologies and WebSocket for live updates.",
       stats: [
-        { label: "Latency", value: "<200ms", icon: Zap },
-        { label: "Connectivity", value: "MQTT/TLS", icon: Shield },
-        { label: "Storage", value: "Azure Blob", icon: Cloud },
+        { label: "Real-Time", value: "WebSocket", icon: Zap },
+        { label: "Notifications", value: "Email/SMS", icon: Shield },
+        { label: "Grouping", value: "Zones/Lines", icon: BarChart3 },
       ],
-      problemStatement: "Traditional security systems often lack integrated environmental monitoring and are difficult to scale across remote locations. There is a need for a unified platform that combines visual surveillance with real-time sensor data at the edge.",
+      problemStatement: "Manufacturing facilities require real-time visibility into equipment status, environmental conditions, and production metrics. Traditional systems lack live updates, flexible alerting, and the ability to organize devices by production zones.",
       requirements: [
-        "Real-time temperature and humidity monitoring",
-        "Motion-triggered image capture and cloud upload",
-        "Edge-based data processing to reduce cloud costs",
-        "Secure, encrypted communication between nodes and gateway",
+        "Real-time sensor data streaming without manual refresh",
+        "Automated email/SMS notifications when thresholds are exceeded",
+        "Device grouping by zones and production lines",
+        "Batch operations and grouped analytics for device management",
       ],
       solution: {
         architecture: [
-          { title: "Edge Node", desc: "ESP32-WROVER-E, DHT11, Camera", icon: Cpu },
-          { title: "Gateway", desc: "Raspberry Pi 5, Azure IoT Edge", icon: Server },
-          { title: "Communication", desc: "MQTT over TLS 1.3", icon: Globe },
-          { title: "Cloud Hub", desc: "Azure IoT Hub, Device Provisioning", icon: Cloud },
-          { title: "Processing", desc: "Azure Stream Analytics", icon: BarChart3 },
-          { title: "Storage", desc: "Azure Blob Storage (Images)", icon: Database },
-          { title: "Alerting", desc: "Azure Logic Apps (Email/SMS)", icon: Zap },
+          { title: "Frontend", desc: "React + TypeScript + Vite", icon: Cpu },
+          { title: "Backend", desc: "Node.js + Express + TypeScript", icon: Cloud },
+          { title: "Real-Time", desc: "WebSocket (ws package)", icon: Zap },
+          { title: "Database", desc: "MySQL with Drizzle ORM", icon: Database },
+          { title: "Notifications", desc: "Email/SMS alert system", icon: Shield },
+          { title: "UI Design", desc: "IMSOP-inspired deep space theme", icon: Globe },
+          { title: "Styling", desc: "TailwindCSS + shadcn/ui", icon: BarChart3 },
         ],
         techStack: [
-          { category: "Hardware", items: ["Raspberry Pi 5", "ESP32-WROVER-E", "DHT11 Sensor", "OV2640 Camera"] },
-          { category: "Edge Software", items: ["Python", "C++ (Arduino)", "Docker", "Azure IoT Edge Runtime"] },
-          { category: "Cloud Services", items: ["Azure IoT Hub", "Stream Analytics", "Blob Storage", "Logic Apps"] },
-          { category: "Protocols", items: ["MQTT", "HTTPS", "AMQP", "WebSockets"] },
+          { category: "Frontend", items: ["React 19", "TypeScript", "Vite", "TailwindCSS"] },
+          { category: "Backend", items: ["Node.js", "Express", "TypeScript", "WebSocket"] },
+          { category: "Database", items: ["MySQL", "Drizzle ORM"] },
+          { category: "UI", items: ["shadcn/ui", "Framer Motion", "Recharts"] },
         ],
       },
       implementation: [
         {
-          phase: "Edge Development",
-          duration: "Weeks 1-3",
-          description: "Develop ESP32 firmware for sensor data acquisition and camera integration. Implement MQTT client with TLS.",
+          phase: "Core Dashboard",
+          duration: "Weeks 1-2",
+          description: "Build foundational dashboard with device management, sensor data visualization, and alert monitoring.",
         },
         {
-          phase: "Gateway Setup",
-          duration: "Weeks 4-6",
-          description: "Configure Raspberry Pi 5 with Azure IoT Edge. Implement custom modules for local data filtering and image buffering.",
+          phase: "WebSocket Integration",
+          duration: "Weeks 3-4",
+          description: "Implement real-time WebSocket service for live sensor data streaming and automatic chart updates.",
         },
         {
-          phase: "Cloud Integration",
-          duration: "Weeks 7-9",
-          description: "Set up Azure IoT Hub, Stream Analytics jobs, and Blob Storage containers. Configure Logic Apps for automated alerting.",
+          phase: "Notification System",
+          duration: "Weeks 5-6",
+          description: "Develop email/SMS notification service with threshold-based alerting and queue management.",
         },
         {
-          phase: "Testing & Optimization",
-          duration: "Weeks 10-12",
-          description: "Perform end-to-end latency testing, optimize power consumption for edge nodes, and refine motion detection algorithms.",
+          phase: "Device Grouping",
+          duration: "Weeks 7-8",
+          description: "Add device grouping functionality for zones/production lines with batch operations and aggregated analytics.",
         },
       ],
       results: [
-        "Real-time environmental monitoring with <200ms latency",
-        "Automated security alerts with image attachments",
-        "30% reduction in cloud bandwidth via edge filtering",
-        "Scalable architecture supporting 100+ remote nodes",
+        "Real-time WebSocket updates for live sensor data",
+        "Automated email/SMS alerts with threshold monitoring",
+        "Device grouping with batch operations",
+        "IMSOP-inspired UI with deep space blue theme",
       ],
     }),
     []
@@ -105,12 +105,12 @@ export default function IoTDetail() {
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold mb-6 tracking-tight leading-tight">{projectData.title}</h1>
               <p className="text-xl font-medium text-slate-300 mb-8 leading-relaxed">{projectData.subtitle}</p>
               <div className="flex flex-wrap gap-4">
-                <button className="inline-flex items-center gap-2 px-6 py-3 bg-orange-500 text-white font-bold rounded-xl hover:bg-orange-400 transition-all hover:scale-105 opacity-50 cursor-not-allowed">
-                  <Github className="w-5 h-5" /> Coming Soon
-                </button>
-                <button className="inline-flex items-center gap-2 px-6 py-3 border-2 border-orange-500 text-orange-400 font-bold rounded-xl hover:bg-orange-500/10 transition-all hover:scale-105 opacity-50 cursor-not-allowed">
-                  <ExternalLink className="w-5 h-5" /> Case Study
-                </button>
+                <a href="https://github.com/DruHustle/smart-factory-iot" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-6 py-3 bg-orange-500 text-white font-bold rounded-xl hover:bg-orange-400 transition-all hover:scale-105">
+                  <Github className="w-5 h-5" /> GitHub Repo
+                </a>
+                <a href="https://druhustle.github.io/smart-factory-iot" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-6 py-3 border-2 border-orange-500 text-orange-400 font-bold rounded-xl hover:bg-orange-500/10 transition-all hover:scale-105">
+                  <ExternalLink className="w-5 h-5" /> Live Demo
+                </a>
               </div>
             </div>
             <div className="grid gap-4">

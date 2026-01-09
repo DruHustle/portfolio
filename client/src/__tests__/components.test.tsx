@@ -44,9 +44,9 @@ describe('ProjectService', () => {
   });
 
   it('should retrieve IoT project data', () => {
-    const project = ProjectService.getProjectById('azure-smart-guardian');
+    const project = ProjectService.getProjectById('smart-factory-iot');
     expect(project).toBeDefined();
-    expect(project?.title).toBe('Azure Smart Guardian');
+    expect(project?.title).toBe('Smart Factory IoT Dashboard');
     expect(project?.subtitle).toContain('IoT');
   });
 
@@ -121,7 +121,7 @@ describe('ProjectService', () => {
   });
 
   it('should have consistent data across all projects', () => {
-    const projectIds = ['imsop', 'sap-btp-ai-hub', 'azure-smart-guardian'];
+    const projectIds = ['imsop', 'sap-btp-ai-hub', 'smart-factory-iot'];
     projectIds.forEach((id) => {
       const project = ProjectService.getProjectById(id);
       expect(project?.title).toBeDefined();
@@ -139,7 +139,7 @@ describe('ProjectService', () => {
  */
 describe('Project Data Validation', () => {
   it('should not have empty strings in project data', () => {
-    const projectIds = ['imsop', 'sap-btp-ai-hub', 'azure-smart-guardian'];
+    const projectIds = ['imsop', 'sap-btp-ai-hub', 'smart-factory-iot'];
     projectIds.forEach((id) => {
       const project = ProjectService.getProjectById(id);
       expect(project?.title).toBeTruthy();
