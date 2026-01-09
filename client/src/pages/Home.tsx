@@ -145,9 +145,18 @@ export default function Home() {
     []
   );
 
+  const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+    e.preventDefault();
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <div className="min-h-screen bg-white text-gray-900">
       {/* Navigation */}
+
       <nav className="fixed top-0 w-full bg-gray-900 text-white z-50 border-b border-gray-800">
         <div className="px-4 sm:px-6 lg:px-8 flex items-center justify-between py-3 md:py-4 max-w-7xl mx-auto w-full">
           <Link href="/">
@@ -163,15 +172,23 @@ export default function Home() {
             </a>
           </Link>
           <div className="hidden md:flex items-center gap-6 lg:gap-8">
-            <a href="#projects" className="text-sm font-medium hover:text-teal-400 transition-all duration-300">
-              Projects
-            </a>
-            <a href="#skills" className="text-sm font-medium hover:text-teal-400 transition-all duration-300">
-              Skills
-            </a>
-            <a href="#about" className="text-sm font-medium hover:text-teal-400 transition-all duration-300">
-              About
-            </a>
+
+            <a href="#projects" 
+                onClick={(e) => scrollToSection(e, "projects")}
+                className="text-sm font-medium hover:text-teal-400 transition-all duration-300 cursor-pointer" >
+                Projects
+              </a>
+              <a href="#skills" 
+                onClick={(e) => scrollToSection(e, "skills")}
+                className="text-sm font-medium hover:text-teal-400 transition-all duration-300 cursor-pointer" >
+                Skills
+              </a>   
+              <a href="#about" 
+                onClick={(e) => scrollToSection(e, "about")}
+                className="text-sm font-medium hover:text-teal-400 transition-all duration-300 cursor-pointer">
+                About
+              </a>
+
           </div>
         </div>
       </nav>
@@ -194,7 +211,7 @@ export default function Home() {
                 A comprehensive demonstration of full-stack cloud architecture, microservices design, and enterprise-scale system engineering across multi-cloud platforms.
               </p>
               <div className="flex flex-wrap gap-4">
-                <a href="#projects" className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-teal-500 text-white font-semibold rounded-lg hover:bg-teal-600 transition-all hover:shadow-lg hover:shadow-teal-500/50 hover:scale-105">
+                <a href="#projects" onClick={(e) => scrollToSection(e, "projects")} className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-teal-500 text-white font-semibold rounded-lg hover:bg-teal-600 transition-all hover:shadow-lg hover:shadow-teal-500/50 hover:scale-105">
                   View Projects <ChevronRight className="w-4 h-4" />
                 </a>
                 <a href="resume/resume_download.pdf" className="inline-flex items-center justify-center gap-2 px-6 py-3 border-2 border-white text-white font-semibold rounded-lg hover:bg-white hover:text-slate-900 transition-all hover:scale-105">

@@ -121,6 +121,16 @@
 }
 
 @layer base {
+
+html {
+    scroll-behavior: smooth;
+  }
+
+  /* This prevents the navbar from covering your section titles */
+  section[id] {
+    scroll-margin-top: 100px; 
+  }
+
   * {
     @apply border-border outline-ring/50;
   }
