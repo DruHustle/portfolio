@@ -72,7 +72,7 @@ export default function IoTDetail() {
         "Device grouping with batch operations",
         "Enterprise-grade data security with encrypted communications",
         "99.9% uptime SLA with redundant architecture",
-        "Responsive UI with optimized color scheme for eye comfort",
+        "Seamless OTA updates for zero-downtime device firmware management",
       ],
     }),
     []
