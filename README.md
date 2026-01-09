@@ -35,6 +35,7 @@ The portfolio is optimized for **GitHub Pages** using hash-based routing. Any pu
 - **Dynamic Project Details**: Deep-dive views for major projects like IMSOP and SAP BTP AI Hub.
 - **Responsive Design**: Optimized for all devices with a focus on high-efficiency layouts.
 - **Documentation Hub**: Integrated viewing and downloading of project documentation.
+- **Analytics Dashboard**: Track portfolio visits and resume downloads at [Analytics Page](https://druhustle.github.io/portfolio/#/analytics).
 - **Modern Tech Stack**: Built with React, TypeScript, Tailwind CSS, and Wouter.
 
 ## 🛠️ Technology Stack
