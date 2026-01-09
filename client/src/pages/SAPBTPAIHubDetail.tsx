@@ -89,8 +89,14 @@ export default function SAPBTPAIHubDetail() {
             </a>
           </Link>
           {showBackButton && (
-            <Link href="/#projects">
-              <a className="flex items-center gap-2 text-sm font-semibold text-slate-300 hover:text-blue-400 transition-colors">
+            <Link href="/">
+              <a 
+                onClick={() => {
+                  // Store intent to scroll to projects
+                  sessionStorage.setItem('scrollToProjects', 'true');
+                }}
+                className="flex items-center gap-2 text-sm font-semibold text-slate-300 hover:text-blue-400 transition-colors cursor-pointer"
+              >
                 <ArrowLeft className="w-4 h-4" /> Back to Projects
               </a>
             </Link>

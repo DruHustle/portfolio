@@ -146,13 +146,27 @@ export default function Home() {
     []
   );
 
-  const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
-    e.preventDefault();
+  const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement> | null, id: string) => {
+    if (e) e.preventDefault();
     const element = document.getElementById(id);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
     }
   };
+
+  useMemo(() => {
+    // Check if we need to scroll to projects after navigation
+    if (typeof window !== 'undefined') {
+      const shouldScroll = sessionStorage.getItem('scrollToProjects');
+      if (shouldScroll === 'true') {
+        sessionStorage.removeItem('scrollToProjects');
+        // Small delay to ensure DOM is ready
+        setTimeout(() => {
+          scrollToSection(null, 'projects');
+        }, 100);
+      }
+    }
+  }, []);
 
   return (
     <div className="min-h-screen bg-white text-gray-900">
