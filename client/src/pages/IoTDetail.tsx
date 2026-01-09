@@ -1,5 +1,5 @@
 import { Link } from "wouter";
-import { ArrowLeft, ExternalLink, Github, Cpu, Shield, Zap, BarChart3, Cloud, Globe, Database } from "lucide-react";
+import { ArrowLeft, ExternalLink, Github, Cpu, Shield, Zap, BarChart3, Cloud, Globe, Database, FileText } from "lucide-react";
 import { useMemo, useEffect } from "react";
 import { useNavigationState } from "@/hooks/useNavigationState";
 
@@ -35,7 +35,6 @@ export default function IoTDetail() {
           { title: "Real-Time", desc: "WebSocket (ws package)", icon: Zap },
           { title: "Database", desc: "MySQL with Drizzle ORM", icon: Database },
           { title: "Notifications", desc: "Email/SMS alert system", icon: Shield },
-          { title: "UI Design", desc: "IMSOP-inspired deep space theme", icon: Globe },
           { title: "Styling", desc: "TailwindCSS + shadcn/ui", icon: BarChart3 },
         ],
         techStack: [
@@ -71,7 +70,7 @@ export default function IoTDetail() {
         "Real-time WebSocket updates for live sensor data",
         "Automated email/SMS alerts with threshold monitoring",
         "Device grouping with batch operations",
-        "IMSOP-inspired UI with deep space blue theme",
+        "Responsive UI with optimized color scheme for eye comfort",
       ],
     }),
     []
@@ -118,12 +117,17 @@ export default function IoTDetail() {
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold mb-6 tracking-tight leading-tight">{projectData.title}</h1>
               <p className="text-xl font-medium text-slate-300 mb-8 leading-relaxed">{projectData.subtitle}</p>
               <div className="flex flex-wrap gap-4">
-                <a href="https://github.com/DruHustle/smart-factory-iot" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-6 py-3 bg-orange-500 text-white font-bold rounded-xl hover:bg-orange-400 transition-all hover:scale-105">
+                <a href="https://github.com/DruHustle/smart-factory-iot" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-6 py-3 bg-orange-600 text-white font-bold rounded-xl hover:bg-orange-500 transition-all hover:scale-105">
                   <Github className="w-5 h-5" /> GitHub Repo
                 </a>
-                <a href="https://druhustle.github.io/smart-factory-iot" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-6 py-3 border-2 border-orange-500 text-orange-400 font-bold rounded-xl hover:bg-orange-500/10 transition-all hover:scale-105">
+                <a href="https://druhustle.github.io/smart-factory-iot" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-6 py-3 border-2 border-orange-600 text-orange-300 font-bold rounded-xl hover:bg-orange-600/10 transition-all hover:scale-105">
                   <ExternalLink className="w-5 h-5" /> Live Demo
                 </a>
+                <Link href="/projects/smart-factory-iot/documentation">
+                  <a className="inline-flex items-center gap-2 px-6 py-3 bg-slate-800 text-white font-bold rounded-xl hover:bg-slate-700 transition-all hover:scale-105 border border-slate-700">
+                    <FileText className="w-5 h-5 text-orange-400" /> Project Documentation
+                  </a>
+                </Link>
               </div>
             </div>
             <div className="grid gap-4">
@@ -213,8 +217,8 @@ export default function IoTDetail() {
         </div>
 
         {/* Results */}
-        <section className="bg-gradient-to-br from-orange-600 to-red-600 rounded-3xl p-8 md:p-12 text-white">
-          <h2 className="text-3xl font-bold mb-10 text-center">Projected Impact</h2>
+        <section className="bg-gradient-to-br from-orange-700 to-orange-800 rounded-3xl p-8 md:p-12 text-white">
+          <h2 className="text-3xl font-bold mb-10 text-center">Project Impact</h2>
           <div className="grid md:grid-cols-2 gap-6">
             {projectData.results.map((result, i) => (
               <div key={i} className="flex gap-5 p-6 bg-white/10 rounded-2xl border border-white/20">
