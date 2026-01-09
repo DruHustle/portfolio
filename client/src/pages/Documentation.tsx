@@ -103,26 +103,55 @@ export default function Documentation() {
         </div>
 
         {/* Diagrams Section */}
-        <section className="mt-20 p-10 rounded-[2.5rem] bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700/50 text-center">
-          <h2 className="text-3xl font-bold mb-4">System Diagrams</h2>
-          <p className="text-slate-400 mb-10 max-w-2xl mx-auto">
-            Visual representations of the platform's high-level architecture and data flow.
+        <section className="mt-20 p-10 rounded-[2.5rem] bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700/50">
+          <h2 className="text-3xl font-bold mb-4 text-center">System Architecture</h2>
+          <p className="text-slate-400 mb-10 max-w-2xl mx-auto text-center">
+            High-level overview of the IMSOP platform's bounded contexts and data flow.
           </p>
-          <div className="relative rounded-2xl overflow-hidden border border-white/10 shadow-2xl group">
-            <img 
-              src="/docs/diagrams/high_level_architecture.png" 
-              alt="High Level Architecture" 
-              className="w-full h-auto transition-transform duration-700 group-hover:scale-105"
-            />
-            <div className="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-              <a 
-                href="/docs/diagrams/high_level_architecture.png" 
-                target="_blank" 
-                className="px-8 py-4 bg-white text-slate-900 font-bold rounded-xl flex items-center gap-2 hover:scale-105 transition-transform"
-              >
-                <ExternalLink className="w-5 h-5" /> View Full Resolution
-              </a>
-            </div>
+          <div className="bg-slate-900/50 rounded-2xl border border-slate-600/50 p-8 overflow-x-auto">
+            <pre className="text-cyan-400 font-mono text-sm leading-relaxed whitespace-pre-wrap break-words text-center">
+{`Bounded Contexts Architecture
+
+┌─────────────────────────────────────────────────────────────┐
+│                    API Gateway                              │
+│              (Authentication & Routing)                     │
+└────────────────┬────────────────────────────────────────────┘
+                 │
+    ┌────────────┼────────────┬────────────┐
+    │            │            │            │
+┌───▼────┐  ┌───▼────┐  ┌───▼────┐  ┌───▼────┐
+│Identity │  │Ingestion│  │Operations│  │Analytics│
+│Context  │  │Context  │  │Context   │  │Context  │
+└────┬────┘  └────┬────┘  └────┬────┘  └────┬────┘
+     │            │            │            │
+     └────────────┼────────────┼────────────┘
+                  │
+          ┌───────▼────────┐
+          │  Data Layer    │
+          │  (PostgreSQL)  │
+          └────────────────┘`}
+            </pre>
+          </div>
+          <div className="mt-8 p-6 bg-slate-800/40 rounded-xl border border-slate-700/50">
+            <h3 className="text-lg font-bold text-cyan-400 mb-4">Key Components:</h3>
+            <ul className="space-y-3 text-slate-300">
+              <li className="flex gap-3">
+                <span className="text-cyan-400 font-bold">•</span>
+                <span><strong>Identity Context:</strong> OAuth 2.0, RBAC, managed identities</span>
+              </li>
+              <li className="flex gap-3">
+                <span className="text-cyan-400 font-bold">•</span>
+                <span><strong>Ingestion Context:</strong> REST APIs, Kafka streams, WebSockets</span>
+              </li>
+              <li className="flex gap-3">
+                <span className="text-cyan-400 font-bold">•</span>
+                <span><strong>Operations Context:</strong> Shipment tracking, state machines</span>
+              </li>
+              <li className="flex gap-3">
+                <span className="text-cyan-400 font-bold">•</span>
+                <span><strong>Analytics Context:</strong> Data processing, ML model inference</span>
+              </li>
+            </ul>
           </div>
         </section>
       </main>
