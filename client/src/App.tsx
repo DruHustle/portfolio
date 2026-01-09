@@ -12,6 +12,7 @@ import IMSOPDetail from "./pages/IMSOPDetail";
 import SAPBTPAIHubDetail from "./pages/SAPBTPAIHubDetail";
 import IoTDetail from "./pages/IoTDetail";
 import Documentation from "./pages/Documentation";
+import IoTDocumentation from "./pages/IoTDocumentation";
 
 
 function AppRouter() {
@@ -23,6 +24,7 @@ function AppRouter() {
         <Route path="/projects/imsop/documentation" component={Documentation} />
         <Route path="/projects/sap-btp-ai-hub" component={SAPBTPAIHubDetail} />
         <Route path="/projects/smart-factory-iot" component={IoTDetail} />
+        <Route path="/projects/smart-factory-iot/documentation" component={IoTDocumentation} />
         <Route path="/404" component={NotFound} />
         <Route component={NotFound} />
       </Switch>
