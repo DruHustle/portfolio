@@ -70,6 +70,8 @@ export default function IoTDetail() {
         "Real-time WebSocket updates for live sensor data",
         "Automated email/SMS alerts with threshold monitoring",
         "Device grouping with batch operations",
+        "Enterprise-grade data security with encrypted communications",
+        "99.9% uptime SLA with redundant architecture",
         "Responsive UI with optimized color scheme for eye comfort",
       ],
     }),
@@ -218,7 +220,7 @@ export default function IoTDetail() {
 
         {/* Results */}
         <section className="bg-gradient-to-br from-orange-700 to-orange-800 rounded-3xl p-8 md:p-12 text-white">
-          <h2 className="text-3xl font-bold mb-10 text-center">Project Impact</h2>
+          <h2 className="text-3xl font-bold mb-10 text-center">Business Impact & Results</h2>
           <div className="grid md:grid-cols-2 gap-6">
             {projectData.results.map((result, i) => (
               <div key={i} className="flex gap-5 p-6 bg-white/10 rounded-2xl border border-white/20">

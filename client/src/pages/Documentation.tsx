@@ -68,7 +68,7 @@ export default function Documentation() {
 
       {/* Docs Grid */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid md:grid-cols-2 gap-8">
+        <div className="grid sm:grid-cols-1 md:grid-cols-2 gap-8">
           {docs.map((doc, i) => (
             <div key={i} className="p-8 rounded-3xl bg-slate-800/40 border border-slate-700/50 hover:border-cyan-500/30 transition-all group">
               <div className="flex items-start justify-between mb-6">

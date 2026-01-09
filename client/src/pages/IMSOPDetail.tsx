@@ -70,7 +70,9 @@ export default function IMSOPDetail() {
       results: [
         "10M+ requests per day with sub-100ms latency",
         "99.99% uptime SLA across all services",
+        "Multi-layer data security with encryption at rest and in transit",
         "35% infrastructure cost reduction",
+        "Minimal downtime through redundant multi-region deployment",
         "Deployment time reduced from weeks to hours",
       ],
     }),
