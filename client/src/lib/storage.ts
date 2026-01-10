@@ -56,6 +56,21 @@ export const safeLocalStorage = {
     } else {
       delete memoryStorage[key];
     }
+  },
+  clear: (): void => {
+    if (storageAvailable.local) {
+      try {
+        localStorage.clear();
+      } catch (e) {
+        for (const key in memoryStorage) {
+          delete memoryStorage[key];
+        }
+      }
+    } else {
+      for (const key in memoryStorage) {
+        delete memoryStorage[key];
+      }
+    }
   }
 };
 
@@ -90,6 +105,21 @@ export const safeSessionStorage = {
       }
     } else {
       delete sessionMemoryStorage[key];
+    }
+  },
+  clear: (): void => {
+    if (storageAvailable.session) {
+      try {
+        sessionStorage.clear();
+      } catch (e) {
+        for (const key in sessionMemoryStorage) {
+          delete sessionMemoryStorage[key];
+        }
+      }
+    } else {
+      for (const key in sessionMemoryStorage) {
+        delete sessionMemoryStorage[key];
+      }
     }
   }
 };

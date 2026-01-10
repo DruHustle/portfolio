@@ -4,28 +4,22 @@ import { useEffect } from "react";
 
 const docs = [
   {
-    title: "Project Overview (README)",
-    description: "Comprehensive overview of the IMSOP platform, its goals, and high-level features.",
-    mdPath: "/docs/README.md",
-    pdfPath: "/docs/README.pdf",
-  },
-  {
-    title: "Design Document",
+    title: "Architecture Overview",
     description: "Detailed technical design, including system architecture and bounded contexts.",
-    mdPath: "/docs/DESIGN.md",
-    pdfPath: "/docs/DESIGN.pdf",
+    mdPath: "/docs/architecture.md",
+    pdfPath: "/docs/architecture.pdf",
   },
   {
-    title: "Requirements Specification",
-    description: "Functional and non-functional requirements for the enterprise-grade platform.",
-    mdPath: "/docs/REQUIREMENTS.md",
-    pdfPath: "/docs/REQUIREMENTS.pdf",
+    title: "Database Schema",
+    description: "Comprehensive database design and entity relationship specifications.",
+    mdPath: "/docs/database-schema.md",
+    pdfPath: "/docs/database-schema.pdf",
   },
   {
-    title: "API Documentation",
+    title: "API Flows",
     description: "Technical specification for REST and GraphQL APIs used across the platform.",
-    mdPath: "/docs/API_DOCUMENTATION.md",
-    pdfPath: "/docs/API_DOCUMENTATION.pdf",
+    mdPath: "/docs/api-flows.md",
+    pdfPath: "/docs/api-flows.pdf",
   },
 ];
 
@@ -88,14 +82,22 @@ export default function Documentation() {
               </div>
               <h3 className="text-2xl font-bold mb-3 text-white group-hover:text-cyan-400 transition-colors">{doc.title}</h3>
               <p className="text-slate-400 mb-8 leading-relaxed">{doc.description}</p>
-              <div className="flex gap-4">
+              <div className="flex flex-col gap-3">
+                <a 
+                  href={`https://druhustle.github.io/portfolio/#/projects/imsop/documentation`} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3 bg-slate-700/50 text-white font-bold rounded-xl hover:bg-slate-600 transition-all"
+                >
+                  <Eye className="w-4 h-4" /> View Online
+                </a>
                 <a 
                   href={doc.pdfPath} 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3 bg-cyan-500 text-white font-bold rounded-xl hover:bg-cyan-400 transition-all"
                 >
-                  <Eye className="w-4 h-4" /> View Online
+                  <Download className="w-4 h-4" /> Preview & Download PDF
                 </a>
               </div>
             </div>
