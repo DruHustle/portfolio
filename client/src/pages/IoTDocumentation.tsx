@@ -4,40 +4,22 @@ import { useEffect } from "react";
 
 const docs = [
   {
-    title: "Project Overview (README)",
-    description: "Comprehensive overview of the Smart Factory IoT Dashboard, its goals, and core features for real-time industrial monitoring.",
-    mdPath: "/docs/iot/README.md",
-    pdfPath: "/docs/iot/README.pdf",
-  },
-  {
-    title: "Design Document",
+    title: "Architecture Overview",
     description: "Detailed technical design, including system architecture, WebSocket implementation, and notification service design.",
-    mdPath: "/docs/iot/DESIGN.md",
-    pdfPath: "/docs/iot/DESIGN.pdf",
+    mdPath: "/docs/iot/architecture.md",
+    pdfPath: "/docs/iot/architecture.pdf",
   },
   {
-    title: "Requirements Specification",
-    description: "Functional and non-functional requirements for the IoT monitoring platform with real-time data streaming.",
-    mdPath: "/docs/iot/REQUIREMENTS.md",
-    pdfPath: "/docs/iot/REQUIREMENTS.pdf",
+    title: "Database Schema",
+    description: "Comprehensive database design and entity relationship specifications for IoT data.",
+    mdPath: "/docs/iot/database-schema.md",
+    pdfPath: "/docs/iot/database-schema.pdf",
   },
   {
-    title: "API Documentation",
-    description: "Technical specification for REST APIs and WebSocket endpoints used for device management and real-time updates.",
-    mdPath: "/docs/iot/API_DOCUMENTATION.md",
-    pdfPath: "/docs/iot/API_DOCUMENTATION.pdf",
-  },
-  {
-    title: "Implementation Guide",
-    description: "Step-by-step guide for setting up, configuring, and deploying the Smart Factory IoT Dashboard.",
-    mdPath: "/docs/iot/IMPLEMENTATION_GUIDE.md",
-    pdfPath: "/docs/iot/IMPLEMENTATION_GUIDE.pdf",
-  },
-  {
-    title: "SOLID Principles",
-    description: "Comprehensive documentation of SOLID design principles implementation throughout the codebase.",
-    mdPath: "/docs/iot/SOLID_PRINCIPLES.md",
-    pdfPath: "/docs/iot/SOLID_PRINCIPLES.pdf",
+    title: "API Flows",
+    description: "Technical specification for REST APIs and WebSocket endpoints used for device management.",
+    mdPath: "/docs/iot/api-flows.md",
+    pdfPath: "/docs/iot/api-flows.pdf",
   },
 ];
 
@@ -100,14 +82,22 @@ export default function IoTDocumentation() {
               </div>
               <h3 className="text-2xl font-bold mb-3 text-white group-hover:text-orange-400 transition-colors">{doc.title}</h3>
               <p className="text-slate-400 mb-8 leading-relaxed">{doc.description}</p>
-              <div className="flex gap-4">
+              <div className="flex flex-col gap-3">
+                <a 
+                  href={`https://druhustle.github.io/portfolio/#/projects/smart-factory-iot/documentation`} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3 bg-slate-700/50 text-white font-bold rounded-xl hover:bg-slate-600 transition-all"
+                >
+                  <Eye className="w-4 h-4" /> View Online
+                </a>
                 <a 
                   href={doc.pdfPath} 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3 bg-orange-600 text-white font-bold rounded-xl hover:bg-orange-500 transition-all"
                 >
-                  <Eye className="w-4 h-4" /> View Online
+                  <Download className="w-4 h-4" /> Preview & Download PDF
                 </a>
               </div>
             </div>
