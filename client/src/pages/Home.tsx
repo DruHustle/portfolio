@@ -15,6 +15,7 @@ import {
   Award,
   Target,
   TrendingUp,
+  Download,
 } from "lucide-react";
 import { useMemo, useEffect } from "react";
 import { NavigationService } from "@/services/navigationService";
@@ -237,10 +238,12 @@ export default function Home() {
                 </a>
                 <a 
                   href="resume/resume_download.pdf" 
-                  onClick={() => analyticsService.trackResumeDownload("resume_download.pdf")}
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  onClick={() => analyticsService.trackResumeView("resume_download.pdf")}
                   className="inline-flex items-center justify-center gap-2 px-6 py-3 border-2 border-white text-white font-semibold rounded-lg hover:bg-white hover:text-slate-900 transition-all hover:scale-105"
                 >
-                  Download Resume <ExternalLink className="w-4 h-4" />
+                  View Resume <ExternalLink className="w-4 h-4" />
                 </a>
               </div>
             </div>
