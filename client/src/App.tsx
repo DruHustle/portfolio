@@ -10,9 +10,9 @@ import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
 import IMSOPDetail from "./pages/IMSOPDetail";
 import SAPBTPAIHubDetail from "./pages/SAPBTPAIHubDetail";
-import IoTDetail from "./pages/IoTDetail";
-import Documentation from "./pages/Documentation";
-import IoTDocumentation from "./pages/IoTDocumentation";
+import SmartFactoryIoTDetail from "./pages/SmartFactoryIoTDetail";
+import IMSOPDocumentation from "./pages/IMSOPDocumentation";
+import SmartFactoryIoTDocumentation from "./pages/SmartFactoryIoTDocumentation";
 import Analytics from "./pages/Analytics";
 
 
@@ -23,10 +23,10 @@ function AppRouter() {
         <Route path="/" component={Home} />
         <Route path="/analytics" component={Analytics} />
         <Route path="/projects/imsop" component={IMSOPDetail} />
-        <Route path="/projects/imsop/documentation" component={Documentation} />
+        <Route path="/projects/imsop/documentation" component={IMSOPDocumentation} />
         <Route path="/projects/sap-btp-ai-hub" component={SAPBTPAIHubDetail} />
-        <Route path="/projects/smart-factory-iot" component={IoTDetail} />
-        <Route path="/projects/smart-factory-iot/documentation" component={IoTDocumentation} />
+        <Route path="/projects/smart-factory-iot" component={SmartFactoryIoTDetail} />
+        <Route path="/projects/smart-factory-iot/documentation" component={SmartFactoryIoTDocumentation} />
         <Route path="/404" component={NotFound} />
         <Route component={NotFound} />
       </Switch>

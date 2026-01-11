@@ -14,17 +14,23 @@ export interface PageVisit {
   referrer: string;
 }
 
+export interface ResumeView {
+  fileName: string;
+  timestamp: number;
+}
+
 export interface ResumeDownload {
   fileName: string;
   timestamp: number;
 }
 
+
 export interface AnalyticsStats {
   totalPageVisits: number;
-  totalResumeDownloads: number;
+  totalResumeViews: number;
   pageVisitsByPage: Record<string, number>;
   lastPageVisit: number | null;
-  lastResumeDownload: number | null;
+  lastResumeView: number | null;
 }
 
 interface StorageProvider {
@@ -34,7 +40,7 @@ interface StorageProvider {
 }
 
 const VISITS_STORAGE_KEY = 'portfolio_page_visits';
-const DOWNLOADS_STORAGE_KEY = 'portfolio_resume_downloads';
+const RESUME_VIEWS_KEY = 'portfolio_resume_views';
 
 /**
  * Safe localStorage wrapper that handles Safari private browsing mode
@@ -130,22 +136,23 @@ export class AnalyticsService {
   }
 
   /**
-   * Track a resume download
+   * Track a resume view
    */
-  trackResumeDownload(fileName: string): void {
+  trackResumeView(fileName: string): void {
     try {
-      const downloads = this.getResumeDownloads();
-      const download: ResumeDownload = {
+      const views = this.getResumeViews();
+      const view: ResumeView = {
         fileName,
         timestamp: Date.now(),
       };
-      downloads.push(download);
-      this.storageProvider.setItem(DOWNLOADS_STORAGE_KEY, JSON.stringify(downloads));
+      views.push(view);
+      this.storageProvider.setItem(RESUME_VIEWS_KEY, JSON.stringify(views));
     } catch (error) {
-      console.warn('Failed to track resume download:', error);
+      console.warn('Failed to track resume view:', error);
       // Silently fail - don't break the application
     }
   }
+
 
   /**
    * Get all page visits
@@ -161,24 +168,25 @@ export class AnalyticsService {
   }
 
   /**
-   * Get all resume downloads
+   * Get all resume views
    */
-  getResumeDownloads(): ResumeDownload[] {
+  getResumeViews(): ResumeView[] {
     try {
-      const data = this.storageProvider.getItem(DOWNLOADS_STORAGE_KEY);
+      const data = this.storageProvider.getItem(RESUME_VIEWS_KEY);
       return data ? JSON.parse(data) : [];
     } catch (error) {
-      console.warn('Failed to retrieve resume downloads:', error);
+      console.warn('Failed to retrieve resume views:', error);
       return [];
     }
   }
+
 
   /**
    * Get analytics statistics
    */
   getStats(): AnalyticsStats {
     const pageVisits = this.getPageVisits();
-    const resumeDownloads = this.getResumeDownloads();
+    const resumeViews = this.getResumeViews();
 
     const pageVisitsByPage: Record<string, number> = {};
     pageVisits.forEach((visit) => {
@@ -187,10 +195,10 @@ export class AnalyticsService {
 
     return {
       totalPageVisits: pageVisits.length,
-      totalResumeDownloads: resumeDownloads.length,
+      totalResumeViews: resumeViews.length,
       pageVisitsByPage,
       lastPageVisit: pageVisits.length > 0 ? pageVisits[pageVisits.length - 1].timestamp : null,
-      lastResumeDownload: resumeDownloads.length > 0 ? resumeDownloads[resumeDownloads.length - 1].timestamp : null,
+      lastResumeView: resumeViews.length > 0 ? resumeViews[resumeViews.length - 1].timestamp : null,
     };
   }
 
@@ -200,7 +208,7 @@ export class AnalyticsService {
   clearAllData(): void {
     try {
       this.storageProvider.removeItem(VISITS_STORAGE_KEY);
-      this.storageProvider.removeItem(DOWNLOADS_STORAGE_KEY);
+      this.storageProvider.removeItem(RESUME_VIEWS_KEY);
     } catch (error) {
       console.warn('Failed to clear analytics data:', error);
     }

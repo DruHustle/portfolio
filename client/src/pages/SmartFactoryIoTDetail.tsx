@@ -4,7 +4,7 @@ import { useMemo, useEffect } from "react";
 import { useNavigationState } from "@/hooks/useNavigationState";
 import { safeSessionStorage } from "@/lib/storage";
 
-export default function IoTDetail() {
+export default function SmartFactoryIoTDetail() {
   const { showBackButton } = useNavigationState();
   
   useEffect(() => {
