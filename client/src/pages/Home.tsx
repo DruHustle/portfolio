@@ -472,15 +472,15 @@ export default function Home() {
                 Visit Diaspora Unlocked <ExternalLink className="w-4 h-4" />
               </a>
             </div>
-            <div className="p-8 md:p-10 rounded-2xl bg-white border border-blue-100 shadow-sm">
+            <div className="p-8 md:p-10 rounded-2xl bg-gradient-to-br from-slate-900 via-indigo-950 to-blue-950 border border-indigo-700/50 shadow-xl">
               <div className="flex items-center gap-3 mb-6 p-4 rounded-xl bg-gradient-to-r from-indigo-700 to-blue-600 shadow-md shadow-indigo-200/60">
                 <div className="w-11 h-11 rounded-xl bg-white/15 border border-white/20 flex items-center justify-center"><Zap className="w-6 h-6 text-cyan-300" /></div>
                 <div><p className="text-xs font-bold uppercase tracking-wider text-cyan-200">Custom AI System</p><h3 className="text-2xl font-bold text-white">Onesa</h3></div>
               </div>
-              <p className="text-gray-700 leading-relaxed mb-7">Onesa brings together conversational intelligence, real-time voice interaction, contextual travel assistance, and immersive interfaces in one extensible AI experience.</p>
+              <p className="text-gray-300 leading-relaxed mb-7">Onesa brings together conversational intelligence, real-time voice interaction, contextual travel assistance, and immersive interfaces in one extensible AI experience.</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {["Trained from scratch", "Speech-to-text (STT)", "Text-to-speech (TTS)", "AI-driven travel", "AR/VR integration", "Multimodal experiences"].map((capability) => (
-                  <div key={capability} className="flex items-center gap-3 p-3 rounded-lg bg-indigo-50 text-indigo-950 text-sm font-semibold"><div className="w-2 h-2 rounded-full bg-cyan-500 shrink-0"></div>{capability}</div>
+                  <div key={capability} className="flex items-center gap-3 p-3 rounded-lg bg-white/10 border border-white/10 text-indigo-50 text-sm font-semibold"><div className="w-2 h-2 rounded-full bg-cyan-400 shrink-0"></div>{capability}</div>
                 ))}
               </div>
             </div>
