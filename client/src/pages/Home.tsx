@@ -15,6 +15,9 @@ import {
   Target,
   TrendingUp,
   Menu,
+  CalendarDays,
+  MapPin,
+  Mic2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -117,6 +120,15 @@ export default function Home() {
           "Test-Driven Development (TDD)",
           "SOLID Principles",
           "Agile (Scrum & Kanban)",
+        ],
+      },
+      {
+        title: "Applied AI & Multimodal Systems",
+        skills: [
+          "AI Model Training from Scratch",
+          "Speech-to-Text & Text-to-Speech",
+          "Conversational Intelligence",
+          "AI Travel Experiences & AR/VR",
         ],
       },
       {
@@ -306,7 +318,7 @@ export default function Home() {
                 Senior DevOps<br />Engineer
               </h1>
               <p className="text-lg md:text-xl leading-relaxed max-w-2xl text-gray-200 mb-8">
-                Building secure cloud platforms, automated delivery systems, resilient infrastructure, and observable services across Azure, AWS, container, software, and industrial IoT environments.
+                Building secure cloud platforms, automated delivery systems, resilient infrastructure, industrial IoT solutions, and a self-trained multimodal AI model spanning voice, travel, and AR/VR.
               </p>
               <div className="flex flex-wrap gap-4">
                 <a href="#projects" onClick={(e) => scrollToSection(e, "projects")} className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-teal-500 text-white font-semibold rounded-lg hover:bg-teal-600 transition-all hover:shadow-lg hover:shadow-teal-500/50 hover:scale-105">
@@ -333,6 +345,48 @@ export default function Home() {
                   <p className="text-sm font-medium text-gray-400">{stat.label}</p>
                 </div>
               ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Featured Speaking */}
+      <section className="py-16 bg-white">
+        <div className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
+          <div className="rounded-2xl overflow-hidden bg-slate-900 text-white border border-slate-800 shadow-xl">
+            <div className="grid grid-cols-1 lg:grid-cols-[0.85fr_1.15fr]">
+              <div className="p-8 md:p-10 bg-gradient-to-br from-teal-500/20 to-blue-500/10">
+                <div className="inline-flex items-center gap-2 px-3 py-1 mb-5 rounded-full bg-teal-400/10 border border-teal-400/30 text-teal-300 text-xs font-bold uppercase tracking-wider">
+                  <Mic2 className="w-4 h-4" /> Featured Speaker
+                </div>
+                <h2 className="text-2xl md:text-3xl font-bold leading-tight mb-4">
+                  Enterprise Continuous Delivery &amp; Automation Summit 2026
+                </h2>
+                <div className="space-y-3 text-gray-300 text-sm">
+                  <p className="flex items-center gap-3"><CalendarDays className="w-4 h-4 text-teal-400 shrink-0" /> November 30 – December 1, 2026</p>
+                  <p className="flex items-center gap-3"><MapPin className="w-4 h-4 text-teal-400 shrink-0" /> Maritim proArte Hotel, Berlin</p>
+                </div>
+                <a
+                  href="https://www.we-conect.com/events/enterprise-continuous-delivery-automation-summit-2026/speakers/1fd0e561-a633-44e6-b578-00c5d13f63cd"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 mt-7 text-sm font-semibold text-teal-300 hover:text-teal-200 transition-colors"
+                >
+                  View official speaker profile <ExternalLink className="w-4 h-4" />
+                </a>
+              </div>
+              <div className="p-8 md:p-10 space-y-7">
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-wider text-teal-400 mb-2">Case study · 09:00–09:25</p>
+                  <h3 className="text-xl font-bold mb-2">Balancing Control and Flexibility</h3>
+                  <p className="text-gray-400 leading-relaxed">Building modern delivery platforms for complex enterprise environments—combining governed core systems with modular architecture, APIs, secure automation, and CI/CD.</p>
+                </div>
+                <div className="pt-6 border-t border-slate-700">
+                  <p className="text-xs font-bold uppercase tracking-wider text-teal-400 mb-2">Panel discussion · 18:00–18:45</p>
+                  <h3 className="text-xl font-bold mb-2">AI in Highly Regulated Industries</h3>
+                  <p className="text-gray-400 leading-relaxed">Exploring how enterprise AI governance can enable responsible experimentation, strengthen compliance, and accelerate innovation without compromising security.</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -396,6 +450,35 @@ export default function Home() {
                 </a>
               </Link>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* AI Product Spotlight */}
+      <section className="py-20 bg-[#E0F2FE]">
+        <div className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.1fr] gap-8 items-stretch">
+            <div className="p-8 md:p-10 rounded-2xl bg-gradient-to-br from-indigo-950 via-blue-950 to-slate-900 text-white shadow-xl">
+              <span className="inline-flex px-3 py-1 mb-5 rounded-full bg-cyan-400/10 border border-cyan-300/30 text-cyan-300 text-xs font-bold uppercase tracking-wider">AI Product Spotlight</span>
+              <h2 className="text-3xl md:text-4xl font-bold mb-3">Diaspora Unlocked</h2>
+              <p className="text-cyan-300 font-semibold mb-5">Zimbabwe diaspora services powered by Onesa</p>
+              <p className="text-gray-300 leading-relaxed mb-7">A digital services platform I built to connect diaspora communities with intelligent travel and destination experiences. Its AI foundation is Onesa, my own model trained from scratch using the Llama architecture and designed to move beyond conventional chat interfaces.</p>
+              <a href="https://www.diasporaunlocked.com/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-5 py-3 rounded-lg bg-cyan-500 text-slate-950 font-bold hover:bg-cyan-400 transition-colors">
+                Visit Diaspora Unlocked <ExternalLink className="w-4 h-4" />
+              </a>
+            </div>
+            <div className="p-8 md:p-10 rounded-2xl bg-white border border-blue-100 shadow-sm">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-11 h-11 rounded-xl bg-indigo-100 flex items-center justify-center"><Zap className="w-6 h-6 text-indigo-600" /></div>
+                <div><p className="text-xs font-bold uppercase tracking-wider text-indigo-600">Custom AI System</p><h3 className="text-2xl font-bold text-gray-900">Onesa</h3></div>
+              </div>
+              <p className="text-gray-700 leading-relaxed mb-7">Onesa brings together conversational intelligence, real-time voice interaction, contextual travel assistance, and immersive interfaces in one extensible AI experience.</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {["Trained from scratch", "Speech-to-text (STT)", "Text-to-speech (TTS)", "AI-driven travel", "AR/VR integration", "Multimodal experiences"].map((capability) => (
+                  <div key={capability} className="flex items-center gap-3 p-3 rounded-lg bg-indigo-50 text-indigo-950 text-sm font-semibold"><div className="w-2 h-2 rounded-full bg-cyan-500 shrink-0"></div>{capability}</div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>
