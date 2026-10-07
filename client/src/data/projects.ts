@@ -56,20 +56,19 @@ export const projects: Project[] = [
   {
     id: "imsop",
     title: "IMSOP",
-    subtitle: "Intelligent Multi-Cloud Supply Chain & Operations Platform",
+    subtitle: "Supply Chain Operations, Telemetry & Integration Platform",
     description:
-      "Enterprise-grade supply chain platform with GraphQL API, .NET microservices, and multi-cloud support via Azure Arc, ensuring 99.9% uptime and high performance.",
+      "Full-stack supply chain platform combining a React operations dashboard, a Node/Express API, shipment and telemetry workflows, analytics, mapping, JWT/RBAC, and an extensible .NET microservices backend.",
     tags: [
+      { label: "React 19", color: "purple" },
+      { label: "Node.js", color: "purple" },
       { label: ".NET 8", color: "purple" },
-      { label: "Python", color: "cyan" },
       { label: "GraphQL", color: "purple" },
-      { label: "Azure Arc", color: "purple" },
-      { label: "Aiven PostgreSQL", color: "purple" },
-      { label: "Redis", color: "purple" },
-      { label: "Elasticsearch", color: "purple" },
+      { label: "REST API", color: "purple" },
+      { label: "Aiven MySQL", color: "purple" },
       { label: "SignalR", color: "purple" },
-      { label: "Entity Framework Core", color: "purple" },
-      { label: "ML.NET", color: "purple" },
+      { label: "Docker", color: "purple" },
+      { label: "GitHub Actions", color: "purple" },
     ],
     link: "/projects/imsop",
     gradient: {

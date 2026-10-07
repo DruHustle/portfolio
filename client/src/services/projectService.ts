@@ -64,37 +64,36 @@ export class ProjectService {
   private static getIMSOPProject(): ProjectData {
     return {
       title: 'IMSOP',
-      subtitle: 'Intelligent Multi-Cloud Supply Chain & Operations Platform',
+      subtitle: 'Supply Chain Operations, Telemetry & Integration Platform',
       description:
-        'An enterprise-grade, cloud-native platform designed for real-time supply chain visibility, predictive analytics, and intelligent automation. Built with domain-driven design principles across seven bounded contexts, serving 10M+ requests per day with 99.99% uptime SLA.',
+        'A full-stack operations platform combining a React dashboard, Node/Express REST API, shipment and telemetry workflows, analytics, mapping, JWT/RBAC, and an extensible .NET microservices backend.',
       stats: [
-        { label: 'Daily Requests', value: '10M+', icon: null },
-        { label: 'Uptime SLA', value: '99.99%', icon: null },
-        { label: 'Cost Reduction', value: '35%', icon: null },
+        { label: 'Frontend', value: 'React 19', icon: null },
+        { label: 'APIs', value: 'REST + GraphQL', icon: null },
+        { label: 'Services', value: 'Node + .NET', icon: null },
       ],
       problemStatement:
         'The organization faced critical challenges in managing legacy monolithic systems that couldn\'t scale with growing demand. Peak traffic loads exceeding 5M requests per day caused frequent outages and high operational costs.',
       requirements: [
-        'Handle 10M+ requests per day with sub-100ms latency',
-        'Achieve 99.99% uptime SLA across multiple regions',
-        'Reduce infrastructure costs by 30-40%',
-        'Support multi-cloud strategy (Azure + AWS)',
+        'Unify shipment, order, telemetry, analytics, and reporting workflows',
+        'Protect application operations with JWT and role-based access',
+        'Support deployed REST APIs and an extensible GraphQL service gateway',
+        'Automate testing, containers, and cloud delivery',
       ],
       solution: {
         architecture: [
-          { title: 'Identity', desc: 'OAuth 2.0, RBAC, managed identities', icon: null },
-          { title: 'Ingestion', desc: 'REST APIs, Kafka streams, WebSockets', icon: null },
-          { title: 'Operations', desc: 'Shipment tracking, state machines', icon: null },
-          { title: 'Analytics', desc: 'Data processing, ML model inference', icon: null },
-          { title: 'Prediction', desc: 'Delay prediction, demand forecasting', icon: null },
-          { title: 'AI Assistant', desc: 'Natural language chatbot', icon: null },
-          { title: 'Reporting', desc: 'GraphQL API, real-time dashboards', icon: null },
+          { title: 'Experience', desc: 'React dashboards, maps, charts, exports', icon: null },
+          { title: 'Application API', desc: 'Node.js, Express, TypeScript, REST', icon: null },
+          { title: 'Identity', desc: 'JWT, bcrypt, RBAC, protected routes', icon: null },
+          { title: 'Operations', desc: 'Shipments, orders, telemetry, reports', icon: null },
+          { title: '.NET Services', desc: 'Gateway, supply chain, operations', icon: null },
+          { title: 'Persistence', desc: 'MySQL and PostgreSQL service models', icon: null },
         ],
         techStack: [
-          { category: 'Backend', items: ['.NET Core 8', 'Python 3.11', 'FastAPI', 'GraphQL'] },
-          { category: 'Data', items: ['PostgreSQL', 'Azure SQL', 'MongoDB', 'Redis'] },
-          { category: 'Infrastructure', items: ['Kubernetes (AKS)', 'Docker', 'Terraform', 'Azure Bicep'] },
-          { category: 'DevOps', items: ['Azure DevOps', 'GitHub Actions', 'ELK Stack', 'Prometheus'] },
+          { category: 'Frontend', items: ['React 19', 'TypeScript', 'Vite', 'Recharts', 'Google Maps'] },
+          { category: 'Backend', items: ['Node.js', 'Express', '.NET 8', 'GraphQL', 'SignalR'] },
+          { category: 'Data', items: ['Aiven MySQL', 'PostgreSQL', 'Drizzle ORM', 'EF Core'] },
+          { category: 'Delivery', items: ['Docker', 'GitHub Actions', 'Azure DevOps', 'Terraform', 'Azure Bicep'] },
         ],
       },
       implementation: [
@@ -120,10 +119,10 @@ export class ProjectService {
         },
       ],
       results: [
-        '10M+ requests per day with sub-100ms latency',
-        '99.99% uptime SLA across all services',
-        '35% infrastructure cost reduction',
-        'Deployment time reduced from weeks to hours',
+        'Unified operations, telemetry, analytics, and mapping experience',
+        'Authenticated REST workflows with role-aware access',
+        'Extensible .NET gateway and domain-service architecture',
+        'Automated test, container, and deployment workflows',
       ],
     };
   }

@@ -7,19 +7,19 @@ const baseUrl = import.meta.env.BASE_URL || '/';
 const docs = [
   {
     title: "Architecture Overview",
-    description: "Detailed technical design, including system architecture, .NET 8 microservices, and multi-cloud support.",
+    description: "Architecture blueprint covering the React client, application APIs, .NET service model, data stores, integration boundaries, and cloud deployment options.",
     mdPath: "/docs/imsop/architecture.md",
     pdfPath: "/docs/imsop/architecture.pdf",
   },
   {
     title: "Database Schema",
-    description: "Comprehensive database design and entity relationship specifications for Aiven PostgreSQL.",
+    description: "Data-model reference for organizations, users, suppliers, products, inventory, orders, shipments, telemetry, and analytics.",
     mdPath: "/docs/imsop/database-schema.md",
     pdfPath: "/docs/imsop/database-schema.pdf",
   },
   {
     title: "API Flows",
-    description: "Technical specification for REST and GraphQL APIs used across the platform.",
+    description: "Technical flows for authentication, supply-chain operations, telemetry, analytics, permissions, shipment tracking, and reporting.",
     mdPath: "/docs/imsop/api-flows.md",
     pdfPath: "/docs/imsop/api-flows.pdf",
   },
@@ -57,7 +57,7 @@ export default function IMSOPDocumentation() {
           </div>
           <h1 className="text-4xl md:text-5xl font-extrabold mb-4 tracking-tight">IMSOP Documentation</h1>
           <p className="text-xl text-slate-400 max-w-2xl mx-auto">
-            Technical specifications, design patterns, and architectural blueprints for the Intelligent Multi-Cloud Supply Chain platform.
+            Technical specifications and architecture blueprints for IMSOP's supply-chain operations, telemetry, integration, and cloud deployment model.
           </p>
         </div>
       </header>
@@ -102,7 +102,7 @@ export default function IMSOPDocumentation() {
         <section className="mt-20 p-10 rounded-[2.5rem] bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700/50">
           <h2 className="text-3xl font-bold mb-4 text-center">System Architecture</h2>
           <p className="text-slate-400 mb-10 max-w-2xl mx-auto text-center">
-            High-level overview of the IMSOP platform's multi-cloud architecture.
+            High-level overview of the IMSOP client, API, service, data, and integration architecture.
           </p>
           <div className="rounded-2xl overflow-hidden border border-slate-600/50">
             <img 

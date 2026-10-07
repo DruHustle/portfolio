@@ -358,9 +358,9 @@ export default function Home() {
               },
               {
                 title: "IMSOP",
-                sub: "Multi-Cloud Supply Chain Platform",
-                desc: "Enterprise-grade microservices architecture with GraphQL API, supporting multi-cloud environments via Azure Arc.",
-                tech: [".NET 8", "GraphQL", "Azure Arc", "PostgreSQL"],
+                sub: "Supply Chain Operations & Telemetry Platform",
+                desc: "Full-stack operations platform for shipment and order workflows, telemetry, analytics, mapping, role-based access, and extensible .NET microservices.",
+                tech: ["React 19", "Node.js", ".NET 8", "REST/GraphQL", "MySQL", "Docker"],
                 link: "/projects/imsop",
                 color: "from-cyan-500 to-teal-500" 
               },
