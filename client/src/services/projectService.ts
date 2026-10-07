@@ -197,9 +197,9 @@ export class ProjectService {
   private static getSmartFactoryIoTProject(): ProjectData {
     return {
       title: 'Smart Factory IoT Dashboard',
-      subtitle: 'Real-Time Industrial IoT Monitoring & Analytics Platform',
+      subtitle: 'Industrial IoT Asset, Telemetry & Edge Platform',
       description:
-        'A production-oriented industrial IoT platform for asset lifecycle management, durable MQTT telemetry, incident response, analytics, notifications, and secure edge integration.',
+        'A production-oriented industrial IoT platform spanning a Vercel React/Node control plane, five private .NET services, durable MQTT telemetry, incident response, analytics, secure edge integration, and an OAuth-protected BaSyx AAS runtime.',
       stats: [
         { label: 'Services', value: '6 Processes', icon: null },
         { label: 'Edge Transport', value: 'MQTT TLS', icon: null },
@@ -220,7 +220,7 @@ export class ProjectService {
           { title: 'Private Services', desc: 'Five .NET 8 services', icon: null },
           { title: 'Messaging', desc: 'CloudAMQP + MQTT TLS', icon: null },
           { title: 'Database', desc: 'Aiven PostgreSQL + Drizzle', icon: null },
-          { title: 'Asset Standards', desc: 'AAS repositories and gateway', icon: null },
+          { title: 'Asset Standards', desc: 'BaSyx repositories, registries and gateway', icon: null },
           { title: 'Edge', desc: 'Pi, WROVER, OPC UA, Modbus, serial', icon: null },
         ],
         techStack: [
@@ -228,7 +228,7 @@ export class ProjectService {
           { category: 'Backend', items: ['Node.js', 'Express', 'tRPC', '.NET 8', 'ASP.NET Core'] },
           { category: 'Data', items: ['Aiven PostgreSQL', 'Drizzle ORM', 'Redis Cloud'] },
           { category: 'IoT & Edge', items: ['CloudAMQP', 'MQTT TLS', 'Raspberry Pi', 'ESP32', 'OPC UA', 'Modbus'] },
-          { category: 'Delivery', items: ['Vercel', 'Render', 'Docker', 'GitHub Actions'] },
+          { category: 'Delivery', items: ['Vercel', 'Render', 'Docker', 'Supervisor', 'GitHub Actions', 'Immutable Images'] },
         ],
       },
       implementation: [

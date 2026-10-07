@@ -8,21 +8,21 @@ const docs = [
   {
     title: "Architecture Overview",
     description:
-      "Production topology spanning Vercel, the public Node API, five private .NET services, MQTT edge gateways, PostgreSQL, Redis, and the AAS runtime.",
+      "Production topology spanning the Vercel proxy, six-process Render container, durable MQTT edge paths, managed data services, and the Oracle-hosted BaSyx runtime.",
     mdPath: "/docs/smartfactoryiot/architecture.md",
     pdfPath: "/docs/smartfactoryiot/architecture.pdf",
   },
   {
     title: "Database Schema",
     description:
-      "Application data model covering PostgreSQL-backed accounts, assets, devices, telemetry, incidents, lifecycle history, and durable notifications.",
+      "PostgreSQL model for identities, AAS assets and revisions, gateway mappings, replay-safe telemetry, incident workflows, downtime, and durable notifications.",
     mdPath: "/docs/smartfactoryiot/database-schema.md",
     pdfPath: "/docs/smartfactoryiot/database-schema.pdf",
   },
   {
     title: "API Flows",
     description:
-      "Technical specification for REST APIs and SignalR endpoints used for device management.",
+      "Role-enforced login, AAS create/import/version flows, grounded Assistant routing, edge profiles, MQTT telemetry, incident response, and service delegation.",
     mdPath: "/docs/smartfactoryiot/api-flows.md",
     pdfPath: "/docs/smartfactoryiot/api-flows.pdf",
   },
@@ -68,8 +68,8 @@ export default function SmartFactoryIoTDocumentation() {
             Smart Factory IoT Documentation
           </h1>
           <p className="text-xl text-slate-400 max-w-2xl mx-auto">
-            Technical specifications, design patterns, and architectural
-            blueprints for the real-time industrial IoT monitoring platform.
+            Current production topology, security boundaries, API workflows,
+            and data models for the industrial asset and telemetry platform.
           </p>
         </div>
       </header>
@@ -122,8 +122,8 @@ export default function SmartFactoryIoTDocumentation() {
             System Architecture
           </h2>
           <p className="text-slate-400 mb-10 max-w-2xl mx-auto text-center">
-            High-level overview of the Smart Factory IoT platform's real-time
-            architecture.
+            Vercel, Render, managed messaging and data services, the private
+            BaSyx standards runtime, and factory edge systems.
           </p>
 
           <div className="rounded-2xl overflow-hidden border border-slate-700/50 bg-slate-900/50 p-6">

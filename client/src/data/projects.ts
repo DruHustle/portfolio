@@ -32,9 +32,9 @@ export const projects: Project[] = [
   {
     id: "smart-factory-iot",
     title: "Smart Factory IoT",
-    subtitle: "Real-time Industrial Monitoring & Control Platform",
+    subtitle: "Industrial IoT Asset, Telemetry & Edge Platform",
     description:
-      "Industrial asset, telemetry, and edge platform with a React/Node control plane, private .NET services, durable MQTT ingestion, PostgreSQL, Redis, and AAS lifecycle integration.",
+      "Production-oriented platform with a Vercel React/Node control plane, five private .NET services, durable MQTT ingestion, PostgreSQL/Redis, secure edge gateways, and a BaSyx AAS runtime.",
     tags: [
       { label: "React (Vite)", color: "cyan" },
       { label: ".NET 8", color: "cyan" },
@@ -42,6 +42,7 @@ export const projects: Project[] = [
       { label: "PostgreSQL", color: "cyan" },
       { label: "CloudAMQP", color: "cyan" },
       { label: "AAS", color: "cyan" },
+      { label: "BaSyx", color: "cyan" },
       { label: "Docker", color: "cyan" },
       { label: "TypeScript", color: "cyan" },
       { label: "Redis", color: "cyan" },

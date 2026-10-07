@@ -18,7 +18,7 @@ export default function SmartFactoryIoTDetail() {
       title: "Smart Factory IoT",
       subtitle: "Real-Time Industrial Monitoring & Control Platform",
       description:
-        "A production-oriented industrial IoT platform for asset lifecycle management, durable telemetry, incident response, analytics, and bounded machine control. It combines a React dashboard and Node API with five private .NET services, PostgreSQL, Redis, MQTT edge gateways, and an OAuth-protected AAS runtime.",
+        "A production-oriented industrial IoT platform for asset lifecycle management, durable telemetry, incident response, analytics, and bounded machine control. It combines a Vercel-hosted React UI and API proxy with one supervised Render container, five private .NET services, managed PostgreSQL and Redis, MQTT edge gateways, and an OAuth-protected BaSyx AAS runtime.",
       stats: [
         { label: "Services", value: "6", icon: Zap },
         { label: "Edge Transport", value: "MQTT TLS", icon: Shield },
@@ -46,8 +46,8 @@ export default function SmartFactoryIoTDetail() {
           { category: "Backend", items: ["Node.js", "Express", "tRPC", ".NET 8", "ASP.NET Core", "REST", "WebSocket"] },
           { category: "IoT & Edge", items: ["CloudAMQP", "MQTT TLS", "Raspberry Pi", "ESP32 WROVER", "OPC UA", "Modbus", "Serial"] },
           { category: "Data", items: ["Aiven PostgreSQL", "Drizzle ORM", "Redis Cloud", "Durable Outbox"] },
-          { category: "Assets & Security", items: ["Asset Administration Shell", "AASX", "OIDC/OAuth 2.0", "RBAC", "HttpOnly JWT"] },
-          { category: "Delivery", items: ["Vercel", "Render", "Docker", "GitHub Actions", "Immutable Images"] },
+          { category: "Assets & Security", items: ["BaSyx", "AAS Core 3.1", "AASX", "CAEX 3.0", "OIDC/OAuth 2.0", "RBAC", "HttpOnly JWT"] },
+          { category: "Delivery", items: ["Vercel", "Render", "Docker", "Supervisor", "GitHub Actions", "Immutable Multi-Repo Images"] },
         ],
         implementation: [
           {
@@ -68,7 +68,7 @@ export default function SmartFactoryIoTDetail() {
           {
             phase: "Optimization",
             duration: "Weeks 15–18",
-            description: "Add AAS/AASX lifecycle workflows, OAuth-protected standards APIs, Redis-backed cross-instance events, asset analytics, and role-aware incident operations.",
+            description: "Add AAS/AASX lifecycle workflows, revision-safe edits, OAuth-protected BaSyx APIs, Redis-backed cross-instance events, grounded AI assistance, asset analytics, and role-aware incident operations.",
           },
           {
             phase: "Production",
@@ -80,8 +80,8 @@ export default function SmartFactoryIoTDetail() {
 
       results: [
         "Durable, replay-tolerant telemetry from gateway and direct MQTT devices",
-        "Versioned AAS lifecycle with import, export, audit history, and standards gateway",
-        "Role-aware incident ownership, downtime confirmation, and durable notifications",
+        "Versioned AAS lifecycle with AASX import, CAEX export, audit history, and OAuth standards gateway",
+        "Role-aware incident ownership, explicit downtime confirmation, and durable inbox/email notifications",
         "Source-pinned delivery across three repositories with immutable deployments",
       ],
     }),
