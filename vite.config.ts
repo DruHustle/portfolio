@@ -2,13 +2,17 @@ import { jsxLocPlugin } from "@builder.io/vite-plugin-jsx-loc";
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
-import { defineConfig } from "vite";
+import { defineConfig } from "vitest/config";
 
 const plugins = [react(), tailwindcss(), jsxLocPlugin()];
 
 export default defineConfig({
   plugins,
   base: "/portfolio/", // CRITICAL: Fix for GitHub Pages asset loading
+  test: {
+    environment: "jsdom",
+    setupFiles: ["./client/src/__tests__/setup.ts"],
+  },
   resolve: {
     alias: {
       "@": path.resolve(import.meta.dirname, "client", "src"),

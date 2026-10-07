@@ -50,8 +50,8 @@ export default function Home() {
       },
       {
         icon: Zap,
-        title: "Event-Driven",
-        desc: "Real-time data processing with SignalR and Kafka",
+        title: "Reliability Engineering",
+        desc: "Observable, recoverable systems with measurable service health",
       },
       {
         icon: Database,
@@ -65,8 +65,8 @@ export default function Home() {
       },
       {
         icon: Shield,
-        title: "Zero Trust Security",
-        desc: "OAuth 2.0 and Entra ID for robust access control",
+        title: "Secure Delivery",
+        desc: "Identity, secrets, policy, and supply-chain controls by design",
       },
     ],
     []
@@ -75,12 +75,12 @@ export default function Home() {
   const skills = useMemo(
     () => [
       {
-        title: "Cloud & Services",
+        title: "Cloud & Platform Engineering",
         skills: [
-          "Azure (Functions, App Services, AKS)",
-          "AWS (EC2, Lambda, RDS)",
-          "Microsoft Entra ID & Graph API",
-          "Multi-cloud deployment",
+          "Azure & AWS Platforms",
+          "Platform Architecture",
+          "Cloud Migration & Modernization",
+          "Cost & Capacity Optimization",
         ],
       },
       {
@@ -93,7 +93,7 @@ export default function Home() {
         ],
       },
       {
-        title: "Containerization",
+        title: "Containers & Runtime Platforms",
         skills: [
           "Docker & Docker Compose",
           "Kubernetes Orchestration",
@@ -138,21 +138,21 @@ export default function Home() {
         ],
       },
       {
-        title: "Monitoring & Security",
+        title: "Observability & Reliability",
         skills: [
-          "Azure Monitor & App Insights",
-          "Log Analytics & Alerting",
-          "Zero Trust Architecture",
-          "Governance Automation",
+          "Metrics, Logs & Distributed Tracing",
+          "SLOs, Alerting & Incident Response",
+          "Performance & Capacity Engineering",
+          "Operational Readiness & Recovery",
         ],
       },
       {
         title: "IoT & Edge Computing",
         skills: [
-          "Azure IoT Hub & IoT Edge",
-          "MQTT & AMQP Protocols",
+          "MQTT, AMQP & Edge Gateways",
+          "OPC UA, Modbus & Serial Integration",
           "Raspberry Pi & ESP32 Development",
-          "Edge Analytics & Telemetry",
+          "Industrial Telemetry & Asset Models",
         ],
       },
     ],
@@ -303,10 +303,10 @@ export default function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 items-center">
             <div className="lg:col-span-2">
               <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 leading-tight">
-                Cloud Platform<br />Engineering
+                Senior DevOps<br />Engineer
               </h1>
               <p className="text-lg md:text-xl leading-relaxed max-w-2xl text-gray-200 mb-8">
-                Specializing in full-stack cloud architecture, microservices design, and enterprise-scale system engineering across multi-cloud platforms.
+                Building secure cloud platforms, automated delivery systems, resilient infrastructure, and observable services across Azure, AWS, container, software, and industrial IoT environments.
               </p>
               <div className="flex flex-wrap gap-4">
                 <a href="#projects" onClick={(e) => scrollToSection(e, "projects")} className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-teal-500 text-white font-semibold rounded-lg hover:bg-teal-600 transition-all hover:shadow-lg hover:shadow-teal-500/50 hover:scale-105">
@@ -350,9 +350,9 @@ export default function Home() {
             {[
               {
                 title: "Smart Factory IoT",
-                sub: "Real-Time Industrial Monitoring",
-                desc: "Comprehensive IoT platform with real-time SignalR updates, .NET 8 microservices, and Azure IoT Hub integration.",
-                tech: [".NET 8", "SignalR", "Azure IoT Hub", "AKS", "MQTT/AMQP"],
+                sub: "Industrial Asset, Telemetry & Edge Platform",
+                desc: "Production-oriented IoT platform spanning asset lifecycle management, AAS integration, durable MQTT telemetry, incident workflows, analytics, and secure edge gateways.",
+                tech: ["React", "Node.js", ".NET 8", "PostgreSQL", "MQTT", "AAS"],
                 link: "/projects/smart-factory-iot",
                 color:"from-orange-500 to-red-500"
               },
@@ -405,7 +405,7 @@ export default function Home() {
         <div className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Technical Expertise</h2>
-            <p className="text-gray-700 text-lg max-w-2xl mx-auto">Specialized in cloud-native architectures and enterprise systems.</p>
+            <p className="text-gray-700 text-lg max-w-3xl mx-auto">DevOps leadership spanning cloud platforms, infrastructure automation, CI/CD, containers, observability, security, software architecture, and industrial edge systems.</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {skills.map((category, i) => (
@@ -437,7 +437,7 @@ export default function Home() {
                  <div className="text-center mb-12">
                   <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">Adding Value</h2>
                   <p className="text-gray-700 text-lg leading-relaxed mb-6">
-                    With extensive experience in enterprise software engineering, I specialize in building resilient, scalable, and cost-effective cloud solutions. My approach combines deep technical expertise with a focus on business value and operational excellence.
+                    As a Senior DevOps Engineer, I connect software delivery, cloud infrastructure, platform reliability, security, and operational ownership. I design systems that are repeatable to deploy, observable in production, resilient under failure, and aligned with measurable business outcomes.
                   </p>
                 </div>
               </div>

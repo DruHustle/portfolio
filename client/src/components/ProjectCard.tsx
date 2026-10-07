@@ -28,11 +28,11 @@ export function ProjectCard({
   icon,
 }: ProjectCardProps) {
   return (
-    <Link href={link}>
-      <a
-        className="group relative flex flex-col h-full rounded-2xl overflow-hidden bg-white border border-blue-100 hover:border-teal-500/50 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer will-change-transform"
-        aria-label={`View ${title} project details`}
-      >
+    <Link
+      href={link}
+      className="group relative flex flex-col h-full rounded-2xl overflow-hidden bg-white border border-blue-100 hover:border-teal-500/50 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer will-change-transform"
+      aria-label={`View ${title} project details`}
+    >
         <div className={`absolute top-0 left-0 w-full h-1 bg-gradient-to-r ${color}`}></div>
         <div className="p-8 flex flex-col flex-grow">
           <div className="flex items-center justify-between mb-4">
@@ -57,7 +57,6 @@ export function ProjectCard({
             ))}
           </div>
         </div>
-      </a>
     </Link>
   );
 }

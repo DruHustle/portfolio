@@ -1,321 +1,147 @@
-Smart Factory IoT - API Flows & Sequences
-Authentication Flow
-mermaidsequenceDiagram
-    participant Client as Client App (React/Vite)
-    participant API as .NET Backend API
-    participant DB as Azure SQL Database
-    participant Auth as Microsoft Entra ID
-    
-    Client->>API: POST /api/auth/login<br/>{email, password}
-    API->>Auth: Validate via OAuth 2.0
-    Auth->>DB: Query user by email (synced)
-    DB-->>Auth: User record
-    Auth->>Auth: Verify credentials
-    Auth-->>API: Token result
-    
-    alt Authentication Success
-        API->>API: Generate/Return JWT
-        API-->>Client: {token, user}
-        Client->>Client: Store token in localStorage
-    else Authentication Failed
-        API-->>Client: 401 Unauthorized
-        Client->>Client: Show error message
-    end
-Real-time Device Monitoring Flow
-mermaidsequenceDiagram
-    participant Device as IoT Device
-    participant IoTHub as Azure IoT Hub
-    participant Backend as .NET Backend Service
-    participant DB as Azure SQL Database
-    participant Dashboard as React Dashboard UI
-    
-    Device->>IoTHub: Connect via MQTT/AMQP
-    IoTHub-->>Device: Connection established
-    
-    loop Every 5 seconds
-        Device->>IoTHub: Send sensor telemetry
-        IoTHub->>Backend: Route to Azure Function/ASP.NET (C2D/D2C)
-        Backend->>DB: Store sensor_reading
-        Backend->>Backend: Check thresholds (DDD Aggregate)
-        
-        alt Threshold Exceeded
-            Backend->>DB: Create alert
-            Backend->>IoTHub: Broadcast via SignalR/WebSocket
-            IoTHub->>Dashboard: Real-time update (via SignalR hub)
-            Dashboard->>Dashboard: Update UI
-        else Within Range
-            Backend->>IoTHub: Broadcast reading
-            IoTHub->>Dashboard: Real-time update
-        end
-    end
-    
-    Device->>IoTHub: Disconnect
-    IoTHub-->>Device: Connection closed
-Alert Management Flow
-mermaidsequenceDiagram
-    participant Sensor as Sensor Reading
-    participant Threshold as Threshold Check
-    participant Alert as Alert Service (.NET)
-    participant Notification as Azure Logic Apps
-    participant User as User
-    
-    Sensor->>Threshold: New reading value (from IoT Hub)
-    Threshold->>Threshold: Compare with limits
-    
-    alt Value out of range
-        Threshold->>Alert: Create alert
-        Alert->>Alert: Determine severity
-        Alert->>Notification: Trigger workflow
-        Notification->>User: Email/SMS alert (via Microsoft Graph)
-        User->>User: Receive notification
-        
-        User->>Alert: Acknowledge alert (API call)
-        Alert->>Alert: Mark as acknowledged
-        
-        User->>Alert: Resolve alert
-        Alert->>Alert: Mark as resolved
-    else Value in range
-        Threshold-->>Sensor: No action
-    end
-Device Management Flow
-mermaidsequenceDiagram
-    participant UI as React Dashboard
-    participant API as .NET REST API
-    participant Service as Device Service (.NET)
-    participant DB as Azure SQL Database
-    participant Cache as Azure Redis Cache
-    
-    UI->>API: GET /api/devices
-    API->>Cache: Check cache (Managed Identity)
-    
-    alt Cache hit
-        Cache-->>API: Cached devices
-    else Cache miss
-        API->>Service: Fetch devices (DDD Repository)
-        Service->>DB: Query devices (EF Core)
-        DB-->>Service: Device records
-        Service->>Cache: Update cache
-        Service-->>API: Device list
-    end
-    
-    API-->>UI: {devices: [...]}
-    UI->>UI: Render device list
-    
-    UI->>API: POST /api/devices/update<br/>{id, data}
-    API->>Service: Update device
-    Service->>DB: Update record
-    DB-->>Service: Updated device
-    Service->>Cache: Invalidate cache
-    Service-->>API: Updated device
-    API-->>UI: {success: true}
-    UI->>UI: Update UI
-OTA Update Flow
-mermaidsequenceDiagram
-    participant Admin as Administrator
-    participant API as .NET Backend API
-    participant Device as IoT Device
-    participant DB as Azure SQL Database
-    participant Storage as Azure Blob Storage
-    
-    Admin->>API: POST /api/ota/deploy<br/>{version, devices}
-    API->>DB: Create deployments
-    API->>IoTHub: Notify device via Direct Method
-    Device->>Device: Check update available
-    
-    Device->>Storage: Download firmware (SAS Token)
-    Storage-->>Device: Firmware file
-    Device->>Device: Verify checksum
-    Device->>Device: Install firmware
-    Device->>Device: Reboot
-    
-    Device->>API: POST /api/ota/reportStatus<br/>{status: completed} (via IoT Hub)
-    API->>DB: Update deployment status
-    DB-->>API: Updated
-    API-->>Admin: Update complete (SignalR)
-    Admin->>Admin: Receive notification
-Analytics & Reporting Flow
-mermaidsequenceDiagram
-    participant Dashboard as React Dashboard
-    participant API as .NET Analytics API
-    participant Cache as Azure Redis Cache
-    participant DB as Azure SQL Database
-    
-    Dashboard->>API: GET /api/analytics/oee<br/>{timeRange}
-    API->>Cache: Check cache
-    
-    alt Cache valid
-        Cache-->>API: Cached metrics
-    else Cache expired
-        API->>DB: Query sensor readings (EF Core)
-        DB-->>API: Raw data
-        API->>API: Calculate OEE (C# Logic)
-        API->>API: Calculate availability
-        API->>API: Calculate performance
-        API->>API: Calculate quality
-        API->>Cache: Store metrics
-    end
-    
-    API-->>Dashboard: {oee, availability, performance, quality}
-    Dashboard->>Dashboard: Render charts
-Error Handling Flow
-mermaidsequenceDiagram
-    participant Client as React Client
-    participant API as .NET API Server
-    participant Handler as Error Handler (Middleware)
-    participant Logger as Azure App Insights
-    participant User as User
-    
-    Client->>API: Request
-    API->>API: Process request
-    
-    alt Error occurs
-        API->>Handler: Handle error
-        Handler->>Logger: Log error details (Telemetry)
-        Logger->>Logger: Store in logs
-        
-        alt Client error (4xx)
-            Handler-->>Client: Error response
-            Client->>User: Show error message
-        else Server error (5xx)
-            Handler->>Logger: Alert administrators
-            Handler-->>Client: Generic error
-            User->>User: See generic message
-        end
-    else Success
-        API-->>Client: Success response
-    end
-WebSocket Connection Management
-mermaidsequenceDiagram
-    participant Client as React Client App
-    participant WS as SignalR Hub (.NET)
-    participant Heartbeat as Azure Function Heartbeat
-    
-    Client->>WS: Connect (SignalR)
-    WS-->>Client: Connection established
-    WS->>WS: Add to connection pool
-    
-    loop Every 30 seconds
-        WS->>Heartbeat: Check connections
-        Heartbeat->>Client: Ping
-        Client-->>Heartbeat: Pong
-    end
-    
-    alt Connection inactive
-        Heartbeat->>WS: Connection timeout
-        WS->>Client: Close connection
-        Client->>Client: Attempt reconnect
-    else Connection active
-        Heartbeat->>WS: Connection healthy
-    end
-    
-    Client->>WS: Disconnect
-    WS->>WS: Remove from pool
-    WS-->>Client: Disconnected
-Data Aggregation Flow
-mermaidsequenceDiagram
-    participant Sensors as Multiple Sensors
-    participant Aggregator as Azure Function Aggregator
-    participant Processor as .NET Data Processor
-    participant DB as Azure SQL Database
-    participant Analytics as Analytics Engine (.NET)
-    
-    loop Every minute
-        Sensors->>Aggregator: Send readings (via IoT Hub)
-        Aggregator->>Aggregator: Collect all readings
-        Aggregator->>Processor: Batch process (Queue Trigger)
-        Processor->>Processor: Calculate averages
-        Processor->>Processor: Detect anomalies
-        Processor->>DB: Store aggregated data
-        Processor->>Analytics: Update metrics
-        Analytics->>Analytics: Recalculate KPIs
-    end
-Multi-Device Grouping Flow
-mermaidsequenceDiagram
-    participant UI as React Dashboard
-    participant API as .NET API
-    participant Service as Grouping Service (.NET DDD)
-    participant DB as Azure SQL Database
-    
-    UI->>API: POST /api/devices/group<br/>{name, deviceIds}
-    API->>Service: Create group
-    Service->>DB: Insert group record (EF Core)
-    Service->>DB: Insert group_members
-    DB-->>Service: Success
-    Service-->>API: Group created
-    API-->>UI: {groupId, devices}
-    
-    UI->>API: POST /api/devices/group/batch<br/>{groupId, operation}
-    API->>Service: Execute batch operation
-    Service->>DB: Get group devices
-    DB-->>Service: Device list
-    
-    loop For each device
-        Service->>Service: Execute operation
-        Service->>DB: Update device
-    end
-    
-    Service-->>API: Operation complete
-    API-->>UI: {success: true, updated: N}
-API Response Format
-Success Response
-JSON{
-  "data": {
-    "id": 1,
-    "name": "Device 1",
-    "status": "online"
-  }
-}
-Error Response
-JSON{
-  "error": {
-    "code": "UNAUTHORIZED",
-    "message": "Invalid credentials"
-  }
-}
-Rate Limiting
+# API Flows
 
-API Endpoints: 100 requests per minute per user (via Azure API Management)
-SignalR/WebSocket: 1000 messages per minute per connection
-File Upload: 10 MB per file, 100 MB per day
+The React client calls the Node/Express tRPC API. Server-side procedures enforce the user's current database role; client-side route and button checks only control presentation.
 
-Timeout Configuration
+## Login and authorization
 
-Operation,Timeout
-REST API Call,30 seconds
-SignalR Connection,60 seconds
-Database Query,10 seconds
-File Upload,5 minutes
-Device Firmware Download,30 minutes
+```mermaid
+sequenceDiagram
+  participant UI as React UI
+  participant API as Node API
+  participant DB as PostgreSQL
+  UI->>API: auth.login(email, password)
+  API->>DB: Find user by email
+  API->>API: Verify bcrypt password hash
+  API->>API: Sign 8-hour HS256 session JWT
+  API-->>UI: HttpOnly session cookie + public user
+  UI->>API: Protected request with cookie
+  API->>API: Verify issuer, audience, expiry, and signature
+  API->>DB: Reload user and current role
+  API->>API: Enforce minimum role and Origin on unsafe calls
+  API-->>UI: Result or UNAUTHORIZED / FORBIDDEN
+```
 
+Registration creates viewer accounts. The browser neither reads nor stores the JWT. When `ENABLE_DEMO_ACCOUNTS=true` in a non-production process, `auth.demoAccounts` returns the four development shortcuts to the login page; the server does not seed or authenticate those identities in production.
 
+## Register an asset and open its AAS
 
+### Quick Create (Form)
 
+```mermaid
+flowchart TD
+  Engineer[Engineer completes equipment form] --> API[POST /api/assets]
+  API --> Node[Node checks role and required fields]
+  Node --> DotNet[.NET creates the IDTA AAS model]
+  DotNet --> AAS[Register shell/submodels; repository updates registries]
+  AAS --> Store[Save canonical model and lifecycle record]
+  Store --> Review[Open AAS and manage lifecycle]
+```
 
+### Import Package (.aasx)
 
+```mermaid
+flowchart TD
+  Engineer[Engineer selects a vendor package] --> API[Multipart POST /api/assets/import]
+  API --> Node[Node checks role and 50 MB limit]
+  Node --> DotNet[.NET parses AASX with official package reader and validates with AAS Core 3.1 SDK]
+  DotNet --> Register[Register imported models and preserve the original package]
+  Register --> Store[Save imported asset metadata]
+  Store --> Review[Open the imported AAS]
+```
 
+Form-managed AAS edits submit the revision currently loaded by the engineer. PostgreSQL serializes changes per asset, the .NET service confirms the matching repository revisions before replacing them, and the API appends a snapshot plus SHA-256 digest. A stale update returns HTTP 409. Restoring a snapshot creates a new revision. Reusing an imported shell identifier is rejected by the unique asset key and does not replace the existing package.
 
+### Deploy and confirm an edge profile
 
+```mermaid
+flowchart TD
+  Asset[Assign a validated gateway mapping] --> API[POST /api/assets/sync]
+  API --> DotNet[.NET validates and publishes retained QoS 1 command]
+  DotNet --> Pi[Pi validates, saves, and reloads its polling profile]
+  Pi --> Ack[Pi acknowledges profile application to AAS management]
+```
 
+The UI's `assets.*` tRPC procedures expose dashboard workflows. `/api/assets/import` is a role-checked multipart API with a 50 MB package limit. `/api/aas/*` is the standards API gateway: the Node service checks the application session and engineer/admin role, resolves an OAuth token endpoint from OIDC discovery or uses its configured direct URL, and forwards the request with a service bearer token. Writes to dashboard-managed records are blocked at this gateway so edits cannot skip revision history. Do not expose AAS services directly to browsers.
 
+After a repository mutation, DeviceService publishes an `aas_changed` event to Redis Pub/Sub. Each dashboard replica fans the event out to its own authenticated WebSocket clients, so a browser connected to any replica can refresh its AAS view. Engineers and admins can export the current asset hierarchy as CAEX 3.0 from **Assets → Export AutomationML**; the export carries stable asset IDs and basic metadata but not gateway mappings.
 
+### Assistant context and provider routing
 
+```mermaid
+flowchart TD
+  UI["Assistant UI: question, recent turns, optional asset"] --> API["Node API: authenticate viewer and prepare request"]
+  API --> DOCS["Rank focused guide allowlist (no READMEs); select up to four sections"]
+  API --> DB["Read bounded current asset, device, telemetry, and incident snapshot"]
+  DOCS --> EVIDENCE["Combine evidence; exclude endpoints, secrets, full AAS, and controls"]
+  DB --> EVIDENCE
+  EVIDENCE -->|Gemini key configured| GEMINI["Gemini primary model"]
+  EVIDENCE -->|Remote providers disabled| LOCAL["Local grounded response"]
+  GEMINI -->|Success| ANSWER["Direct answer with steps, time, and sources"]
+  GEMINI -->|Missing key or provider error| GROQ["Groq fallback model"]
+  GROQ -->|Success| ANSWER
+  GROQ -->|No provider succeeds| LOCAL
+  LOCAL --> ANSWER
+  ANSWER --> UI
+```
 
+The `assistant.ask` procedure is available to signed-in viewers and higher. It ranks only the explicit focused-guide allowlist in `server/assistantKnowledge.ts` (README files are excluded), adds a bounded snapshot from the dashboard database, and sends recent conversation context plus relevant evidence to Gemini first and Groq second when server API keys are configured. Keys remain on the server. Answers are formatted for readability and include ordered steps for how-to questions; the UI shows context capture time and source excerpts without provider/model labels or a provider data-transmission notice. With providers disabled or unavailable, a local grounded response remains available. The Assistant does not read environment files, README files, full AAS packages, private account records, or machine-control interfaces. See [Assistant configuration and data boundaries](assistant.md).
 
+Asset Analytics sends selected AAS identifiers and a selected time range to `analytics.getAssetTelemetry`; readings are selected by their persisted asset attribution and can be scoped to one asset or filtered into metadata groups. The response includes per-asset means and peaks for power, temperature, vibration, pressure, and speed; linked-device alert counts; alert events in the period; and early-to-recent temperature, vibration, and pressure changes where the observed sample span supports comparison. These changes are descriptive screening indicators: they are not degradation models, failure predictions, or remaining-useful-life estimates. Pressure and vibration retain device-profile scales, so the UI avoids aggregating their charts across multiple assets. The service does not calculate OEE, capacity utilization, kWh, energy per unit, emissions, causal root cause, TCO, or MTBF until its required production, calibrated energy, maintenance, failure, and cost inputs are recorded.
 
+The **Dashboard** summarizes API-backed asset, gateway, lifecycle, active-alert, and confirmed downtime state, including the longest current outage and average downtime-to-resolution. **Live Monitoring** shows gateway and edge-device connectivity with batched latest readings. **Alerts** combines the response queue and searchable/exportable records, while threshold configuration remains attached to gateway details.
 
+Gateway publication updates a complete desired-state profile over MQTT. QoS 1 broker publication is not an edge-application receipt; the Pi publishes an acknowledgement under the matching command topic. The operator may also download the profile for controlled offline deployment. Credentials are configured on the edge host and are not included in either path.
 
+## Edge configuration, control, and firmware
 
+These are separate operations. **Edge configuration** sends the gateway a desired-state profile containing asset identity, protocol mappings, and telemetry rules; only the gateway's matching application acknowledgement indicates that it applied the profile. **Control** sends a bounded, device-specific command through an authorized protocol adapter. **Firmware update** replaces executable code and requires a compatible updater, trusted release artifact, integrity/signature verification, device-reported result, and recovery strategy. A configuration acknowledgement does not verify firmware or machine motion.
 
+| Target | Configuration / control path | Firmware update path in this release |
+|---|---|---|
+| Raspberry Pi gateway | MQTT desired-state profile with gateway acknowledgement; supported adapters are documented in the edge repository. | Manual staged deployment over SSH/rsync; no remote updater or dashboard OTA. |
+| ESP-WROVER-KIT | Telemetry and bounded GPIO pulse requests route through the Pi; the dashboard does not currently expose its GPIO panel. A GPIO acknowledgement confirms a logic output only. | Build with PlatformIO and flash over USB; firmware has no OTA receiver. |
+| ADA031 V4 arm | USB serial through the Pi gateway; the AAS page exposes bounded joint jogs for authorized roles. No position feedback or independent safety function is claimed. | Program the Uno over USB using the vendor sketch; no OTA. |
+| Other industrial assets | Requires an asset-specific protocol adapter, authorization policy, interlocks, limits, and verified feedback appropriate to that machine. | Requires a vendor-supported update mechanism and tested release/recovery process; there is no universal industrial OTA protocol. |
 
+The firmware inventory page is read-only. Backend OTA submission/status endpoints return `501 Not Implemented` and do not mutate rollout state until a verified release service and authenticated device agent exist. Legacy rollout rows are historical application records, not proof of installation. Do not use software commands as emergency-stop, guarding, or other protective functions.
 
+## Edge telemetry
 
+```mermaid
+  flowchart TD
+  Machine[Industrial machine] -->|OPC UA / Modbus / serial| Pi[Pi gateway]
+  ESP[ESP32 WROVER] -->|local MQTT over TLS| Pi
+  Direct[Native MQTT device with managed identity] -->|MQTT over TLS; per-device ACL| MQTT[CloudAMQP]
+  Pi -->|validated MQTT over TLS| MQTT[CloudAMQP]
+  MQTT --> DotNet[.NET telemetry consumer]
+  DotNet --> BackendDB[(.NET telemetry DB)]
+  DotNet -->|Bearer INGESTION_API_TOKEN| Bridge[Node internal telemetry route]
+  Bridge --> AppDB[(Dashboard PostgreSQL)]
+  AppDB --> Dashboard[Dashboard charts and alerts]
+```
 
+WROVER and ADA031 remain behind the Pi gateway. The WROVER is allowlisted by the Pi and can publish only to the Pi-local Mosquitto listener; its firmware has no CloudAMQP credentials or internet route. Other eligible devices with native MQTT/TLS and per-device identities may connect directly to CloudAMQP. The gateway validates its local topic, identity, payload size, timestamp, and metric fields before forwarding. Normalized timestamps are Unix epoch milliseconds in UTC. The authenticated telemetry bridge stores the optional gateway identifier with the device record; connectivity views render child records as `GatewayID-DeviceID` and show a gateway by its own ID. The bridge validates the payload and compares a service-only token in constant time. This credential is independent of user sessions and must only be installed in backend service configuration.
 
+## Alert generation and resolution
 
-OperationTimeoutREST API Call30 secondsSignalR Connection60 secondsDatabase Query10 secondsFile Upload5 minutesDevice Firmware Download30 minutes
-API Versioning
+```mermaid
+flowchart TD
+  Telemetry[Validated device telemetry] --> Thresholds[Device warning/critical thresholds]
+  Thresholds -->|one open event per device, asset and metric| Alert[Alert with SF error code]
+  Alert --> Operator[Operator acknowledges]
+  Alert --> Engineer[Engineer assigns technician]
+  Engineer -->|confirmed outage| Down[Record downtime start]
+  Down -->|assigned engineer resolves| Resolved[Resolved timestamp]
+  Resolved --> MTTR[Downtime-to-resolution reporting]
+  Admin[Admin override] --> Resolved
+```
 
-Current Version: v1
-Endpoint Pattern: /api/v1/[controller]
-Backward Compatibility: Maintained for 2 major versions
-Deprecation Notice: 6 months before removal
+Alert codes are platform classifications unless a source-specific code is provided. A threshold event does not automatically imply machine downtime; the assigned engineer-role incident responder records that point when the machine is confirmed unavailable. Device-offline alerts report lost communication; they do not automatically start factory downtime. Historical inferred downtime records require review. Only alerts with a downtime start and a resolution time contribute to the mean downtime-to-resolution metric. Operators can acknowledge, while assigned engineer-role responders or admins can resolve.
+
+See [authorization and AAS](authorization-and-aas.md) for the role matrix, template versions, configuration variables, and verification commands.
+
+## Identity, coverage and incident notifications
+
+In Render mode, `auth.me` delegates to the private IdentityService with the authenticated dashboard account ID and a separate service token; the service reads the current role from PostgreSQL. It never returns an email-provider or AAS access token. `analytics.getCoverage` delegates a bounded selected-asset/time range to AnalyticsService, which aggregates indexed stored samples without treating missing metrics as zero.
+
+Alert writes atomically create the per-user inbox via the database trigger. `notifications.list` and `notifications.markRead` are authenticated owner-only operations. `notifications.retryEmail` requires an engineer/admin owner and an eligible failed/unconfigured/unauthorized job. Reading a notification is independent of incident acknowledgment. The UI links notifications to event details by ID. NotificationService delivers the durable queue through the configured Resend sender and checks current account role and recipient domain at delivery time.

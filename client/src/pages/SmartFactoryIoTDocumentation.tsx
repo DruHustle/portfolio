@@ -8,14 +8,14 @@ const docs = [
   {
     title: "Architecture Overview",
     description:
-      "Detailed technical design, including system architecture, .NET microservices, and Azure IoT Hub integration.",
+      "Production topology spanning Vercel, the public Node API, five private .NET services, MQTT edge gateways, PostgreSQL, Redis, and the AAS runtime.",
     mdPath: "/docs/smartfactoryiot/architecture.md",
     pdfPath: "/docs/smartfactoryiot/architecture.pdf",
   },
   {
     title: "Database Schema",
     description:
-      "Comprehensive database design and entity relationship specifications for Aiven MySQL.",
+      "Application data model covering PostgreSQL-backed accounts, assets, devices, telemetry, incidents, lifecycle history, and durable notifications.",
     mdPath: "/docs/smartfactoryiot/database-schema.md",
     pdfPath: "/docs/smartfactoryiot/database-schema.pdf",
   },
