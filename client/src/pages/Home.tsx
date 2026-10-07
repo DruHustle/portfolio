@@ -334,17 +334,22 @@ export default function Home() {
                 </a>
               </div>
             </div>
-            <div className="space-y-6">
-              {[
-                { val: "10M+", label: "Daily Requests Architected" },
-                { val: "99.9%", label: "Uptime SLA Achieved" },
-                { val: "35%", label: "Cost Reduction Delivered" }
-              ].map((stat, i) => (
-                <div key={i} className="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20 hover:bg-white/15 transition-all">
-                  <div className="text-3xl md:text-4xl font-bold text-teal-400 mb-1">{stat.val}</div>
-                  <p className="text-sm font-medium text-gray-400">{stat.label}</p>
+            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-7 border border-white/20">
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-teal-400 mb-5">Engineering Focus</p>
+              <div className="space-y-6">
+                <div>
+                  <h2 className="text-lg font-bold mb-1">AI Model Engineering</h2>
+                  <p className="text-sm leading-relaxed text-gray-400">Creator of Onesa, a multimodal AI model trained from scratch using the Llama architecture.</p>
                 </div>
-              ))}
+                <div className="pt-5 border-t border-white/10">
+                  <h2 className="text-lg font-bold mb-1">Cloud &amp; DevOps Platforms</h2>
+                  <p className="text-sm leading-relaxed text-gray-400">Secure delivery automation, infrastructure as code, containers, reliability, and governance.</p>
+                </div>
+                <div className="pt-5 border-t border-white/10">
+                  <h2 className="text-lg font-bold mb-1">Industrial IoT &amp; Software</h2>
+                  <p className="text-sm leading-relaxed text-gray-400">End-to-end systems connecting cloud software, edge platforms, telemetry, and operational technology.</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -468,9 +473,9 @@ export default function Home() {
               </a>
             </div>
             <div className="p-8 md:p-10 rounded-2xl bg-white border border-blue-100 shadow-sm">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-11 h-11 rounded-xl bg-indigo-100 flex items-center justify-center"><Zap className="w-6 h-6 text-indigo-600" /></div>
-                <div><p className="text-xs font-bold uppercase tracking-wider text-indigo-600">Custom AI System</p><h3 className="text-2xl font-bold text-gray-900">Onesa</h3></div>
+              <div className="flex items-center gap-3 mb-6 p-4 rounded-xl bg-gradient-to-r from-indigo-700 to-blue-600 shadow-md shadow-indigo-200/60">
+                <div className="w-11 h-11 rounded-xl bg-white/15 border border-white/20 flex items-center justify-center"><Zap className="w-6 h-6 text-cyan-300" /></div>
+                <div><p className="text-xs font-bold uppercase tracking-wider text-cyan-200">Custom AI System</p><h3 className="text-2xl font-bold text-white">Onesa</h3></div>
               </div>
               <p className="text-gray-700 leading-relaxed mb-7">Onesa brings together conversational intelligence, real-time voice interaction, contextual travel assistance, and immersive interfaces in one extensible AI experience.</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
