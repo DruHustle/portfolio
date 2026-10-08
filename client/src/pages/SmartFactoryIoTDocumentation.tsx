@@ -1,30 +1,50 @@
 import { Link } from "wouter";
-import { ArrowLeft, FileText, Download, Eye } from "lucide-react";
+import { ArrowLeft, FileText, Download, Eye, ExternalLink } from "lucide-react";
 import { useEffect } from "react";
 
 const baseUrl = import.meta.env.BASE_URL || "/";
+const assetUrl = (path: string) =>
+  `${baseUrl.replace(/\/$/, "")}/${path.replace(/^\//, "")}`;
 
 const docs = [
   {
     title: "Architecture Overview",
     description:
-      "Production topology spanning the Vercel proxy, six-process Render container, durable MQTT edge paths, managed data services, and the Oracle-hosted BaSyx runtime.",
+      "Production topology spanning the Vercel proxy, scalable Render web tier, singleton worker, durable MQTT edge paths, managed data services, and the Oracle-hosted BaSyx runtime.",
     mdPath: "/docs/smartfactoryiot/architecture.md",
     pdfPath: "/docs/smartfactoryiot/architecture.pdf",
   },
   {
     title: "Database Schema",
     description:
-      "PostgreSQL model for identities, AAS assets and revisions, gateway mappings, replay-safe telemetry, incident workflows, downtime, and durable notifications.",
+      "PostgreSQL model for identities, persisted system settings, AAS assets and revisions, gateway mappings, replay-safe telemetry, incident workflows, downtime, and durable notifications.",
     mdPath: "/docs/smartfactoryiot/database-schema.md",
     pdfPath: "/docs/smartfactoryiot/database-schema.pdf",
   },
   {
     title: "API Flows",
     description:
-      "Role-enforced login, AAS create/import/version flows, grounded Assistant routing, edge profiles, MQTT telemetry, incident response, and service delegation.",
+      "Role-enforced login, account welcome mail, AAS create/import/version flows, grounded Assistant routing, edge profiles, MQTT telemetry, incident response, and service delegation.",
     mdPath: "/docs/smartfactoryiot/api-flows.md",
     pdfPath: "/docs/smartfactoryiot/api-flows.pdf",
+  },
+];
+
+const supportingDocs = [
+  {
+    title: "Deployment Guide",
+    description: "Split Render roles, Vercel delivery, migrations, readiness checks, rollback, and production configuration.",
+    path: "/docs/RENDER_DEPLOYMENT.md",
+  },
+  {
+    title: "System Diagrams",
+    description: "Detailed runtime, telemetry, identity, AAS, notification, and release-flow diagrams.",
+    path: "/docs/smartfactoryiot/SYSTEM_DIAGRAMS.md",
+  },
+  {
+    title: "Production Readiness Review",
+    description: "Verified production controls, remaining operational constraints, and acceptance evidence.",
+    path: "/docs/smartfactoryiot/production-readiness-review.md",
   },
 ];
 
@@ -87,7 +107,7 @@ export default function SmartFactoryIoTDocumentation() {
                   <FileText className="w-8 h-8" />
                 </div>
                 <a
-                  href={`${baseUrl}${doc.pdfPath}`}
+                  href={assetUrl(doc.pdfPath)}
                   download
                   className="p-2 rounded-lg bg-slate-700/50 text-slate-300 hover:bg-orange-500 hover:text-white transition-all"
                   title="Download PDF"
@@ -104,17 +124,48 @@ export default function SmartFactoryIoTDocumentation() {
                 {doc.description}
               </p>
 
-              <a
-                href={`${baseUrl}${doc.pdfPath}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 px-6 py-3 bg-slate-700/50 text-white font-bold rounded-xl hover:bg-slate-600 transition-all"
-              >
-                <Eye className="w-4 h-4" /> View Online
-              </a>
+              <div className="grid grid-cols-2 gap-3">
+                <a
+                  href={assetUrl(doc.pdfPath)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center gap-2 px-4 py-3 bg-slate-700/50 text-white font-bold rounded-xl hover:bg-slate-600 transition-all"
+                >
+                  <Eye className="w-4 h-4" /> PDF
+                </a>
+                <a
+                  href={assetUrl(doc.mdPath)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center gap-2 px-4 py-3 bg-slate-700/50 text-white font-bold rounded-xl hover:bg-slate-600 transition-all"
+                >
+                  <FileText className="w-4 h-4" /> Markdown
+                </a>
+              </div>
             </div>
           ))}
         </div>
+
+        <section className="mt-12">
+          <h2 className="text-2xl font-bold mb-6">Operational &amp; Review Guides</h2>
+          <div className="grid md:grid-cols-3 gap-5">
+            {supportingDocs.map((doc) => (
+              <a
+                key={doc.title}
+                href={assetUrl(doc.path)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group p-6 rounded-2xl bg-slate-800/40 border border-slate-700/50 hover:border-orange-500/40 transition-all"
+              >
+                <div className="flex items-center justify-between gap-4 mb-3">
+                  <h3 className="font-bold text-white group-hover:text-orange-400 transition-colors">{doc.title}</h3>
+                  <ExternalLink className="w-4 h-4 text-slate-400 group-hover:text-orange-400 shrink-0" />
+                </div>
+                <p className="text-sm leading-relaxed text-slate-400">{doc.description}</p>
+              </a>
+            ))}
+          </div>
+        </section>
 
         {/* System Architecture */}
         <section className="mt-20 p-10 rounded-[2.5rem] bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700/50">
@@ -129,7 +180,7 @@ export default function SmartFactoryIoTDocumentation() {
           <div className="rounded-2xl overflow-hidden border border-slate-700/50 bg-slate-900/50 p-6">
             <img
               src={`${import.meta.env.BASE_URL}images/smart_factory_arch.png`}
-              alt="Smart Factory IoT Architecture"
+              alt="Smart Factory IoT split production architecture with factory edge, CloudAMQP, Render web and worker tiers, and managed cloud services"
               className="w-full h-auto rounded-xl"
             />
           </div>

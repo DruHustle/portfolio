@@ -18,7 +18,7 @@ export default function SmartFactoryIoTDetail() {
       title: "Smart Factory IoT",
       subtitle: "Real-Time Industrial Monitoring & Control Platform",
       description:
-        "A production-oriented industrial IoT platform for asset lifecycle management, durable telemetry, incident response, analytics, and bounded machine control. It combines a Vercel-hosted React UI and API proxy with one supervised Render container, five private .NET services, managed PostgreSQL and Redis, MQTT edge gateways, and an OAuth-protected BaSyx AAS runtime.",
+        "A production-oriented industrial IoT platform for asset lifecycle management, durable telemetry, incident response, analytics, and bounded machine control. It combines a Vercel-hosted React UI and API proxy with a scalable Render web tier, a singleton telemetry and notification worker, five .NET services, managed PostgreSQL and Redis, MQTT edge gateways, and an OAuth-protected BaSyx AAS runtime.",
       stats: [
         { label: "Services", value: "6", icon: Zap },
         { label: "Edge Transport", value: "MQTT TLS", icon: Shield },
@@ -47,7 +47,7 @@ export default function SmartFactoryIoTDetail() {
           { category: "IoT & Edge", items: ["CloudAMQP", "MQTT TLS", "Raspberry Pi", "ESP32 WROVER", "OPC UA", "Modbus", "Serial"] },
           { category: "Data", items: ["Aiven PostgreSQL", "Drizzle ORM", "Redis Cloud", "Durable Outbox"] },
           { category: "Assets & Security", items: ["BaSyx", "AAS Core 3.1", "AASX", "CAEX 3.0", "OIDC/OAuth 2.0", "RBAC", "HttpOnly JWT"] },
-          { category: "Delivery", items: ["Vercel", "Render", "Docker", "Supervisor", "GitHub Actions", "Immutable Multi-Repo Images"] },
+          { category: "Delivery", items: ["Vercel", "Render Web + Worker", "Docker", "Supervisor", "GitHub Actions", "Immutable Multi-Repo Images"] },
         ],
         implementation: [
           {
@@ -58,7 +58,7 @@ export default function SmartFactoryIoTDetail() {
           {
             phase: "Core Platform",
             duration: "Weeks 5–10",
-            description: "Build the five private .NET services for device management, telemetry, identity, analytics, and durable notifications inside one supervised Render container.",
+            description: "Build five .NET services for device management, telemetry, identity, analytics, and durable notifications, then divide them between scalable web and singleton worker roles.",
           },
           {
             phase: "Data Processing",
@@ -73,7 +73,7 @@ export default function SmartFactoryIoTDetail() {
           {
             phase: "Production",
             duration: "Weeks 19–20",
-            description: "Release an immutable multi-repository image to Render, deploy the prebuilt UI to Vercel, validate readiness, secure service credentials, and document recovery and scaling limits.",
+            description: "Release one immutable multi-repository image to the Render worker and scalable web tiers, deploy the prebuilt UI to Vercel, validate readiness, secure service credentials, and document recovery and scaling limits.",
           },
         ],
       },
@@ -82,7 +82,7 @@ export default function SmartFactoryIoTDetail() {
         "Durable, replay-tolerant telemetry from gateway and direct MQTT devices",
         "Versioned AAS lifecycle with AASX import, CAEX export, audit history, and OAuth standards gateway",
         "Role-aware incident ownership, explicit downtime confirmation, and durable inbox/email notifications",
-        "Source-pinned delivery across three repositories with immutable deployments",
+        "Source-pinned delivery across three repositories with independently scalable web and singleton worker roles",
       ],
     }),
     []
@@ -204,8 +204,8 @@ export default function SmartFactoryIoTDetail() {
           <h2 className="text-3xl font-bold mb-10 text-center">System Architecture</h2>
           <div className="overflow-hidden">
             <img 
-              src={`${import.meta.env.BASE_URL}images/smart_factory_arch.png`} 
-              alt="Smart Factory IoT Architecture" 
+              src={`${import.meta.env.BASE_URL}images/smart_factory_arch.png`}
+              alt="Smart Factory IoT split production architecture with factory edge, CloudAMQP, Render web and worker tiers, and managed cloud services"
               className="w-full h-auto rounded-xl shadow-2xl"
             />
           </div>

@@ -201,7 +201,7 @@ export class ProjectService {
       description:
         'A production-oriented industrial IoT platform spanning a Vercel React/Node control plane, five private .NET services, durable MQTT telemetry, incident response, analytics, secure edge integration, and an OAuth-protected BaSyx AAS runtime.',
       stats: [
-        { label: 'Services', value: '6 Processes', icon: null },
+        { label: 'Runtime', value: '2 Render Roles', icon: null },
         { label: 'Edge Transport', value: 'MQTT TLS', icon: null },
         { label: 'Asset Standard', value: 'AAS', icon: null },
       ],
@@ -228,7 +228,7 @@ export class ProjectService {
           { category: 'Backend', items: ['Node.js', 'Express', 'tRPC', '.NET 8', 'ASP.NET Core'] },
           { category: 'Data', items: ['Aiven PostgreSQL', 'Drizzle ORM', 'Redis Cloud'] },
           { category: 'IoT & Edge', items: ['CloudAMQP', 'MQTT TLS', 'Raspberry Pi', 'ESP32', 'OPC UA', 'Modbus'] },
-          { category: 'Delivery', items: ['Vercel', 'Render', 'Docker', 'Supervisor', 'GitHub Actions', 'Immutable Images'] },
+          { category: 'Delivery', items: ['Vercel', 'Render Web + Worker', 'Docker', 'Supervisor', 'GitHub Actions', 'Immutable Images'] },
         ],
       },
       implementation: [
@@ -240,7 +240,7 @@ export class ProjectService {
         {
           phase: 'Service Integration',
           duration: 'Weeks 3-4',
-          description: 'Integrate the private .NET services for devices, telemetry, identity, analytics, and notifications.',
+          description: 'Integrate the private .NET services for devices, telemetry, identity, analytics, and notifications across scalable web and singleton worker roles.',
         },
         {
           phase: 'Edge & Telemetry',
@@ -250,7 +250,7 @@ export class ProjectService {
         {
           phase: 'AAS & Production',
           duration: 'Weeks 7-8',
-          description: 'Add AAS lifecycle integration and source-pinned immutable delivery across Vercel and Render.',
+          description: 'Add AAS lifecycle integration and source-pinned immutable delivery across Vercel plus the split Render web and worker tiers.',
         },
       ],
       results: [
