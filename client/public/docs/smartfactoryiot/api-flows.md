@@ -71,7 +71,7 @@ After a repository mutation, DeviceService publishes an `aas_changed` event to R
 
 Only administrators can call `assets.delete`. It removes the selected dashboard AAS and its represented BaSyx resources, retains historical telemetry and incidents, and reports gateway resynchronization failures.
 
-### Assistant context and provider routing
+### Assistant context and Onesa AI routing
 
 ```mermaid
 flowchart TD
@@ -80,17 +80,15 @@ flowchart TD
   API --> DB["Read bounded current asset, device, telemetry, and incident snapshot"]
   DOCS --> EVIDENCE["Combine evidence; exclude endpoints, secrets, full AAS, and controls"]
   DB --> EVIDENCE
-  EVIDENCE -->|Gemini key configured| GEMINI["Gemini primary model"]
-  EVIDENCE -->|Remote providers disabled| LOCAL["Local grounded response"]
-  GEMINI -->|Success| ANSWER["Direct answer with steps, time, and sources"]
-  GEMINI -->|Missing key or provider error| GROQ["Groq fallback model"]
-  GROQ -->|Success| ANSWER
-  GROQ -->|No provider succeeds| LOCAL
+  EVIDENCE -->|Onesa AI configured| ONESA["Onesa AI — in-house, Llama-based"]
+  EVIDENCE -->|Onesa AI disabled| LOCAL["Local grounded response"]
+  ONESA -->|Success| ANSWER["Direct answer with steps, time, and sources"]
+  ONESA -->|Unavailable| LOCAL
   LOCAL --> ANSWER
   ANSWER --> UI
 ```
 
-The `assistant.ask` procedure is available to signed-in viewers and higher. It ranks only the explicit focused-guide allowlist in `server/assistantKnowledge.ts` (README files are excluded), adds a bounded snapshot from the dashboard database, and sends recent conversation context plus relevant evidence to Gemini first and Groq second when server API keys are configured. Keys remain on the server. Answers are formatted for readability and include ordered steps for how-to questions; the UI shows context capture time and source excerpts without provider/model labels or a provider data-transmission notice. With providers disabled or unavailable, a local grounded response remains available. The Assistant does not read environment files, README files, full AAS packages, private account records, or machine-control interfaces. See [Assistant configuration and data boundaries](assistant.md).
+The `assistant.ask` procedure is available to signed-in viewers and higher. It ranks only the explicit focused-guide allowlist in `server/assistantKnowledge.ts` (README files are excluded), adds a bounded snapshot from the dashboard database, and sends recent conversation context plus relevant evidence to Onesa AI when its server-side connection is configured. Onesa is built on the Llama architecture and trained in-house; credentials remain on the server. Answers are formatted for readability and include ordered steps for how-to questions; the UI shows context capture time and source excerpts. When Onesa AI is disabled or unavailable, a local grounded response remains available. The Assistant does not read environment files, README files, full AAS packages, private account records, or machine-control interfaces. See [Assistant configuration and data boundaries](assistant.md).
 
 Asset Analytics sends selected AAS identifiers and a selected time range to `analytics.getAssetTelemetry`; readings are selected by their persisted asset attribution and can be scoped to one asset or filtered into metadata groups. The response includes per-asset means and peaks for power, temperature, vibration, pressure, and speed; linked-device alert counts; alert events in the period; and early-to-recent temperature, vibration, and pressure changes where the observed sample span supports comparison. These changes are descriptive screening indicators: they are not degradation models, failure predictions, or remaining-useful-life estimates. Pressure and vibration retain device-profile scales, so the UI avoids aggregating their charts across multiple assets. The service does not calculate OEE, capacity utilization, kWh, energy per unit, emissions, causal root cause, TCO, or MTBF until its required production, calibrated energy, maintenance, failure, and cost inputs are recorded.
 

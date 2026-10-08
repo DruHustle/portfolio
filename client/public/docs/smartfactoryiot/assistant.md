@@ -1,31 +1,12 @@
-# Smart Factory Assistant
+# Smart Factory Assistant — Onesa AI
 
-The Assistant combines approved application guides with a small, current snapshot from the Smart Factory API. It can explain workflows and answer questions about visible assets, connected gateway/device status, recent telemetry, and incidents. It is advisory and read-only; it cannot issue equipment commands.
+The Assistant is powered by **Onesa AI**, an in-house AI system built on the Llama architecture and trained in-house. It combines approved application guides with a small, current snapshot from the Smart Factory API. It can explain workflows and answer questions about visible assets, connected gateway/device status, recent telemetry, and incidents. It is advisory and read-only; it cannot issue equipment commands.
 
-## Provider setup
+## Onesa AI setup
 
-Provider settings belong in the backend environment (`.env.local` for local Compose or the deployment platform's secret settings). Never add provider credentials to `VITE_*` variables, frontend code, source control, screenshots, or support logs.
+Onesa AI connection settings belong in the backend environment (`.env.local` for local Compose or the deployment platform's secret settings). Never add Onesa credentials to `VITE_*` variables, frontend code, source control, screenshots, or support logs.
 
-```dotenv
-ASSISTANT_PROVIDER=openai_compatible
-ASSISTANT_INCLUDE_LIVE_CONTEXT=true
-
-ASSISTANT_GEMINI_MODEL=gemini-3.8-flash
-ASSISTANT_GEMINI_FALLBACK_MODEL=gemini-2.5-flash
-ASSISTANT_GEMINI_MODEL_CANDIDATES=gemini-3.8-flash,gemini-2.5-flash
-ASSISTANT_GEMINI_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai
-ASSISTANT_GEMINI_API_KEY=
-
-ASSISTANT_GROQ_MODEL=openai/gpt-oss-120b
-ASSISTANT_GROQ_FALLBACK_MODEL=openai/gpt-oss-20b
-ASSISTANT_GROQ_MODEL_CANDIDATES=openai/gpt-oss-120b,openai/gpt-oss-20b
-ASSISTANT_GROQ_BASE_URL=https://api.groq.com/openai/v1
-ASSISTANT_GROQ_API_KEY=
-```
-
-`openai_compatible` (the default) tries Gemini first and Groq second. `gemini` uses the same order; `groq` tries Groq first. `disabled`, `off`, or `none` disables external calls and uses the local grounded response. Missing keys also mean local mode. The service tries configured models in order after a model-not-found response, and tries one alternate model after a Gemini HTTP 5xx response before falling back to Groq. Quota, authentication, throttling, and network failures move directly to the other provider. Each HTTP call has a 12-second timeout. Provider keys and raw provider error responses are never returned to the browser or included in application logs.
-
-The implementation accepts the older `ASSISTANT_GROK_*` spelling for migration, but new configurations should use `ASSISTANT_GROQ_*`. The Groq model IDs previously used in early examples have been retired or are not available on current developer tiers; the defaults here use currently documented Groq production models. Confirm model access in the provider console for the account and region in use.
+The production integration is server-to-server. Onesa credentials and raw service errors are never returned to the browser or included in application logs. When Onesa AI is unavailable, the Assistant falls back to a local grounded response assembled from approved guides and any available snapshot.
 
 For local Docker, set values in the root `.env.local`, then recreate the dashboard container so Compose injects them:
 
@@ -33,15 +14,15 @@ For local Docker, set values in the root `.env.local`, then recreate the dashboa
 docker compose --env-file .env.local up -d --build --force-recreate dashboard
 ```
 
-For production, configure the same variables as encrypted backend secrets in the hosting platform, then redeploy. Do not commit `.env.local` or place keys in public frontend build arguments.
+For production, configure the Onesa AI connection as encrypted backend secrets in the hosting platform, then redeploy. Do not commit `.env.local` or place secrets in public frontend build arguments.
 
-## Data sent to a provider
+## Data used by Onesa AI
 
-When a provider is configured, the API sends the current question, up to 12 recent conversation messages, up to four matching approved Markdown excerpts, the caller's role, and a bounded snapshot (up to eight assets, 12 connected devices, and eight incidents). The snapshot can contain asset names and AAS identifiers, type, manufacturer/model, location/zone, lifecycle stage and revision; connected device and gateway IDs/status; the latest stored telemetry fields; and recent incident codes/status/timestamps. Demo rows are marked simulated. The API excludes provider keys, database credentials, connection endpoints, full AAS models/packages, account details, and machine-control commands.
+The API sends Onesa AI the current question, up to 12 recent conversation messages, up to four matching approved Markdown excerpts, the caller's role, and a bounded snapshot (up to eight assets, 12 connected devices, and eight incidents). The snapshot can contain asset names and AAS identifiers, type, manufacturer/model, location/zone, lifecycle stage and revision; connected device and gateway IDs/status; the latest stored telemetry fields; and recent incident codes/status/timestamps. Demo rows are marked simulated. The API excludes Onesa credentials, database credentials, connection endpoints, full AAS models/packages, account details, and machine-control commands.
 
-The snapshot is loaded when each question is submitted. It is not persisted as assistant chat history. The UI shows the context capture time and matched sources; it does not show provider or model names. If the database or external providers are unavailable, the Assistant reports that limitation and falls back to approved local guides and any available snapshot.
+The snapshot is loaded when each question is submitted. It is not persisted as assistant chat history. The UI shows the context capture time and matched sources. If the database or Onesa AI is unavailable, the Assistant reports that limitation and falls back to approved local guides and any available snapshot.
 
-External providers process prompts under their own service terms and retention settings. Before enabling this feature with production assets, assess the data fields above against the organization's confidentiality, residency, and AI-provider policies. Set `ASSISTANT_PROVIDER=disabled` to prevent external transmission. Set `ASSISTANT_INCLUDE_LIVE_CONTEXT=false` to omit the database snapshot while retaining guide-based answers.
+Onesa AI is built on the Llama architecture and trained in-house. Before enabling live context with production assets, assess the data fields above against the organization's confidentiality, residency, and AI policies. Disable the Onesa AI connection to keep responses local, or disable live context to omit the database snapshot while retaining guide-based answers.
 
 ## Retrieval and answer boundaries
 
@@ -49,10 +30,8 @@ The source allowlist lives in `server/assistantKnowledge.ts`; only listed focuse
 
 Treat generated guidance as advisory. Confirm maintenance and safety procedures against approved site documentation and equipment manuals. Machine control and emergency-stop functions remain outside this Assistant.
 
-## Provider references
+## Model ownership
 
-- [Google Gemini OpenAI-compatible API](https://ai.google.dev/gemini-api/docs/openai)
-- [Google Gemini model list](https://ai.google.dev/gemini-api/docs/models)
-- [Groq OpenAI-compatible API](https://console.groq.com/docs/openai)
-- [Groq production models](https://console.groq.com/docs/models)
-- [Groq model deprecations](https://console.groq.com/docs/deprecations)
+- Assistant: Onesa AI
+- Foundation: Llama architecture
+- Training: performed in-house

@@ -24,7 +24,7 @@ const docs = [
   {
     title: "API Flows",
     description:
-      "Role-enforced login, account welcome mail, AAS create/import/version flows, grounded Assistant routing, edge profiles, MQTT telemetry, incident response, and service delegation.",
+      "Role-enforced login, account welcome mail, AAS create/import/version flows, grounded Onesa AI routing, edge profiles, MQTT telemetry, incident response, and service delegation.",
     mdPath: "/docs/smartfactoryiot/api-flows.md",
     pdfPath: "/docs/smartfactoryiot/api-flows.pdf",
   },
