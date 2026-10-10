@@ -34,7 +34,13 @@ jobs:
           cache: pnpm
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
+
+      - name: Audit production dependencies
+        run: pnpm audit --prod --audit-level=moderate
+
+      - name: Run unit tests
+        run: pnpm test
 
       - name: Build
         run: pnpm build
@@ -54,7 +60,6 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-        continue-on-error: true
 
       - name: Rollback on Failure
         if: steps.deployment.outcome == 'failure'
