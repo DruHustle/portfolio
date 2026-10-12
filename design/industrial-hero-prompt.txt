@@ -1,0 +1,7 @@
+Asset: client/public/images/industrial-hero.webp
+Generated with: built-in imagegen
+Reference: the LinkedIn cover image provided by Andrew Gotora.
+Source dimensions: 1672 x 941. Encoded as WebP at quality 86 for the portfolio.
+
+Final prompt:
+Use case: precise-object-edit. Asset type: responsive portfolio hero background. Input image 1 is the edit target: the user's industrial software / intelligent systems LinkedIn banner. Create a text-free adaptation of that banner. Remove ALL lettering and bullet separators, seamlessly restoring the backdrop. Preserve the same industrial robot arm on the right, realistic factory setting, deep midnight navy background, cyan blue light and subtle connected data trails. Extend the composition vertically into a wide landscape 16:9 image suitable for a website hero, keeping the robot entirely in the rightmost 45 percent and generous calm dark negative space in the left 55 percent for accessible HTML text. The robot gripper and machinery should remain recognizable on the right even when cropped. Photorealistic, sophisticated industrial engineering photography. No new people, no logos, no lettering, no watermark, no UI. Keep the restrained visual character and dark navy/cyan palette of the reference. Opaque background.

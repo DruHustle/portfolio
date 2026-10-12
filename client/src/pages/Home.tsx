@@ -18,6 +18,8 @@ import {
   CalendarDays,
   MapPin,
   Mic2,
+  Factory,
+  BrainCircuit,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -31,6 +33,7 @@ import { useMemo, useEffect, useState } from "react";
 import { NavigationService } from "@/services/navigationService";
 import { analyticsService } from "@/services/analyticsService";
 import { safeSessionStorage } from "@/lib/storage";
+import { professionalExperience } from "@/data/experience";
 
 export default function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -78,95 +81,86 @@ export default function Home() {
   const skills = useMemo(
     () => [
       {
-        title: "Cloud & Platform Engineering",
-        skills: [
+        "title": "Industrial IoT & Automation",
+        "skills": [
+          "OPC UA, MQTT & Modbus",
+          "ThingWorx & Kepware",
+          "Industrial Telemetry & Asset Models",
+          "Asset Administration Shells (AAS)"
+        ]
+      },
+      {
+        "title": "Edge Computing & Digital Twins",
+        "skills": [
+          "Edge Gateways & Protocol Integration",
+          "Raspberry Pi & ESP32 Development",
+          "Digital Twins & Asset Lifecycle",
+          "Industrial Monitoring & Control"
+        ]
+      },
+      {
+        "title": "AI Platforms & Applied AI",
+        "skills": [
+          "Open-Weight Foundation Models",
+          "Retrieval-Augmented Generation (RAG)",
+          "Model Customization & Fine-Tuning",
+          "Self-Hosted AI Infrastructure"
+        ]
+      },
+      {
+        "title": "Cloud-Native Systems",
+        "skills": [
           "Azure & AWS Platforms",
-          "Platform Architecture",
-          "Cloud Migration & Modernization",
-          "Cost & Capacity Optimization",
-        ],
-      },
-      {
-        title: "DevOps & Infrastructure",
-        skills: [
-          "Terraform & Azure Bicep",
-          "Azure DevOps & GitHub Actions",
-          "CI/CD Pipeline Automation",
-          "Infrastructure as Code",
-        ],
-      },
-      {
-        title: "Containers & Runtime Platforms",
-        skills: [
-          "Docker & Docker Compose",
-          "Kubernetes Orchestration",
+          "Docker & Kubernetes",
           "Microservices Architecture",
-          "Container Networking",
-        ],
+          "Cloud Migration & Modernization"
+        ]
       },
       {
-        title: "Security & Governance",
-        skills: [
-          "Role-Based Access Control (RBAC)",
-          "Managed Identities & Secrets Management",
-          "Policy-Driven Access Control",
-          "Secure API Design & Compliance",
-        ],
-      },
-      {
-        title: "Architecture & Engineering Practices",
-        skills: [
-          "Domain-Driven Design (DDD)",
-          "Test-Driven Development (TDD)",
-          "SOLID Principles",
-          "Agile (Scrum & Kanban)",
-        ],
-      },
-      {
-        title: "Applied AI & Multimodal Systems",
-        skills: [
-          "AI Model Training from Scratch",
-          "Speech-to-Text & Text-to-Speech",
-          "Conversational Intelligence",
-          "AI Travel Experiences & AR/VR",
-        ],
-      },
-      {
-        title: "Programming",
-        skills: [
-          "C# & .NET 8 Core",
+        "title": "Industrial Software Engineering",
+        "skills": [
+          "C# & .NET",
           "Python (Django, FastAPI)",
           "JavaScript & TypeScript",
-          "SQL & Database Design",
-        ],
+          "SQL & Database Design"
+        ]
       },
       {
-        title: "API & Integration",
-        skills: [
+        "title": "API & Integration",
+        "skills": [
           "REST & GraphQL APIs",
           "OAuth 2.0 & Security",
           "Event-Driven Architecture",
-          "SignalR & Message Queues",
-        ],
+          "SignalR & Message Queues"
+        ]
       },
       {
-        title: "Observability & Reliability",
-        skills: [
+        "title": "DevOps & Infrastructure",
+        "skills": [
+          "Terraform & Azure Bicep",
+          "Azure DevOps & GitHub Actions",
+          "CI/CD Pipeline Automation",
+          "Infrastructure as Code"
+        ]
+      },
+      {
+        "title": "Observability & Reliability",
+        "skills": [
           "Metrics, Logs & Distributed Tracing",
           "SLOs, Alerting & Incident Response",
           "Performance & Capacity Engineering",
-          "Operational Readiness & Recovery",
-        ],
+          "Operational Readiness & Recovery"
+        ]
       },
       {
-        title: "IoT & Edge Computing",
-        skills: [
-          "MQTT, AMQP & Edge Gateways",
-          "OPC UA, Modbus & Serial Integration",
-          "Raspberry Pi & ESP32 Development",
-          "Industrial Telemetry & Asset Models",
-        ],
-      },
+        "title": "Architecture, Security & Quality",
+        "skills": [
+          "Domain-Driven Design & SOLID",
+          "Test-Driven Development",
+          "RBAC & Secrets Management",
+          "Secure API Design & Governance"
+        ]
+      }
     ],
     []
   );
@@ -175,18 +169,18 @@ export default function Home() {
     () => [
       {
         icon: TrendingUp,
-        title: "Performance Optimization",
-        desc: "Architected systems handling 10M+ requests/day with sub-100ms latency, delivering 35% infrastructure cost reduction through cloud-native optimization.",
+        title: "Interoperable Industrial Systems",
+        desc: "Connecting industrial assets, engineering information, and enterprise applications through open protocols, secure APIs, and shared asset models.",
       },
       {
         icon: Target,
-        title: "Enterprise Reliability",
-        desc: "Designed and implemented multi-cloud architectures achieving 99.9% uptime SLA across Azure and AWS, enabling mission-critical operations.",
+        title: "Reliable Enterprise Delivery",
+        desc: "Bringing software engineering and operational ownership together with CI/CD, repeatable infrastructure, observability, and secure cloud delivery.",
       },
       {
         icon: Award,
-        title: "Scalable Solutions",
-        desc: "Built microservices platforms using domain-driven design and event-driven architecture, reducing time-to-market for new features by 40%.",
+        title: "Adaptable AI Platforms",
+        desc: "Developing Onesa AI around self-managed infrastructure, privacy, efficient inference, and a shared application layer designed to evolve with its models.",
       },
     ],
     []
@@ -213,7 +207,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-white text-gray-900">
       {/* Navigation */}
-      <nav className="fixed top-0 w-full bg-gray-900 text-white z-50 border-b border-gray-800">
+      <nav aria-label="Main navigation" className="fixed top-0 w-full bg-[#03121e]/95 backdrop-blur-md text-white z-50 border-b border-cyan-200/10">
         <div className="px-4 sm:px-6 lg:px-8 flex items-center justify-between py-3 md:py-4 max-w-7xl mx-auto w-full">
           <Link href="/">
             <a className="flex items-center gap-2 sm:gap-3 hover:opacity-80 transition-opacity min-w-0">
@@ -222,7 +216,7 @@ export default function Home() {
                 alt="Andrew Gotora"
                 className="w-10 h-10 md:w-12 md:h-12 rounded-full border-2 border-teal-400 object-cover flex-shrink-0"
               />
-              <span className="text-base sm:text-lg md:text-xl font-bold tracking-tight hidden sm:inline truncate">
+              <span className="text-base sm:text-lg md:text-xl font-bold tracking-tight truncate">
                 Andrew Gotora
               </span>
             </a>
@@ -238,6 +232,16 @@ export default function Home() {
               className="text-sm font-medium hover:text-teal-400 transition-all duration-300 cursor-pointer" >
               Skills
             </a>   
+            <a href="#experience"
+              onClick={(e) => scrollToSection(e, "experience")}
+              className="text-sm font-medium hover:text-teal-400 transition-colors">
+              Experience
+            </a>
+            <a href="#onesa"
+              onClick={(e) => scrollToSection(e, "onesa")}
+              className="text-sm font-medium hover:text-teal-400 transition-colors">
+              Onesa AI
+            </a>
             <a href="#about" 
               onClick={(e) => scrollToSection(e, "about")}
               className="text-sm font-medium hover:text-teal-400 transition-all duration-300 cursor-pointer">
@@ -249,7 +253,7 @@ export default function Home() {
           <div className="md:hidden">
             <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="text-white hover:bg-gray-800">
+                <Button aria-label="Open navigation menu" variant="ghost" size="icon" className="text-white hover:bg-gray-800">
                   <Menu className="w-6 h-6" />
                 </Button>
               </SheetTrigger>
@@ -285,7 +289,27 @@ export default function Home() {
                   >
                     Skills
                   </a>
-                  <a 
+                  <a
+                    href="#experience"
+                    onClick={(e) => {
+                      scrollToSection(e, "experience");
+                      setIsMenuOpen(false);
+                    }}
+                    className="text-lg font-medium hover:text-teal-400 transition-colors"
+                  >
+                    Experience
+                  </a>
+                  <a
+                    href="#onesa"
+                    onClick={(e) => {
+                      scrollToSection(e, "onesa");
+                      setIsMenuOpen(false);
+                    }}
+                    className="text-lg font-medium hover:text-teal-400 transition-colors"
+                  >
+                    Onesa AI
+                  </a>
+                  <a
                     href="#about" 
                     onClick={(e) => {
                       scrollToSection(e, "about");
@@ -304,53 +328,59 @@ export default function Home() {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative pt-24 pb-24 bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 text-white overflow-hidden">
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0zNiAxOGMzLjMxNCAwIDYgMi42ODYgNiA2cy0yLjY4NiA2LTYgNi02LTIuNjg2LTYtNiAyLjY4Ni02IDYtNiIgc3Ryb2tlPSJyZ2JhKDU5LCAxMzAsIDI0NiwgMC4xKSIgc3Ryb2tlLXdpZHRoPSIyIi8+PC9nPjwvc3ZnPg==')] opacity-30"></div>
-        <div
-          className="absolute bottom-0 left-0 right-0 h-16 bg-[#E0F2FE]"
-          style={{ clipPath: "polygon(0 100%, 100% 0, 100% 100%, 0 100%)" }}
-        ></div>
-
-        <div className="px-4 sm:px-6 lg:px-8 relative z-10 max-w-7xl mx-auto w-full">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 items-center">
-            <div className="lg:col-span-2">
-              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 leading-tight">
-                Senior DevOps<br />Engineer
-              </h1>
-              <p className="text-lg md:text-xl leading-relaxed max-w-2xl text-gray-200 mb-8">
-                Building secure cloud platforms, automated delivery systems, resilient infrastructure, industrial IoT solutions, and a self-trained multimodal AI model spanning voice, travel, and AR/VR.
-              </p>
-              <div className="flex flex-wrap gap-4">
-                <a href="#projects" onClick={(e) => scrollToSection(e, "projects")} className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-teal-500 text-white font-semibold rounded-lg hover:bg-teal-600 transition-all hover:shadow-lg hover:shadow-teal-500/50 hover:scale-105">
-                  View Projects <ChevronRight className="w-4 h-4" />
-                </a>
-                <a 
-                  href="resume/resume_download.pdf" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-2 px-6 py-3 border-2 border-white text-white font-semibold rounded-lg hover:bg-white hover:text-slate-900 transition-all hover:scale-105"
-                >
-                  View Resume <ExternalLink className="w-4 h-4" />
-                </a>
-              </div>
+      <section aria-labelledby="hero-heading" className="industrial-hero relative pt-28 sm:pt-36 text-white overflow-hidden bg-[#03121e]">
+        <img
+          src={`${import.meta.env.BASE_URL}images/industrial-hero.webp`}
+          alt=""
+          width="1672"
+          height="941"
+          fetchPriority="high"
+          className="industrial-hero-image absolute inset-0 w-full h-full object-cover"
+        />
+        <div className="industrial-hero-shade absolute inset-0" aria-hidden="true" />
+        <div className="px-4 sm:px-6 lg:px-8 relative max-w-7xl mx-auto w-full">
+          <div className="max-w-[760px] pb-12 sm:pb-16 lg:pb-20">
+            <p className="text-cyan-300 text-xs sm:text-sm font-semibold uppercase tracking-[0.18em] mb-5">
+              Industrial software. Intelligent systems.
+            </p>
+            <h1 id="hero-heading" className="text-[2.35rem] sm:text-5xl lg:text-[3.5rem] xl:text-[3.85rem] font-bold tracking-tight leading-[1.1] mb-6">
+              <span className="block">Senior Industrial</span>{" "}
+              <span className="block">Software &amp;</span>{" "}
+              <span className="block text-cyan-300">Digitalization Engineer</span>
+            </h1>
+            <p className="text-base sm:text-lg text-slate-200 leading-relaxed max-w-[570px] mb-6">
+              I build software connecting industrial assets, engineering information, and enterprise systems—with reliability and interoperability at the centre.
+            </p>
+            <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-slate-300 mb-8">
+              <span className="font-semibold text-white">Co-Founder, Onesa UG</span>
+              <span className="inline-flex items-center gap-2"><MapPin aria-hidden="true" className="w-4 h-4 text-cyan-300" /> Heidelberg, Germany</span>
             </div>
-            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-7 border border-white/20">
-              <p className="text-xs font-bold uppercase tracking-[0.2em] text-teal-400 mb-5">Engineering Focus</p>
-              <div className="space-y-6">
+            <div className="flex flex-wrap items-center gap-3 sm:gap-4">
+              <a href="#projects" onClick={(e) => scrollToSection(e, "projects")} className="inline-flex items-center justify-center gap-2 px-5 py-3 bg-cyan-300 text-slate-950 font-semibold rounded-lg hover:bg-cyan-200 transition-colors focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-200">
+                View Projects <ChevronRight aria-hidden="true" className="w-4 h-4" />
+              </a>
+              <a href={`${import.meta.env.BASE_URL}resume/resume_download.pdf`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 px-5 py-3 border border-white/35 text-white font-semibold rounded-lg hover:bg-white/10 transition-colors focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-200">
+                View Resume <ExternalLink aria-hidden="true" className="w-4 h-4" />
+              </a>
+              <a href="https://www.linkedin.com/in/andrewgotora/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-3 py-3 text-slate-200 font-medium hover:text-cyan-200 transition-colors focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-200">
+                <Linkedin aria-hidden="true" className="w-4 h-4" /> LinkedIn
+              </a>
+            </div>
+          </div>
+          <div className="grid sm:grid-cols-3 gap-6 sm:gap-8 py-7 sm:py-8 border-t border-cyan-200/20">
+            {[
+              { icon: Factory, title: "Industrial IoT & Automation", description: "Connected assets. Interoperable systems." },
+              { icon: BrainCircuit, title: "AI Platforms", description: "Open models. Self-managed infrastructure." },
+              { icon: Cloud, title: "Cloud-Native Systems", description: "Reliable software. Secure delivery." },
+            ].map((focus) => (
+              <div key={focus.title} className="flex gap-3 items-start">
+                <focus.icon aria-hidden="true" className="w-5 h-5 text-cyan-300 shrink-0 mt-1" />
                 <div>
-                  <h2 className="text-lg font-bold mb-1">AI Model Engineering</h2>
-                  <p className="text-sm leading-relaxed text-gray-400">Creator of Onesa, a multimodal AI model trained from scratch using the Llama architecture.</p>
-                </div>
-                <div className="pt-5 border-t border-white/10">
-                  <h2 className="text-lg font-bold mb-1">Cloud &amp; DevOps Platforms</h2>
-                  <p className="text-sm leading-relaxed text-gray-400">Secure delivery automation, infrastructure as code, containers, reliability, and governance.</p>
-                </div>
-                <div className="pt-5 border-t border-white/10">
-                  <h2 className="text-lg font-bold mb-1">Industrial IoT &amp; Software</h2>
-                  <p className="text-sm leading-relaxed text-gray-400">End-to-end systems connecting cloud software, edge platforms, telemetry, and operational technology.</p>
+                  <h2 className="text-sm sm:text-base font-semibold tracking-normal mb-1">{focus.title}</h2>
+                  <p className="text-sm text-slate-300">{focus.description}</p>
                 </div>
               </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
@@ -402,7 +432,7 @@ export default function Home() {
         <div className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Featured Projects</h2>
-            <p className="text-gray-700 text-lg max-w-2xl mx-auto mb-2">Enterprise-scale solutions and architectural implementations.</p>
+            <p className="text-gray-700 text-lg max-w-2xl mx-auto mb-2">Industrial digitalization, enterprise integration, and applied AI in practice.</p>
             <p className="text-teal-600 font-bold text-sm animate-pulse">Click on projects below to discover more</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -459,32 +489,42 @@ export default function Home() {
         </div>
       </section>
 
-      {/* AI Product Spotlight */}
-      <section className="py-20 bg-[#E0F2FE]">
+      {/* Onesa AI Platform */}
+      <section id="onesa" aria-labelledby="onesa-heading" className="py-20 bg-[#E0F2FE]">
         <div className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
-          <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.1fr] gap-8 items-stretch">
-            <div className="p-8 md:p-10 rounded-2xl bg-gradient-to-br from-indigo-950 via-blue-950 to-slate-900 text-white shadow-xl">
-              <span className="inline-flex px-3 py-1 mb-5 rounded-full bg-cyan-400/10 border border-cyan-300/30 text-cyan-300 text-xs font-bold uppercase tracking-wider">AI Product Spotlight</span>
-              <h2 className="text-3xl md:text-4xl font-bold mb-3">Diaspora Unlocked</h2>
-              <p className="text-cyan-300 font-semibold mb-5">Zimbabwe diaspora services powered by Onesa</p>
-              <p className="text-gray-300 leading-relaxed mb-7">A digital services platform I built to connect diaspora communities with intelligent travel and destination experiences. Its AI foundation is Onesa, my own model trained from scratch using the Llama architecture and designed to move beyond conventional chat interfaces.</p>
-              <a href="https://www.diasporaunlocked.com/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-5 py-3 rounded-lg bg-cyan-500 text-slate-950 font-bold hover:bg-cyan-400 transition-colors">
-                Visit Diaspora Unlocked <ExternalLink className="w-4 h-4" />
+          <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] gap-8 items-stretch">
+            <div className="p-8 md:p-10 rounded-2xl bg-[#03121e] text-white border border-cyan-900/40">
+              <span className="inline-flex px-3 py-1 mb-5 rounded-full bg-cyan-400/10 border border-cyan-300/30 text-cyan-300 text-xs font-bold uppercase tracking-wider">In development</span>
+              <h2 id="onesa-heading" className="text-3xl md:text-4xl font-bold mb-3">Onesa AI</h2>
+              <p className="text-cyan-300 font-semibold mb-5">Co-Founder, Onesa UG · April 2026</p>
+              <div className="space-y-4 text-slate-300 leading-relaxed">
+                <p>I am developing a general-purpose, modular, self-hosted artificial intelligence platform for developing and deploying intelligent applications across European and international markets.</p>
+                <p>Built on open-weight foundation models, Onesa AI is designed for conversational AI, agentic workflows, enterprise knowledge retrieval, multilingual and multimodal capabilities, and model customization and fine-tuning.</p>
+                <p>The foundation model retains broad general-purpose capabilities. The fine-tuning strategy supports independently versioned specializations across domains, languages, and regions, with a shared API and application layer designed to adopt model changes without rebuilding the platform.</p>
+              </div>
+              <a href="mailto:andrewgotora@yahoo.com?subject=Onesa%20AI%20partnership" className="inline-flex items-center gap-2 mt-7 text-cyan-300 font-semibold hover:text-cyan-200 transition-colors">
+                Discuss a partnership <ChevronRight aria-hidden="true" className="w-4 h-4" />
               </a>
             </div>
-            <div className="p-8 md:p-10 rounded-2xl bg-gradient-to-br from-slate-900 via-indigo-950 to-blue-950 border border-indigo-700/50 shadow-xl">
-              <div className="flex items-center gap-3 mb-6 p-4 rounded-xl bg-gradient-to-r from-indigo-700 to-blue-600 shadow-md shadow-indigo-200/60">
-                <div className="w-11 h-11 rounded-xl bg-white/15 border border-white/20 flex items-center justify-center"><Zap className="w-6 h-6 text-cyan-300" /></div>
-                <div><p className="text-xs font-bold uppercase tracking-wider text-cyan-200">Custom AI System</p><h3 className="text-2xl font-bold text-white">Onesa</h3></div>
+            <div className="p-8 md:p-10 rounded-2xl bg-white border border-blue-100">
+              <h3 className="text-xl font-bold text-slate-900 mb-5">Platform priorities</h3>
+              <div className="space-y-4 text-slate-600 mb-7">
+                <p><strong className="text-slate-900">AI sovereignty.</strong> Self-managed infrastructure with privacy, security, and European market readiness at the centre.</p>
+                <p><strong className="text-slate-900">Efficient deployment.</strong> Efficient inference and scalable deployment across heterogeneous GPU infrastructure.</p>
+                <p><strong className="text-slate-900">Adaptable applications.</strong> Manufacturing, industrial digitalization, tourism, and business services for enterprises, developers, institutions, and consumers.</p>
               </div>
-              <p className="text-gray-300 leading-relaxed mb-7">Onesa brings together conversational intelligence, real-time voice interaction, contextual travel assistance, and immersive interfaces in one extensible AI experience.</p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {["Trained from scratch", "Speech-to-text (STT)", "Text-to-speech (TTS)", "AI-driven travel", "AR/VR integration", "Multimodal experiences"].map((capability) => (
-                  <div key={capability} className="flex items-center gap-3 p-3 rounded-lg bg-white/10 border border-white/10 text-indigo-50 text-sm font-semibold"><div className="w-2 h-2 rounded-full bg-cyan-400 shrink-0"></div>{capability}</div>
-                ))}
+              <div className="border-t border-blue-100 pt-6">
+                <h3 className="text-base font-bold text-slate-900 mb-3">Proposed future profiles</h3>
+                <p className="text-sm text-slate-600 mb-4">These are future model or application profiles, not implemented products. African-language and contextual adaptation is one possible regional specialization.</p>
+                <ul className="flex flex-wrap gap-2" aria-label="Proposed Onesa profiles">
+                  {["Onesa General", "Onesa Enterprise", "Onesa Industrial", "Onesa Travel", "Onesa Multilingual", "Onesa African Languages"].map((profile) => (
+                    <li key={profile} className="px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-600 text-xs font-medium">{profile}</li>
+                  ))}
+                </ul>
               </div>
             </div>
           </div>
+          <p className="mt-6 text-sm text-slate-600">Also built: <a href="https://www.diasporaunlocked.com/" target="_blank" rel="noopener noreferrer" className="font-semibold text-teal-700 underline underline-offset-4 hover:text-teal-900">Diaspora Unlocked</a>, a Zimbabwe diaspora-services platform.</p>
         </div>
       </section>
 
@@ -493,7 +533,7 @@ export default function Home() {
         <div className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Technical Expertise</h2>
-            <p className="text-gray-700 text-lg max-w-3xl mx-auto">DevOps leadership spanning cloud platforms, infrastructure automation, CI/CD, containers, observability, security, software architecture, and industrial edge systems.</p>
+            <p className="text-gray-700 text-lg max-w-3xl mx-auto">Electrical engineering, industrial software, cloud infrastructure, and applied AI—connecting operational technology with modern enterprise systems.</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {skills.map((category, i) => (
@@ -515,6 +555,44 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Professional Experience */}
+      <section id="experience" aria-labelledby="experience-heading" className="py-20 bg-white">
+        <div className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
+          <div className="mb-10 max-w-3xl">
+            <p className="text-teal-700 text-sm font-semibold uppercase tracking-wider mb-3">Professional experience</p>
+            <h2 id="experience-heading" className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">A career connecting engineering and software.</h2>
+            <p className="text-slate-600 text-lg">From electrical engineering and railway signalling to industrial digitalization, enterprise software delivery, and AI platforms.</p>
+          </div>
+          <div className="space-y-5">
+            {professionalExperience.map((role) => (
+              <article key={`${role.company}-${role.dateRange}`} className="p-6 sm:p-8 rounded-xl border border-slate-200 border-l-4 border-l-cyan-600 bg-slate-50/50">
+                <div className="flex flex-col sm:flex-row sm:justify-between gap-3 mb-3">
+                  <div>
+                    <p className="text-sm font-semibold text-teal-700 mb-1">{role.company}{role.employmentType && <span className="font-normal text-slate-500"> · {role.employmentType}</span>}</p>
+                    <h3 className="text-xl sm:text-2xl font-bold text-slate-900">{role.title}</h3>
+                  </div>
+                  <p className="text-sm text-slate-600 shrink-0">{role.dateRange}</p>
+                </div>
+                {role.location && <p className="text-sm text-slate-500 mb-3">{role.location}</p>}
+                <p className="text-slate-700 max-w-4xl">{role.description}</p>
+                {role.status && <p className="mt-3 text-sm font-semibold text-teal-700">{role.status} · Proposed profiles are future plans.</p>}
+                {role.responsibilities.length > 0 && (
+                  <details className="mt-4 group">
+                    <summary className="text-sm font-semibold text-teal-700 cursor-pointer w-fit rounded focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-teal-700">Role details</summary>
+                    <ul className="mt-4 space-y-2 list-disc pl-5 text-sm text-slate-600 max-w-4xl">
+                      {role.responsibilities.map((responsibility) => <li key={responsibility}>{responsibility}</li>)}
+                    </ul>
+                  </details>
+                )}
+                <ul className="flex flex-wrap gap-2 mt-5" aria-label={`${role.company} focus areas`}>
+                  {role.focus.map((focus) => <li key={focus} className="text-xs font-medium text-slate-600 px-2.5 py-1 rounded bg-white border border-slate-200">{focus}</li>)}
+                </ul>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Value Proposition Section */}
       <section id="about" className="py-20 bg-[#E0F2FE]">
         <div className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
@@ -522,11 +600,16 @@ export default function Home() {
             <div className="space-y-8">
 
               <div>
-                 <div className="text-center mb-12">
-                  <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">Adding Value</h2>
-                  <p className="text-gray-700 text-lg leading-relaxed mb-6">
-                    As a Senior DevOps Engineer, I connect software delivery, cloud infrastructure, platform reliability, security, and operational ownership. I design systems that are repeatable to deploy, observable in production, resilient under failure, and aligned with measurable business outcomes.
-                  </p>
+                 <div className="mb-8">
+                  <p className="text-teal-700 text-sm font-semibold uppercase tracking-wider mb-3">About Andrew</p>
+                  <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">Engineering across the industrial and digital worlds.</h2>
+                  <div className="space-y-4 text-gray-700 text-base leading-relaxed">
+                    <p>Over more than a decade, my career has progressed from railway signalling and electronic interlocking to Industrial IoT, distributed applications, and enterprise software delivery. I combine electrical engineering, industrial software, cloud infrastructure, and applied AI, with reliability and interoperability at the centre.</p>
+                    <p>My experience spans C#/.NET, Python, JavaScript, REST APIs, microservices, Docker, and Kubernetes, alongside OPC UA, MQTT, Modbus, ThingWorx, and Kepware.</p>
+                    <p>At BASF, I work as a <strong>Senior DevOps Engineer</strong>, supporting software engineering and enterprise delivery through Azure DevOps, CI/CD, Terraform, Azure Bicep, and secure cloud infrastructure. I live in Heidelberg and work remotely, assigned to the Berlin office with regular visits to Berlin.</p>
+                    <p>I co-founded <strong>Onesa UG in April 2026</strong> and am developing Onesa AI. I welcome conversations about senior industrial software engineering, technical leadership, AI platforms, and partnerships that turn digital innovation into useful products.</p>
+                  </div>
+                  <a href="mailto:andrewgotora@yahoo.com" className="inline-flex items-center gap-2 mt-6 text-teal-700 font-semibold hover:text-teal-900 transition-colors"><Mail aria-hidden="true" className="w-4 h-4" /> Let’s talk</a>
                 </div>
               </div>
 
@@ -575,13 +658,13 @@ export default function Home() {
               <span className="text-xl font-bold tracking-tight">Andrew Gotora</span>
             </div>
             <div className="flex gap-6">
-              <a href="https://github.com/DruHustle" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-teal-400 transition-colors">
+              <a href="https://github.com/DruHustle" aria-label="Andrew Gotora on GitHub" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-teal-400 transition-colors">
                 <Github className="w-6 h-6" />
               </a>
-              <a href="https://linkedin.com/in/andrewgotora" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-teal-400 transition-colors">
+              <a href="https://www.linkedin.com/in/andrewgotora/" aria-label="Andrew Gotora on LinkedIn" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-teal-400 transition-colors">
                 <Linkedin className="w-6 h-6" />
               </a>
-              <a href="mailto:andrewgotora@yahoo.com" className="text-gray-400 hover:text-teal-400 transition-colors">
+              <a href="mailto:andrewgotora@yahoo.com" aria-label="Email Andrew Gotora" className="text-gray-400 hover:text-teal-400 transition-colors">
                 <Mail className="w-6 h-6" />
               </a>
             </div>

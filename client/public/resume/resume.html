@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Andrew Gotora — Senior DevOps Engineer</title>
+  <title>Andrew Gotora — Senior Industrial Software &amp; Digitalization Engineer</title>
   <style>
     @page { size: A4; margin: 8mm 14mm; }
     * { box-sizing: border-box; }
@@ -23,7 +23,7 @@
     .job-meta { color: #475569; font-size: 8.5pt; white-space: nowrap; }
     .company { margin-top: 1px; color: #475569; font-weight: 700; }
     .summary { font-size: 9.7pt; }
-    .skills { display: grid; grid-template-columns: 31% 69%; gap: 3px 8px; }
+    .skills { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2.2fr); gap: 3px 8px; }
     .skills strong { color: #0f172a; }
     .skills div { break-inside: avoid; }
     .page-break { break-before: page; page-break-before: always; }
@@ -35,55 +35,73 @@
 <body>
   <header>
     <h1>Andrew Gotora</h1>
-    <div class="role">Senior DevOps Engineer · Platform Engineering · Software & Industrial IoT</div>
+    <div class="role">Senior Industrial Software &amp; Digitalization Engineer</div>
+    <p class="small">Industrial IoT &amp; Automation · AI Platforms · Cloud-Native Systems · Co-Founder, Onesa UG</p>
     <div class="contact">
       Heidelberg, Germany · +49 177 7821261 · <a href="mailto:andrewgotora@yahoo.com">andrewgotora@yahoo.com</a> ·
-      <a href="https://linkedin.com/in/andrewgotora">linkedin.com/in/andrewgotora</a> ·
+      <a href="https://www.linkedin.com/in/andrewgotora/">linkedin.com/in/andrewgotora</a> ·
       <a href="https://github.com/DruHustle">github.com/DruHustle</a> ·
-      <a href="https://andrewgotora.vercel.app">andrewgotora.vercel.app</a>
+      <a href="https://andrewgotora.com/">andrewgotora.com</a>
     </div>
   </header>
 
   <section>
     <h2>Professional Summary</h2>
-    <p class="summary">Senior DevOps Engineer, software professional, and AI product builder with 10+ years of experience across cloud platforms, enterprise software, industrial systems, and the full delivery lifecycle. Builds CI/CD pipelines, infrastructure as code, container platforms, secure APIs, observable services, and multimodal AI experiences across Azure and AWS. Trained Onesa, an original model using the Llama architecture, from scratch and integrated voice AI, travel intelligence, and AR/VR. Trusted independent contributor from requirements and architecture through testing, deployment, troubleshooting, and operations.</p>
+    <p class="summary">Senior Industrial Software &amp; Digitalization Engineer with more than a decade of experience connecting industrial assets, engineering information, and enterprise systems. Career spans railway signalling and electronic interlocking, Industrial IoT, distributed applications, and enterprise delivery. Combines electrical engineering, C#/.NET and Python software development, cloud infrastructure, and applied AI, with reliability and interoperability at the centre. Senior DevOps Engineer at BASF, working remotely from Heidelberg and assigned to the Berlin office with regular visits. Co-founded Onesa UG in April 2026 and is developing Onesa AI, a modular, self-hosted platform built on open-weight foundation models.</p>
   </section>
 
   <section>
     <h2>Core Expertise</h2>
     <div class="skills small">
-      <strong>DevOps & delivery</strong><div>Azure DevOps, CI/CD, GitHub Actions, GitLab CI/CD, Jenkins, Git, release management, Agile/Scrum</div>
-      <strong>Infrastructure & cloud</strong><div>Terraform, HashiCorp Packer, Azure Bicep, ARM templates, Microsoft Azure, AWS, cloud migration</div>
-      <strong>Containers & platforms</strong><div>Docker, Docker Compose, Kubernetes, AKS, Portainer, Linux, microservices, container networking</div>
-      <strong>Software engineering</strong><div>C#/.NET, ASP.NET, Python, JavaScript, TypeScript, C++, PowerShell, SQL, REST APIs, OAuth 2.0</div>
-      <strong>Data & integration</strong><div>PostgreSQL, SQL Server, MySQL, Kafka, Azure Service Bus, JSON/XML, OpenAPI, FastAPI</div>
-      <strong>Industrial & edge</strong><div>OPC UA, MQTT, MODBUS, Kepware, ThingWorx, Node-RED, Cybus Connectware, digital twins, edge SDKs</div>
-      <strong>AI engineering</strong><div>Model training from scratch, Llama architecture, STT/TTS, conversational AI, RAG, AI travel experiences, AR/VR integration, SAP BTP AI</div>
-      <strong>Quality & operations</strong><div>Test automation, root-cause analysis, monitoring, alerting, technical documentation, FMEA/FMECA, FAT/SAT</div>
+      <strong>Industrial IoT &amp; automation</strong><div>OPC UA, MQTT, Modbus, Kepware, ThingWorx, digital twins, edge SDKs, OT/IT integration</div>
+      <strong>Software engineering</strong><div>C#/.NET, ASP.NET MVC, Python, JavaScript, TypeScript, React, C++, SQL, REST APIs</div>
+      <strong>AI platforms &amp; applied AI</strong><div>Open-weight models, RAG, self-hosted infrastructure, model customization and fine-tuning</div>
+      <strong>Cloud-native systems</strong><div>Azure, AWS, Docker, Kubernetes, microservices, Terraform, Azure Bicep</div>
+      <strong>Delivery &amp; quality</strong><div>Azure DevOps, GitHub Actions, CI/CD, Agile Scrum, Postman, xUnit, application testing</div>
+      <strong>Data &amp; integration</strong><div>Relational databases, Entity Framework, Redis, Elasticsearch, RabbitMQ, secure APIs</div>
+      <strong>Security &amp; operations</strong><div>RBAC, managed identities, Azure Key Vault, monitoring, troubleshooting, secure cloud infrastructure</div>
+      <strong>Electrical engineering</strong><div>PLC programming, embedded C/C++, Altium PCB design, electronic interlocking, FAT/SAT, FMECA</div>
     </div>
   </section>
 
   <section>
     <h2>Professional Experience</h2>
     <article class="job">
-      <div class="job-head"><h3>Senior DevOps Engineer</h3><span class="job-meta">Nov 2022 – Present</span></div>
-      <div class="company">BASF Services Europe GmbH · Berlin, Germany</div>
+      <div class="job-head"><h3>Co-Founder</h3><span class="job-meta">Apr 2026 – Present</span></div>
+      <div class="company">Onesa UG · Self-employed</div>
       <ul>
-        <li>Implement and operate Azure DevOps CI/CD pipelines for reliable application delivery across the department.</li>
-        <li>Contribute to the migration from the Atlassian suite to Azure DevOps, transitioning development and delivery workflows.</li>
-        <li>Automate repeatable cloud infrastructure and environment provisioning with Terraform, Azure Bicep/ARM templates, and policy-controlled configuration; use HashiCorp Packer for reproducible machine images.</li>
-        <li>Develop and maintain C#/.NET and JavaScript applications and secure REST integrations for Tax, Legal, and Compliance teams using JSON/XML, OAuth 2.0, and role-based access control.</li>
-        <li>Build SAP BTP AI solutions including retrieval-augmented generation, Joule Studio agents, document extraction and classification, and custom machine-learning deployments.</li>
-        <li>Lead troubleshooting and root-cause analysis, addressing delivery risks across security, scalability, reliability, quality, time, scope, and cost.</li>
+        <li>Developing Onesa AI, a general-purpose, modular, self-hosted platform built on open-weight models for European and international markets.</li>
+        <li>Priorities: AI sovereignty, privacy, secure infrastructure, efficient GPU inference, reusable APIs, and independently versioned specializations.</li>
+        <li>Onesa AI is in development. Proposed model and application profiles are future plans.</li>
+      </ul>
+    </article>
+
+    <article class="job">
+      <div class="job-head"><h3>Senior DevOps Engineer</h3><span class="job-meta">Nov 2022 – Present</span></div>
+      <div class="company">BASF · Full-time · Remote from Heidelberg · Berlin office, Germany</div>
+      <ul>
+        <li>Engineer Azure cloud infrastructure and software delivery with Azure DevOps CI/CD, Terraform, and Azure Bicep across development, QA, and production.</li>
+        <li>Implement RBAC, managed identities, and Azure Key Vault for secure service access and secrets management.</li>
+        <li>Build and test C# and JavaScript applications in Agile Scrum teams; work remotely from Heidelberg, assigned to the Berlin office with regular visits.</li>
       </ul>
     </article>
 
     <article class="job">
       <div class="job-head"><h3>Software Developer</h3><span class="job-meta">Jan 2022 – Nov 2022</span></div>
-      <div class="company">Boehringer Ingelheim GmbH · Ingelheim, Germany</div>
+      <div class="company">Boehringer Ingelheim · Full-time · Ingelheim am Rhein, Germany</div>
       <ul>
-        <li>Designed, developed, and tested C#/.NET applications and REST APIs on Azure, from requirements analysis through integration and maintenance.</li>
-        <li>Established CI/CD pipelines and Docker-based deployments to streamline repeatable software releases.</li>
+        <li>Designed, developed, and tested C#/.NET RESTful APIs and Azure applications from requirements through integration and maintenance.</li>
+        <li>Established CI/CD pipelines and containerized Docker deployments.</li>
+      </ul>
+    </article>
+
+    <article class="job">
+      <div class="job-head"><h3>IoT Engineer</h3><span class="job-meta">Jan 2021 – Dec 2021</span></div>
+      <div class="company">productONE · Full-time</div>
+      <ul>
+        <li>Designed Industrial IoT solutions connecting equipment, edge devices, and cloud platforms through OPC UA, MQTT, Modbus, Kepware, and ThingWorx.</li>
+        <li>Developed .NET and C++ edge SDKs for heterogeneous devices and OT/IT interoperability.</li>
+        <li>Implemented reliable IoT delivery workflows across AWS and Azure; translated engineering and business requirements into maintainable architectures.</li>
       </ul>
     </article>
   </section>
@@ -92,68 +110,71 @@
 
   <header>
     <h1>Andrew Gotora</h1>
-    <div class="role">Senior DevOps Engineer</div>
+    <div class="role">Senior Industrial Software &amp; Digitalization Engineer</div>
     <div class="contact">Heidelberg, Germany · andrewgotora@yahoo.com · linkedin.com/in/andrewgotora</div>
   </header>
 
   <section>
     <h2>Professional Experience — Continued</h2>
-
-    <article class="job">
-      <div class="job-head"><h3>IoT Solution Architect and Developer</h3><span class="job-meta">Jan 2021 – Dec 2021</span></div>
-      <div class="company">Product One · Johannesburg, South Africa</div>
-      <ul>
-        <li>Architected industrial IoT and digital-twin solutions on Azure and AWS, integrating operational technology through OPC UA, MQTT, and MODBUS.</li>
-        <li>Co-developed an Exxaro mining-equipment monitoring solution that halved equipment downtime, improved efficiency by 30%, and received an industry innovation award.</li>
-        <li>Engineered .NET and C++ edge SDKs and integrated Kepware, ThingWorx, Cybus Connectware, cronetwork MDE, and Node-RED.</li>
-        <li>Delivered requirements, design, implementation, integration, testing, client training, support, and a DevOps process for frequent IoT fleet updates.</li>
-      </ul>
-    </article>
     <article class="job">
       <div class="job-head"><h3>Software Product Engineer</h3><span class="job-meta">Jan 2020 – Dec 2020</span></div>
-      <div class="company">Hensoldt South Africa · Cape Town, South Africa</div>
+      <div class="company">HENSOLDT South Africa · Full-time · Cape Town, South Africa</div>
       <ul>
-        <li>Developed scalable C#/.NET software for advanced spectrum monitoring and analysis in a cross-functional R&amp;D environment.</li>
-        <li>Spearheaded CI/CD implementation to improve delivery efficiency and produced comprehensive design and product documentation.</li>
+        <li>Designed, developed, deployed, and maintained a web application for spectrum management and monitoring in engineering R&amp;D.</li>
+        <li>Connected engineering requirements with software implementation and ongoing maintenance.</li>
       </ul>
     </article>
 
     <article class="job">
-      <div class="job-head"><h3>Software Developer</h3><span class="job-meta">Jan 2016 – Dec 2019</span></div>
-      <div class="company">thyssenkrupp Industrial Solutions · Johannesburg, South Africa</div>
+      <div class="job-head"><h3>Software Engineer</h3><span class="job-meta">Jan 2017 – Dec 2019</span></div>
+      <div class="company">thyssenkrupp · Full-time · Johannesburg, South Africa</div>
       <ul>
-        <li>Built C# ASP.NET and Python Django/Flask applications for industrial engineering workflows, reducing feasibility-study costs by 40%.</li>
-        <li>Developed web applications using C#, JavaScript, HTML5/CSS, Docker, and Kubernetes.</li>
-        <li>Led development of a C# WinForms/WPF desktop application using MVVM architecture.</li>
+        <li>Contributed to LFS Digital, generating liquid fuel storage feasibility proposals, plot plans, process flow diagrams, and financial analysis reports.</li>
+        <li>Developed C#/.NET, ASP.NET MVC, JavaScript, React, and Python applications using three-tier and microservices architectures, relational databases, Entity Framework, Redis, Elasticsearch, and RabbitMQ.</li>
+        <li>Performed Azure/AWS migrations, applied ML.NET, and used Postman and xUnit for application testing.</li>
       </ul>
     </article>
 
     <article class="job">
-      <div class="job-head"><h3>Electrical Engineer</h3><span class="job-meta">2014 – 2016</span></div>
-      <div class="company">Ansaldo STS / Gear Rail SA · South Africa</div>
+      <div class="job-head"><h3>Electronics and Electrical Engineer</h3><span class="job-meta">2015 – 2017</span></div>
+      <div class="company">Gear Rail · Full-time · Sandton, South Africa</div>
       <ul>
-        <li>Designed and tested railway signalling systems involving Microlok II electronic interlocking, axle counting, and wayside equipment.</li>
-        <li>Generated interlocking logic using C, C++, and SpoorText; supported feasibility, integration, testing, type approval, and commissioning.</li>
-        <li>Designed and tested PCB layouts in Altium Designer and performed FMECA, Factory Acceptance Testing, and Site Acceptance Testing.</li>
-        <li>Applied FMEA/FMECA, statistical process control, and 8D problem-solving to investigate issues and support corrective action.</li>
+        <li>Delivered railway signalling engineering from feasibility and detailed design through integration, installation, testing, and commissioning.</li>
+        <li>Developed C/C++ and SpoorText electronic interlocking logic; programmed Siemens, Allen-Bradley, and Microlok PLC systems.</li>
+        <li>Designed Altium lamp-driver PCBs and embedded applications; integrated telecommunications, axle-counting, and track-vacancy systems.</li>
+        <li>Performed FAT/SAT and FMECA; supervised factory assembly and site installations, and produced electrical designs and technical documentation.</li>
+      </ul>
+    </article>
+
+    <article class="job">
+      <div class="job-head"><h3>Graduate Engineer</h3><span class="job-meta">Oct 2013 – Jan 2014</span></div>
+      <div class="company">HVAC International · Pretoria, South Africa</div>
+      <ul>
+        <li>Implemented and maintained energy-saving systems at Tshepong mine in Welkom.</li>
+      </ul>
+    </article>
+
+    <article class="job">
+      <div class="job-head"><h3>Graduate Student Researcher</h3><span class="job-meta">Jun 2013 – Dec 2013</span></div>
+      <div class="company">Opti-Num Solutions · Johannesburg, South Africa</div>
+      <ul>
+        <li>Developed a swine flu detection system using MATLAB.</li>
       </ul>
     </article>
   </section>
 
   <div class="two-col">
     <section>
-      <h2>Selected Speaking</h2>
-      <p class="small"><strong>Featured Speaker — Enterprise Continuous Delivery &amp; Automation Summit 2026</strong><br>Berlin · Nov 30–Dec 1, 2026<br>Case study on modern enterprise delivery platforms; panel on AI in highly regulated industries.</p>
-      <h2>Selected Product</h2>
-      <p class="small"><strong>Diaspora Unlocked &amp; Onesa</strong><br>Built a Zimbabwe diaspora-services platform and trained Onesa from scratch using the Llama architecture, with STT, TTS, conversational intelligence, AI-driven travel, and AR/VR integration.</p>
-      <p class="small"><strong>Smart Factory IoT</strong><br>Architected a three-repository React/Node and .NET industrial platform with split Vercel/Render delivery, durable MQTT edge control, PostgreSQL/Redis, AAS/AASX, OAuth/RBAC, and immutable GitHub Actions releases.</p>
-    </section>
-    <section>
       <h2>Education</h2>
       <p><strong>Bachelor of Electronic and Electrical Engineering Science</strong><br>University of Johannesburg · 2015</p>
-
-      <h2>Languages & Work Authorization</h2>
-      <p class="small">English — fluent<br>German — B1<br>Valid German work permit</p>
+      <h2>Languages &amp; Work Authorization</h2>
+      <p class="small">English — fluent · German — B1<br>Valid German work permit</p>
+    </section>
+    <section>
+      <h2>Selected Speaking</h2>
+      <p class="small"><strong>Featured Speaker — Enterprise Continuous Delivery &amp; Automation Summit 2026</strong><br>Berlin · Nov 30–Dec 1, 2026<br>Case study on modern enterprise delivery platforms; panel on AI in highly regulated industries.</p>
+      <h2>Selected Projects</h2>
+      <p class="small"><strong>Smart Factory IoT</strong> — Asset, telemetry, and edge platform.<br><strong>Diaspora Unlocked</strong> — Zimbabwe diaspora-services platform.</p>
     </section>
   </div>
 
@@ -173,6 +194,6 @@
     </div>
   </section>
 
-  <footer>Portfolio: andrewgotora.vercel.app · GitHub: github.com/DruHustle</footer>
+  <footer>Portfolio: andrewgotora.com · GitHub: github.com/DruHustle</footer>
 </body>
 </html>

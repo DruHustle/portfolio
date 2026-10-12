@@ -174,6 +174,27 @@ html {
 }
 
 @layer components {
+  .industrial-hero-image {
+    object-position: right center;
+  }
+
+  .industrial-hero-shade {
+    background:
+      linear-gradient(0deg, #03121e 0%, transparent 35%),
+      linear-gradient(90deg, #03121e 0%, rgb(3 18 30 / 88%) 35%, rgb(3 18 30 / 12%) 75%);
+  }
+
+  @media (max-width: 767px) {
+    .industrial-hero-image {
+      object-position: 75% center;
+      opacity: 0.45;
+    }
+
+    .industrial-hero-shade {
+      background: linear-gradient(90deg, rgb(3 18 30 / 95%), rgb(3 18 30 / 30%));
+    }
+  }
+
   /**
    * Custom container utility that centers content and adds responsive padding.
    *
