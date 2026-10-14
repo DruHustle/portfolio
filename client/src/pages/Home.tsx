@@ -502,8 +502,8 @@ export default function Home() {
                 <p>Built on open-weight foundation models, Onesa AI is designed for conversational AI, agentic workflows, enterprise knowledge retrieval, multilingual and multimodal capabilities, and model customization and fine-tuning.</p>
                 <p>The foundation model retains broad general-purpose capabilities. The fine-tuning strategy supports independently versioned specializations across domains, languages, and regions, with a shared API and application layer designed to adopt model changes without rebuilding the platform.</p>
               </div>
-              <a href="mailto:andrewgotora@yahoo.com?subject=Onesa%20AI%20partnership" className="inline-flex items-center gap-2 mt-7 text-cyan-300 font-semibold hover:text-cyan-200 transition-colors">
-                Discuss a partnership <ChevronRight aria-hidden="true" className="w-4 h-4" />
+              <a href="https://onesa.eu/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 mt-7 text-cyan-300 font-semibold hover:text-cyan-200 transition-colors">
+                Visit Onesa <ChevronRight aria-hidden="true" className="w-4 h-4" />
               </a>
             </div>
             <div className="p-8 md:p-10 rounded-2xl bg-white border border-blue-100">
