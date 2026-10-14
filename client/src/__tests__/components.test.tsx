@@ -1,5 +1,4 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { describe, it, expect } from 'vitest';
 import { useImagePath, useProfileImagePath } from '../hooks/useImagePath';
 import { ProjectService } from '../services/projectService';
 

@@ -1,167 +1,22 @@
-#!/bin/bash
-# Portfolio - Deployment Script with Robust Rollback & Error Visibility
-# Automated Build, Testing, and Safe Deployment Mechanism
-
-set -e  # Exit on any error
-
-echo "🚀 Starting deployment for Portfolio..."
-
-# Colors for output
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
-NC='\033[0m' # No Color
-
-print_success() {
-    echo -e "${GREEN}✓ $1${NC}"
-}
-
-print_warning() {
-    echo -e "${YELLOW}⚠ $1${NC}"
-}
-
-# Store the current gh-pages commit for potential rollback
-PREVIOUS_COMMIT=$(git rev-parse origin/gh-pages 2>/dev/null || echo "")
-
-# Rollback function
-rollback() {
-    echo ""
-    echo -e "${RED}⚠️  Deployment failed. Initiating rollback...${NC}"
-    
-    if [ -z "$PREVIOUS_COMMIT" ]; then
-        echo "❌ No previous version available for rollback."
-        exit 1
-    fi
-    
-    echo "📦 Rolling back to previous version: $PREVIOUS_COMMIT"
-    git checkout gh-pages
-    git reset --hard "$PREVIOUS_COMMIT"
-    git push origin gh-pages --force
-    
-    git checkout main 2>/dev/null || git checkout master
-    
-    echo -e "${GREEN}✅ Rollback complete! Website reverted to previous working version.${NC}"
-    exit 1
-}
-
-# Set trap to call rollback on error
-trap rollback ERR
-
-# Check prerequisites
-if ! command -v git &> /dev/null; then
-    echo "❌ Error: git is not installed."
-    exit 1
+#!/usr/bin/env bash
+# Explicit manual GitHub Pages publication. Never changes the working branch.
+set -euo pipefail
+cd "$(dirname "$0")"
+trap 'echo "Deployment stopped. The working tree and previous deployment were not reset." >&2' ERR
+command -v pnpm >/dev/null
+command -v git >/dev/null
+git rev-parse --is-inside-work-tree >/dev/null
+if [[ -n "$(git status --porcelain)" ]]; then
+  echo "Commit or preserve local changes before deploying a reviewed revision." >&2
+  exit 1
 fi
-
-if ! command -v pnpm &> /dev/null; then
-    echo "❌ Error: pnpm is not installed."
-    exit 1
-fi
-
-# Initialize git if needed
-if [ ! -d ".git" ]; then
-    echo "📦 Initializing git repository..."
-    git init
-    git add .
-    git commit -m "Initial commit: Portfolio"
-fi
-
-# Check Remote Configuration
-REMOTE_URL=$(git remote get-url origin 2>/dev/null)
-if [ -z "$REMOTE_URL" ]; then
-    echo "🔗 Configuring GitHub repository..."
-    read -p "Enter your GitHub username: " USERNAME
-    read -p "Enter your repository name (default: portfolio): " REPO_NAME
-    REPO_NAME=${REPO_NAME:-portfolio}
-    git remote add origin "https://github.com/$USERNAME/$REPO_NAME.git"
-    print_success "Remote origin added"
-else
-    print_success "Remote origin configured: $REMOTE_URL"
-fi
-
-# Fetch latest changes
-echo "📡 Fetching latest changes..."
-git fetch origin
-
-# Install dependencies
-echo "📦 Installing dependencies..."
-pnpm install --frozen-lockfile || pnpm install
-
-# Run tests (Fixed: Removed 2>/dev/null to show you why tests fail)
-echo "🧪 Running tests..."
-if pnpm test --reporter=default; then
-    print_success "All tests passed!"
-else
-    echo -e "${RED}❌ Tests failed. See the detailed report above. Aborting deployment.${NC}"
-    exit 1
-fi
-
-# Build the project
-echo "🏗️ Building project..."
-pnpm build
-
-# Verify build output exists
-if [ ! -d "dist" ]; then
-    echo "❌ Build failed: dist directory not found."
-    exit 1
-fi
-
-# Ensure gh-pages branch exists
-if ! git show-ref --verify --quiet refs/heads/gh-pages; then
-    echo "📝 Creating gh-pages branch..."
-    git checkout --orphan gh-pages
-    git reset --hard
-    git commit --allow-empty -m "Initial gh-pages commit"
-    git checkout main 2>/dev/null || git checkout master
-fi
-
-# Deploy to GitHub Pages
-echo "🚀 Deploying to GitHub Pages..."
-
-# Create a temporary directory for deployment to keep workspace clean
-TEMP_DIR=$(mktemp -d)
-trap "rm -rf $TEMP_DIR" EXIT
-
-# Copy dist contents to temporary directory
-cp -r dist/* "$TEMP_DIR/"
-
-# Switch to gh-pages branch
-git checkout gh-pages
-
-# Clear old content but PRESERVE the .git folder
-echo "🧹 Cleaning old files from gh-pages..."
-find . -maxdepth 1 -not -name '.git' -not -name '.' -exec rm -rf {} +
-
-# Copy new content from temp
-cp -r "$TEMP_DIR"/* .
-
-# Verify new content was copied
-if [ ! -f "index.html" ]; then
-    echo "❌ Deployment failed: index.html not found in build output."
-    exit 1
-fi
-
-# Create .gitignore using robust printf method
-printf "node_modules/\n.DS_Store\nThumbs.db\n*.env\n" > .gitignore
-print_success ".gitignore created for gh-pages"
-
-# Commit and push
-git add .
-git commit -m "Deploy: $(date '+%Y-%m-%d %H:%M:%S')" || echo "ℹ️  No changes to commit"
-
-# Push with error handling
-if ! git push origin gh-pages --force; then
-    echo "❌ Failed to push to gh-pages branch."
-    exit 1
-fi
-
-# Switch back to main branch
-git checkout main 2>/dev/null || git checkout master
-
-echo -e "\n${GREEN}✨ Deployment complete!${NC}"
-REPO_URL=$(git remote get-url origin | sed -E 's/.*github.com[:\/]([^\/]+)\/([^\.]+).*/\1\/\2/')
-echo "🌐 Your website is live at: https://$(echo $REPO_URL | cut -d'/' -f1).github.io/$(echo $REPO_URL | cut -d'/' -f2)"
-
-echo -e "\n🔄 Rollback Information:"
-echo "   Previous version hash: $PREVIOUS_COMMIT"
+pnpm install --frozen-lockfile
+pnpm lint
+pnpm check
+pnpm test
+pnpm audit --audit-level=moderate
+pnpm test:e2e
+[[ -f dist/index.html ]]
+# The publisher uses its own temporary clone and a normal push.
+node scripts/publish.mjs
+echo "GitHub Pages publication completed."

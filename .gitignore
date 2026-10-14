@@ -101,3 +101,8 @@ temp/
 *.db
 *.sqlite
 *.sqlite3
+
+# Browser verification outputs
+artifacts/
+playwright-report/
+test-results/

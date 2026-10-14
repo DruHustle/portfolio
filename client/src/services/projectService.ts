@@ -1,3 +1,5 @@
+import type { LucideIcon } from "lucide-react";
+
 /**
  * Project Data Service
  * Implements Single Responsibility Principle by separating data from components
@@ -6,13 +8,13 @@
 export interface ProjectStat {
   label: string;
   value: string;
-  icon: any;
+  icon: LucideIcon | null;
 }
 
 export interface ArchitectureItem {
   title: string;
   desc: string;
-  icon: any;
+  icon: LucideIcon | null;
 }
 
 export interface TechStackItem {
@@ -58,7 +60,7 @@ export class ProjectService {
       'smart-factory-iot': this.getSmartFactoryIoTProject(),
     };
 
-    return projects[projectId] || null;
+    return Object.hasOwn(projects, projectId) ? projects[projectId] : null;
   }
 
   private static getIMSOPProject(): ProjectData {

@@ -1,3 +1,4 @@
+import { assetUrl } from "@/lib/urls";
 /**
  * Image Path Hook
  * Provides consistent image path resolution across the application
@@ -5,8 +6,7 @@
  */
 
 export function useImagePath(imagePath: string): string {
-  const baseUrl = import.meta.env.BASE_URL || '/';
-  return `${baseUrl}${imagePath}`;
+  return assetUrl(imagePath);
 }
 
 /**

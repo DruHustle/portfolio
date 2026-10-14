@@ -1,127 +1,56 @@
-/**
- * A safe wrapper for localStorage and sessionStorage that handles Safari Private Browsing mode
- * and other environments where storage might be restricted.
- */
-
-const isStorageAvailable = (type: 'localStorage' | 'sessionStorage'): boolean => {
-  try {
-    if (typeof window === 'undefined') return false;
-    const storage = window[type];
-    if (!storage) return false;
-    const x = '__storage_test__';
-    storage.setItem(x, x);
-    storage.removeItem(x);
-    return true;
-  } catch (e) {
-    return false;
-  }
-};
-
-const storageAvailable = {
-  local: isStorageAvailable('localStorage'),
-  session: isStorageAvailable('sessionStorage'),
-};
-
-// In-memory fallback for when storage is not available
-const memoryStorage: Record<string, string> = {};
-const sessionMemoryStorage: Record<string, string> = {};
-
-export const safeLocalStorage = {
-  getItem: (key: string): string | null => {
-    try {
-      if (storageAvailable.local && typeof localStorage !== 'undefined') {
-        return localStorage.getItem(key);
-      }
-    } catch (e) {
-      // Fallback to memory
-    }
-    return memoryStorage[key] || null;
-  },
-  setItem: (key: string, value: string): void => {
-    try {
-      if (storageAvailable.local && typeof localStorage !== 'undefined') {
-        localStorage.setItem(key, value);
-        return;
-      }
-    } catch (e) {
-      // Fallback to memory
-    }
-    memoryStorage[key] = value;
-  },
-  removeItem: (key: string): void => {
-    if (storageAvailable.local) {
-      try {
-        localStorage.removeItem(key);
-      } catch (e) {
-        delete memoryStorage[key];
-      }
-    } else {
-      delete memoryStorage[key];
-    }
-  },
-  clear: (): void => {
-    if (storageAvailable.local) {
-      try {
-        localStorage.clear();
-      } catch (e) {
-        for (const key in memoryStorage) {
-          delete memoryStorage[key];
+/** Storage can become unavailable at any time, including after initial access. */
+function createSafeStorage(type: "localStorage" | "sessionStorage") {
+  const fallback = new Map<string, string>();
+  let memoryOnly = false;
+  const storage = () =>
+    typeof window === "undefined" ? undefined : window[type];
+  return {
+    getItem(key: string): string | null {
+      if (!memoryOnly) {
+        try {
+          const target = storage();
+          if (target) {
+            const value = target.getItem(key);
+            if (value === null) fallback.delete(key);
+            else fallback.set(key, value);
+            return value;
+          }
+        } catch {
+          memoryOnly = true;
         }
       }
-    } else {
-      for (const key in memoryStorage) {
-        delete memoryStorage[key];
+      return fallback.get(key) ?? null;
+    },
+    setItem(key: string, value: string): void {
+      fallback.set(key, value);
+      if (memoryOnly) return;
+      try {
+        storage()?.setItem(key, value);
+      } catch {
+        memoryOnly = true;
       }
-    }
-  }
-};
+    },
+    removeItem(key: string): void {
+      fallback.delete(key);
+      if (memoryOnly) return;
+      try {
+        storage()?.removeItem(key);
+      } catch {
+        memoryOnly = true;
+      }
+    },
+    clear(): void {
+      fallback.clear();
+      if (memoryOnly) return;
+      try {
+        storage()?.clear();
+      } catch {
+        memoryOnly = true;
+      }
+    },
+  };
+}
 
-export const safeSessionStorage = {
-  getItem: (key: string): string | null => {
-    try {
-      if (storageAvailable.session && typeof sessionStorage !== 'undefined') {
-        return sessionStorage.getItem(key);
-      }
-    } catch (e) {
-      // Fallback to memory
-    }
-    return sessionMemoryStorage[key] || null;
-  },
-  setItem: (key: string, value: string): void => {
-    try {
-      if (storageAvailable.session && typeof sessionStorage !== 'undefined') {
-        sessionStorage.setItem(key, value);
-        return;
-      }
-    } catch (e) {
-      // Fallback to memory
-    }
-    sessionMemoryStorage[key] = value;
-  },
-  removeItem: (key: string): void => {
-    if (storageAvailable.session) {
-      try {
-        sessionStorage.removeItem(key);
-      } catch (e) {
-        delete sessionMemoryStorage[key];
-      }
-    } else {
-      delete sessionMemoryStorage[key];
-    }
-  },
-  clear: (): void => {
-    if (storageAvailable.session) {
-      try {
-        sessionStorage.clear();
-      } catch (e) {
-        for (const key in sessionMemoryStorage) {
-          delete sessionMemoryStorage[key];
-        }
-      }
-    } else {
-      for (const key in sessionMemoryStorage) {
-        delete sessionMemoryStorage[key];
-      }
-    }
-  }
-};
+// After access fails, retain a consistent in-memory view for this page's lifetime.
+export const safeLocalStorage = createSafeStorage("localStorage");
+export const safeSessionStorage = createSafeStorage("sessionStorage");

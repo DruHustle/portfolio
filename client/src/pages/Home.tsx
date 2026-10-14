@@ -28,15 +28,26 @@ import {
   SheetTrigger,
   SheetHeader,
   SheetTitle,
+  SheetDescription,
 } from "@/components/ui/sheet";
-import { useMemo, useEffect, useState } from "react";
-import { NavigationService } from "@/services/navigationService";
+import { useMemo, useEffect, useState, useRef } from "react";
+import { ProjectCard } from "@/components/ProjectCard";
 import { analyticsService } from "@/services/analyticsService";
 import { safeSessionStorage } from "@/lib/storage";
 import { professionalExperience } from "@/data/experience";
 
+function focusSection(id: string) {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
+      element.setAttribute('tabindex', '-1');
+      element.focus({ preventScroll: true });
+    }
+  }
+
 export default function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const pendingSection = useRef<string | null>(null);
 
   useEffect(() => {
     analyticsService.trackPageVisit("home");
@@ -186,21 +197,22 @@ export default function Home() {
     []
   );
 
+
+
   const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement> | null, id: string) => {
     if (e) e.preventDefault();
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
+    if (isMenuOpen) pendingSection.current = id;
+    else focusSection(id);
   };
 
   useEffect(() => {
     const shouldScroll = safeSessionStorage.getItem('scrollToProjects');
     if (shouldScroll === 'true') {
       safeSessionStorage.removeItem('scrollToProjects');
-      setTimeout(() => {
-        scrollToSection(null, 'projects');
+      const timer = setTimeout(() => {
+        focusSection('projects');
       }, 100);
+      return () => clearTimeout(timer);
     }
   }, []);
 
@@ -209,18 +221,17 @@ export default function Home() {
       {/* Navigation */}
       <nav aria-label="Main navigation" className="fixed top-0 w-full bg-[#03121e]/95 backdrop-blur-md text-white z-50 border-b border-cyan-200/10">
         <div className="px-4 sm:px-6 lg:px-8 flex items-center justify-between py-3 md:py-4 max-w-7xl mx-auto w-full">
-          <Link href="/">
-            <a className="flex items-center gap-2 sm:gap-3 hover:opacity-80 transition-opacity min-w-0">
+          <Link href="/" className="flex items-center gap-2 sm:gap-3 hover:opacity-80 transition-opacity min-w-0">
               <img
-                src={`${import.meta.env.BASE_URL}images/profile.jpg`}
-                alt="Andrew Gotora"
+                src={`${import.meta.env.BASE_URL}images/profile-avatar.webp`}
+                alt=""
+                width="48" height="48"
                 className="w-10 h-10 md:w-12 md:h-12 rounded-full border-2 border-teal-400 object-cover flex-shrink-0"
               />
               <span className="text-base sm:text-lg md:text-xl font-bold tracking-tight truncate">
                 Andrew Gotora
               </span>
-            </a>
-          </Link>
+            </Link>
           <div className="hidden md:flex items-center gap-6 lg:gap-8">
             <a href="#projects" 
               onClick={(e) => scrollToSection(e, "projects")}
@@ -260,13 +271,20 @@ export default function Home() {
 
               <SheetContent 
                 side="right" 
+                onCloseAutoFocus={event => {
+                  if (!pendingSection.current) return;
+                  event.preventDefault();
+                  focusSection(pendingSection.current);
+                  pendingSection.current = null;
+                }}
                 // Added [&>button]:text-white to target the built-in close icon
-                className="!bg-transparent shadow-none border-none p-0 w-fit min-w-[140px] h-[calc(100dvh-1rem)] m-2 flex flex-col focus:outline-none [&>button]:text-white [&>button]:hover:text-teal-400"
+                className="bg-slate-950 border-slate-800 text-white w-[min(20rem,90vw)] p-0 overflow-y-auto [&>button]:text-white"
               >
                 {/* Inner Glass Card */}
-                <div className="bg-black/40 backdrop-blur-md rounded-xl border border-white/20 flex flex-col p-6 pt-16 gap-6 h-full text-white">
+                <div className="flex flex-col p-6 pt-16 gap-2 text-white">
                   <SheetHeader className="sr-only">
                     <SheetTitle>Navigation Menu</SheetTitle>
+                    <SheetDescription>Choose a portfolio section.</SheetDescription>
                   </SheetHeader>
 
                   <a 
@@ -275,7 +293,7 @@ export default function Home() {
                       scrollToSection(e, "projects");
                       setIsMenuOpen(false);
                     }}
-                    className="text-lg font-medium hover:text-teal-400 transition-colors"
+                    className="min-h-12 flex items-center text-lg font-medium hover:text-teal-400 transition-colors"
                   >
                     Projects
                   </a>
@@ -285,7 +303,7 @@ export default function Home() {
                       scrollToSection(e, "skills");
                       setIsMenuOpen(false);
                     }}
-                    className="text-lg font-medium hover:text-teal-400 transition-colors"
+                    className="min-h-12 flex items-center text-lg font-medium hover:text-teal-400 transition-colors"
                   >
                     Skills
                   </a>
@@ -295,7 +313,7 @@ export default function Home() {
                       scrollToSection(e, "experience");
                       setIsMenuOpen(false);
                     }}
-                    className="text-lg font-medium hover:text-teal-400 transition-colors"
+                    className="min-h-12 flex items-center text-lg font-medium hover:text-teal-400 transition-colors"
                   >
                     Experience
                   </a>
@@ -305,7 +323,7 @@ export default function Home() {
                       scrollToSection(e, "onesa");
                       setIsMenuOpen(false);
                     }}
-                    className="text-lg font-medium hover:text-teal-400 transition-colors"
+                    className="min-h-12 flex items-center text-lg font-medium hover:text-teal-400 transition-colors"
                   >
                     Onesa AI
                   </a>
@@ -315,7 +333,7 @@ export default function Home() {
                       scrollToSection(e, "about");
                       setIsMenuOpen(false);
                     }}
-                    className="text-lg font-medium hover:text-teal-400 transition-colors"
+                    className="min-h-12 flex items-center text-lg font-medium hover:text-teal-400 transition-colors"
                   >
                     About
                   </a>
@@ -327,6 +345,7 @@ export default function Home() {
         </div>
       </nav>
 
+      <main id="main-content" tabIndex={-1}>
       {/* Hero Section */}
       <section aria-labelledby="hero-heading" className="industrial-hero relative pt-28 sm:pt-36 text-white overflow-hidden bg-[#03121e]">
         <img
@@ -433,9 +452,9 @@ export default function Home() {
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Featured Projects</h2>
             <p className="text-gray-700 text-lg max-w-2xl mx-auto mb-2">Industrial digitalization, enterprise integration, and applied AI in practice.</p>
-            <p className="text-teal-600 font-bold text-sm animate-pulse">Click on projects below to discover more</p>
+            <p className="text-teal-700 font-medium text-sm">Click on projects below to discover more</p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {[
               {
                 title: "Smart Factory IoT",
@@ -461,30 +480,9 @@ export default function Home() {
                 link: "/projects/sap-btp-ai-hub",
                 color:"from-blue-500 to-indigo-500"
               }
-            ].map((p, i) => (
-              <Link key={i} href={p.link}>
-                <a 
-                  onClick={() => NavigationService.setFromFeaturedProjects()}
-                  className="group relative flex flex-col h-full rounded-2xl overflow-hidden bg-white border border-blue-100 hover:border-teal-500/50 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer will-change-transform"
-                >
-                  <div className={`absolute top-0 left-0 w-full h-1 bg-gradient-to-r ${p.color}`}></div>
-                  <div className="p-8 flex flex-col flex-grow">
-                    <div className="flex items-center justify-between mb-4">
-                      <span className="px-3 py-1 bg-blue-50 text-blue-600 text-xs font-bold uppercase tracking-wider rounded-full">Project</span>
-                      <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-teal-500 group-hover:translate-x-1 transition-all" />
-                    </div>
-                    <h3 className="text-2xl font-bold text-gray-900 mb-2 group-hover:text-teal-600 transition-colors">{p.title}</h3>
-                    <p className="text-sm text-teal-600 font-semibold mb-4">{p.sub}</p>
-                    <p className="text-gray-700 text-sm leading-relaxed mb-6 flex-grow">{p.desc}</p>
-                    <div className="flex flex-wrap gap-2 mt-auto">
-                      {p.tech.map((t, j) => (
-                        <span key={j} className="text-[10px] bg-blue-50 text-blue-600 px-2 py-1 rounded font-bold uppercase tracking-wider">{t}</span>
-                      ))}
-                    </div>
-                  </div>
-                </a>
-              </Link>
-            ))}
+            ].map((p) => (
+             <ProjectCard key={p.link} title={p.title} subtitle={p.sub} description={p.desc} technologies={p.tech} link={p.link} color={p.color} />
+           ))}
           </div>
         </div>
       </section>
@@ -568,12 +566,12 @@ export default function Home() {
               <article key={`${role.company}-${role.dateRange}`} className="p-6 sm:p-8 rounded-xl border border-slate-200 border-l-4 border-l-cyan-600 bg-slate-50/50">
                 <div className="flex flex-col sm:flex-row sm:justify-between gap-3 mb-3">
                   <div>
-                    <p className="text-sm font-semibold text-teal-700 mb-1">{role.company}{role.employmentType && <span className="font-normal text-slate-500"> · {role.employmentType}</span>}</p>
+                    <p className="text-sm font-semibold text-teal-700 mb-1">{role.company}{role.employmentType && <span className="font-normal text-slate-600"> · {role.employmentType}</span>}</p>
                     <h3 className="text-xl sm:text-2xl font-bold text-slate-900">{role.title}</h3>
                   </div>
                   <p className="text-sm text-slate-600 shrink-0">{role.dateRange}</p>
                 </div>
-                {role.location && <p className="text-sm text-slate-500 mb-3">{role.location}</p>}
+                {role.location && <p className="text-sm text-slate-600 mb-3">{role.location}</p>}
                 <p className="text-slate-700 max-w-4xl">{role.description}</p>
                 {role.status && <p className="mt-3 text-sm font-semibold text-teal-700">{role.status} · Proposed profiles are future plans.</p>}
                 {role.responsibilities.length > 0 && (
@@ -620,7 +618,7 @@ export default function Home() {
                       <div className="w-8 h-8 rounded-xl bg-teal-500/10 flex items-center justify-center group-hover:bg-teal-500/20 transition-all">
                         <p.icon className="w-5 h-5 text-teal-400" />
                       </div>
-                      <h4 className="font-bold text-gray-900">{p.title}</h4>
+                      <h3 className="text-base font-bold text-gray-900">{p.title}</h3>
                     </div>
                     <p className="text-sm text-gray-600 leading-relaxed">{p.desc}</p>
                   </div>
@@ -645,30 +643,32 @@ export default function Home() {
         </div>
       </section>
 
+      </main>
       {/* Footer */}
       <footer className="bg-gray-900 text-white py-12 border-t border-gray-800">
         <div className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
           <div className="flex flex-col md:flex-row justify-between items-center gap-8">
             <div className="flex items-center gap-3">
               <img
-                src={`${import.meta.env.BASE_URL}images/profile.jpg`}
-                alt="Andrew Gotora"
+                src={`${import.meta.env.BASE_URL}images/profile-avatar.webp`}
+                alt=""
+                width="40" height="40" loading="lazy" decoding="async"
                 className="w-10 h-10 rounded-full border-2 border-teal-500 object-cover"
               />
               <span className="text-xl font-bold tracking-tight">Andrew Gotora</span>
             </div>
             <div className="flex gap-6">
-              <a href="https://github.com/DruHustle" aria-label="Andrew Gotora on GitHub" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-teal-400 transition-colors">
+              <a href="https://github.com/DruHustle" aria-label="Andrew Gotora on GitHub" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center size-11 text-gray-400 hover:text-teal-400 transition-colors">
                 <Github className="w-6 h-6" />
               </a>
-              <a href="https://www.linkedin.com/in/andrewgotora/" aria-label="Andrew Gotora on LinkedIn" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-teal-400 transition-colors">
+              <a href="https://www.linkedin.com/in/andrewgotora/" aria-label="Andrew Gotora on LinkedIn" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center size-11 text-gray-400 hover:text-teal-400 transition-colors">
                 <Linkedin className="w-6 h-6" />
               </a>
-              <a href="mailto:andrewgotora@yahoo.com" aria-label="Email Andrew Gotora" className="text-gray-400 hover:text-teal-400 transition-colors">
+              <a href="mailto:andrewgotora@yahoo.com" aria-label="Email Andrew Gotora" className="inline-flex items-center justify-center size-11 text-gray-400 hover:text-teal-400 transition-colors">
                 <Mail className="w-6 h-6" />
               </a>
             </div>
-            <p className="text-gray-500 text-sm">© 2026 Andrew Gotora. All rights reserved.</p>
+            <p className="text-gray-400 text-sm">© 2026 Andrew Gotora. All rights reserved.</p>
           </div>
         </div>
       </footer>

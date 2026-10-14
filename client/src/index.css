@@ -262,3 +262,51 @@ html {
     @apply text-black font-medium border-b-2 border-red-600 hover:border-red-700 transition-colors;
   }
 }
+
+/* Shared interaction states for light and dark page surfaces. */
+@layer base {
+  :root {
+    --space-page: clamp(1rem, 3vw, 2rem);
+    --focus-color: #0891b2;
+  }
+
+  a:focus-visible, button:focus-visible, summary:focus-visible,
+  input:focus-visible, select:focus-visible, textarea:focus-visible {
+    outline: 3px solid var(--focus-color);
+    outline-offset: 4px;
+  }
+
+  .bg-slate-900, .bg-slate-950, nav, .industrial-hero, footer {
+    --focus-color: #67e8f9;
+  }
+
+  main:focus, section[tabindex="-1"]:focus { outline: none; }
+  h1, h2, h3, h4, p { overflow-wrap: anywhere; }
+  img { max-width: 100%; }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  .skip-link {
+    position: fixed;
+    top: 0.75rem;
+    left: 0.75rem;
+    z-index: 100;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    background: #fff;
+    color: #0f172a;
+    font-weight: 600;
+    transform: translateY(-200%);
+  }
+  .skip-link:focus { transform: translateY(0); }
+}

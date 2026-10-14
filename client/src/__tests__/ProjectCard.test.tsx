@@ -1,7 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { ProjectCard } from '../components/ProjectCard';
-import { BrowserRouter } from 'react-router-dom';
 
 /**
  * Test Suite: ProjectCard Component

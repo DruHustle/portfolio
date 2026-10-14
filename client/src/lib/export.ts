@@ -3,6 +3,70 @@
  */
 
 // CSV Export
+export function csvCell(value: unknown): string {
+  const text =
+    value == null
+      ? ""
+      : value instanceof Date
+        ? value.toISOString()
+        : String(value);
+  // Neutralize formulas in spreadsheet applications, including whitespace prefixes.
+  const safe =
+    typeof value === "string" && /^[\s]*[=+@-]/.test(text) ? `'${text}` : text;
+  return `"${safe.replace(/"/g, '""')}"`;
+}
+
+function escapeHTML(value: unknown): string {
+  return String(value).replace(
+    /[&<>"']/g,
+    character =>
+      ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;",
+      })[character]!
+  );
+}
+
+function safePrintHTML(content: string): string {
+  const doc = new DOMParser().parseFromString(content, "text/html");
+  const allowed = new Set([
+    "DIV",
+    "SPAN",
+    "P",
+    "H1",
+    "H2",
+    "H3",
+    "H4",
+    "TABLE",
+    "THEAD",
+    "TBODY",
+    "TFOOT",
+    "TR",
+    "TH",
+    "TD",
+    "UL",
+    "OL",
+    "LI",
+    "STRONG",
+    "EM",
+    "BR",
+  ]);
+  for (const element of Array.from(doc.body.querySelectorAll("*"))) {
+    if (!allowed.has(element.tagName)) {
+      element.remove();
+      continue;
+    }
+    for (const attribute of Array.from(element.attributes)) {
+      if (!["class", "style", "colspan", "rowspan"].includes(attribute.name))
+        element.removeAttribute(attribute.name);
+    }
+  }
+  return doc.body.innerHTML;
+}
+
 export function exportToCSV<T extends object>(
   data: T[],
   filename: string,
@@ -14,20 +78,20 @@ export function exportToCSV<T extends object>(
   }
 
   // Determine columns from data or use provided columns
-  const cols = columns || Object.keys(data[0]).map(key => ({ key: key as keyof T, label: key }));
+  const cols =
+    columns ||
+    Object.keys(data[0]).map(key => ({ key: key as keyof T, label: key }));
 
   // Create CSV header
-  const header = cols.map(col => `"${col.label}"`).join(",");
+  const header = cols.map(col => csvCell(col.label)).join(",");
 
   // Create CSV rows
   const rows = data.map(row =>
-    cols.map(col => {
-      const value = row[col.key];
-      if (value === null || value === undefined) return '""';
-      if (typeof value === "string") return `"${value.replace(/"/g, '""')}"`;
-      if (value instanceof Date) return `"${value.toISOString()}"`;
-      return `"${String(value)}"`;
-    }).join(",")
+    cols
+      .map(col => {
+        return csvCell(row[col.key]);
+      })
+      .join(",")
   );
 
   // Combine header and rows
@@ -50,13 +114,17 @@ export function exportToPDF(
     return;
   }
 
-  const htmlContent = typeof content === "string" ? content : content.outerHTML;
+  printWindow.opener = null;
+  const htmlContent = safePrintHTML(
+    typeof content === "string" ? content : content.outerHTML
+  );
 
   printWindow.document.write(`
     <!DOCTYPE html>
     <html>
     <head>
-      <title>${title}</title>
+      <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'">
+      <title>${escapeHTML(filename || title)}</title>
       <style>
         @page {
           size: A4;
@@ -123,7 +191,7 @@ export function exportToPDF(
       </style>
     </head>
     <body>
-      <h1>${title}</h1>
+      <h1>${escapeHTML(title)}</h1>
       ${htmlContent}
       <p class="timestamp">Generated on ${new Date().toLocaleString()}</p>
     </body>
@@ -131,10 +199,10 @@ export function exportToPDF(
   `);
 
   printWindow.document.close();
-  
+
   // Add a print button for the user to trigger the PDF download
   const printBtn = printWindow.document.createElement("button");
-  printBtn.innerHTML = "Download as PDF";
+  printBtn.textContent = "Download as PDF";
   printBtn.style.position = "fixed";
   printBtn.style.top = "20px";
   printBtn.style.right = "20px";
@@ -163,15 +231,23 @@ export function generateHTMLTable<T extends object>(
 ): string {
   if (data.length === 0) return "<p>No data available</p>";
 
-  const headerRow = columns.map(col => `<th>${col.label}</th>`).join("");
-  const bodyRows = data.map(row =>
-    `<tr>${columns.map(col => {
-      const value = row[col.key];
-      if (value === null || value === undefined) return "<td>-</td>";
-      if (value instanceof Date) return `<td>${value.toLocaleDateString()}</td>`;
-      return `<td>${String(value)}</td>`;
-    }).join("")}</tr>`
-  ).join("");
+  const headerRow = columns
+    .map(col => `<th>${escapeHTML(col.label)}</th>`)
+    .join("");
+  const bodyRows = data
+    .map(
+      row =>
+        `<tr>${columns
+          .map(col => {
+            const value = row[col.key];
+            if (value === null || value === undefined) return "<td>-</td>";
+            if (value instanceof Date)
+              return `<td>${value.toLocaleDateString()}</td>`;
+            return `<td>${escapeHTML(value)}</td>`;
+          })
+          .join("")}</tr>`
+    )
+    .join("");
 
   return `
     <table>
@@ -187,19 +263,27 @@ export function generateMetricsSummary(
 ): string {
   return `
     <div style="margin: 20px 0;">
-      ${metrics.map(m => `
+      ${metrics
+        .map(
+          m => `
         <div class="metric-card">
-          <div class="metric-value">${m.value}</div>
-          <div class="metric-label">${m.label}</div>
-          ${m.change ? `<div style="color: ${m.change.startsWith('+') ? '#22c55e' : '#ef4444'}; font-size: 12px;">${m.change}</div>` : ""}
+          <div class="metric-value">${escapeHTML(m.value)}</div>
+          <div class="metric-label">${escapeHTML(m.label)}</div>
+          ${m.change ? `<div style="color: ${m.change.startsWith("+") ? "#22c55e" : "#ef4444"}; font-size: 12px;">${escapeHTML(m.change)}</div>` : ""}
         </div>
-      `).join("")}
+      `
+        )
+        .join("")}
     </div>
   `;
 }
 
 // Helper function to download file
-function downloadFile(content: string, filename: string, mimeType: string): void {
+function downloadFile(
+  content: string,
+  filename: string,
+  mimeType: string
+): void {
   const blob = new Blob([content], { type: mimeType });
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
@@ -223,7 +307,10 @@ export interface ShipmentData {
   value: string;
 }
 
-export function exportShipmentsToCSV(shipments: ShipmentData[], filename = "shipments"): void {
+export function exportShipmentsToCSV(
+  shipments: ShipmentData[],
+  filename = "shipments"
+): void {
   exportToCSV(shipments, filename, [
     { key: "id", label: "Shipment ID" },
     { key: "origin", label: "Origin" },
@@ -236,7 +323,10 @@ export function exportShipmentsToCSV(shipments: ShipmentData[], filename = "ship
   ]);
 }
 
-export function exportShipmentsToPDF(shipments: ShipmentData[], title = "Shipments Report"): void {
+export function exportShipmentsToPDF(
+  shipments: ShipmentData[],
+  title = "Shipments Report"
+): void {
   const tableHTML = generateHTMLTable(shipments, [
     { key: "id", label: "Shipment ID" },
     { key: "origin", label: "Origin" },
@@ -248,12 +338,25 @@ export function exportShipmentsToPDF(shipments: ShipmentData[], title = "Shipmen
 
   const summaryHTML = generateMetricsSummary([
     { label: "Total Shipments", value: shipments.length },
-    { label: "In Transit", value: shipments.filter(s => s.status === "In Transit").length },
-    { label: "Delivered", value: shipments.filter(s => s.status === "Delivered").length },
-    { label: "Pending", value: shipments.filter(s => s.status === "Pending").length },
+    {
+      label: "In Transit",
+      value: shipments.filter(s => s.status === "In Transit").length,
+    },
+    {
+      label: "Delivered",
+      value: shipments.filter(s => s.status === "Delivered").length,
+    },
+    {
+      label: "Pending",
+      value: shipments.filter(s => s.status === "Pending").length,
+    },
   ]);
 
-  exportToPDF(title, `<h2>Summary</h2>${summaryHTML}<h2>Shipment Details</h2>${tableHTML}`, "shipments-report");
+  exportToPDF(
+    title,
+    `<h2>Summary</h2>${summaryHTML}<h2>Shipment Details</h2>${tableHTML}`,
+    "shipments-report"
+  );
 }
 
 // Export analytics data
@@ -265,7 +368,10 @@ export interface AnalyticsData {
   avgDeliveryTime: number;
 }
 
-export function exportAnalyticsToCSV(data: AnalyticsData[], filename = "analytics"): void {
+export function exportAnalyticsToCSV(
+  data: AnalyticsData[],
+  filename = "analytics"
+): void {
   exportToCSV(data, filename, [
     { key: "period", label: "Period" },
     { key: "shipments", label: "Total Shipments" },
@@ -290,5 +396,9 @@ export function exportAnalyticsToPDF(
 
   const summaryHTML = generateMetricsSummary(summaryMetrics);
 
-  exportToPDF(title, `<h2>Key Metrics</h2>${summaryHTML}<h2>Detailed Analytics</h2>${tableHTML}`, "analytics-report");
+  exportToPDF(
+    title,
+    `<h2>Key Metrics</h2>${summaryHTML}<h2>Detailed Analytics</h2>${tableHTML}`,
+    "analytics-report"
+  );
 }

@@ -28,22 +28,56 @@ portfolio/
 
 ### Prerequisites
 - Node.js (v22+)
-- PNPM (v9+)
+- Corepack and PNPM (the repository pins pnpm 10.34.7)
 
 ### Installation
 ```bash
-pnpm install
+corepack enable
+pnpm install --frozen-lockfile
 pnpm dev
 ```
 
+Open the `/portfolio/` URL printed by Vite (normally `http://localhost:3000/portfolio/`). If that port is busy, Vite selects the next available port.
+
+### Local verification
+
+```bash
+pnpm lint                    # TypeScript, React hooks, and JSX accessibility rules
+pnpm check                   # Strict application and Vite configuration type checks
+pnpm test                    # Rendered routes, navigation, recovery, exports, and local publication fixtures
+pnpm audit --audit-level=moderate
+pnpm build
+pnpm preview --host 127.0.0.1 --port 4173
+```
+
+The browser suite covers all routes at 375, 768, and 1440 pixels, with overflow checks, real image loading, console and network failures, WCAG A/AA scans, keyboard and mobile-menu behavior, project/documentation navigation, downloads, full-size diagrams, and fault recovery.
+
+```bash
+pnpm exec playwright install chromium   # Once per browser version
+pnpm test:e2e                           # Build and run isolated Chromium checks
+pnpm exec playwright show-report artifacts/browser/report
+```
+
+Screenshots, accessibility results, traces for failures, and the HTML report are written to ignored `artifacts/browser/`. CI runs lint, type checks, unit tests, dependency audit, build, and browser tests before publication and retains the browser report.
+
+For repeatable local performance measurements, serve the current production build on port 4173 and run `pnpm perf`. Optionally set `PERF_BASELINE_URL` to a separately served original build for alternating before-and-after samples. The collector records three cold samples at 375 and 1440 pixels with 150 ms latency, 1.6 Mbps download, 750 Kbps upload, and 4× CPU throttling. Results are in `artifacts/browser/performance.json`. These are synthetic LCP, CLS, and scripted-navigation interaction measurements, not production field Core Web Vitals.
+
+`pnpm start` optionally serves the build and the existing tRPC router from Express on port 3000. Set `PORT` to choose another port, and `ALLOWED_ORIGIN` for an allowed cross-origin frontend. The portfolio itself is static and needs no API or login. The optional `auth.me` and `auth.logout` procedures remain anonymous placeholders, not an authentication system.
+
 ## 🌐 Deployment
-The portfolio is optimized for **GitHub Pages** using hash-based routing. Any push to the `main` branch will trigger an automated deployment via GitHub Actions.
+The portfolio uses hash-based routing and the `/portfolio/` asset base for **GitHub Pages**. Pushes to `main` trigger GitHub Actions; dependency audit, type checks, tests, and build must pass before Pages publication. `vercel.json` retains the asset rewrites for the existing Vercel/custom-domain setup.
+
+For an explicitly authorized manual publication, `pnpm deploy` validates and builds, then publishes `dist` through an isolated temporary Git repository with a normal push. `./deploy.sh` additionally checks for a clean working tree and performs a frozen install. Neither path resets the working branch or force-pushes. The publication regression tests use disposable local bare repositories and never contact GitHub.
+
+Vite selects `NODE_ENV` automatically. The checked-in environment files contain example API settings; no credentials are needed to run the static portfolio. Never put private credentials in `VITE_*` variables because Vite exposes them to browsers.
 
 ## ✨ Key Features
 - **Dynamic Project Details**: Deep-dive views for major projects like IMSOP and SAP BTP AI Hub.
 - **Responsive Design**: Optimized for all devices with a focus on high-efficiency layouts.
 - **Documentation Hub**: Integrated viewing and downloading of project documentation.
-- **Analytics Dashboard**: Track portfolio visits and resume downloads at [Analytics Page](https://druhustle.github.io/portfolio/#/analytics).
+- **Analytics Status**: The public analytics route explains configuration; visitor reports require the owner's Vercel dashboard. The tracking script is included once on Vercel builds, or when `VITE_ENABLE_ANALYTICS=true` is explicitly set. GitHub Pages and local builds leave it disabled by default. Enabling the Vercel integration and verifying collection remain deployment-side steps; this page does not claim live collection or display mock metrics.
+- **Accessible Navigation**: Skip link, visible keyboard focus, section focus management, reduced-motion support, and consistently available return navigation.
+- **Deferred Assets**: Project routes load on demand; compact avatars and dimensioned, lazy-loaded architecture images reduce the initial transfer. Original full-resolution images remain available.
 - **Modern Tech Stack**: Built with React, TypeScript, Tailwind CSS, and Wouter.
 
 ## 🛠️ Technology Stack
@@ -57,4 +91,4 @@ The portfolio is optimized for **GitHub Pages** using hash-based routing. Any pu
 
 ## 👨‍💻 Author
 Developed by **Andrew Gotora**
-**Last Updated**: January 2026
+**Last Updated**: October 2026

@@ -1,17 +1,23 @@
-import { jsxLocPlugin } from "@builder.io/vite-plugin-jsx-loc";
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
-import { defineConfig } from "vitest/config";
+import { defineConfig, loadEnv } from "vite";
+import type {} from "vitest/config";
 
-const plugins = [react(), tailwindcss(), jsxLocPlugin()];
+const plugins = [react(), tailwindcss()];
 
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
+  define: {
+    "import.meta.env.VITE_ENABLE_ANALYTICS": JSON.stringify(
+      loadEnv(mode, import.meta.dirname).VITE_ENABLE_ANALYTICS ??
+        (process.env.VERCEL === "1" ? "true" : "false")
+    ),
+  },
   plugins,
   base: "/portfolio/", // CRITICAL: Fix for GitHub Pages asset loading
   test: {
     environment: "jsdom",
-    setupFiles: ["./client/src/__tests__/setup.ts"],
+    setupFiles: ["./src/__tests__/setup.ts"],
   },
   resolve: {
     alias: {
@@ -27,19 +33,16 @@ export default defineConfig({
     outDir: path.resolve(import.meta.dirname, "dist"),
     emptyOutDir: true,
     // Ensures assets are generated with relative paths
-      assetsDir: 'assets',
+    assetsDir: "assets",
   },
-
 
   server: {
     port: 3000,
     strictPort: false,
     host: true,
-    allowedHosts: true,
     fs: {
       strict: true,
       deny: ["**/.*"],
     },
   },
-
-});
+}));

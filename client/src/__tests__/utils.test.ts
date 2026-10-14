@@ -17,7 +17,7 @@ describe('Utility Functions', () => {
     });
 
     it('should handle conditional classes', () => {
-      const result = cn('base', true && 'active', false && 'inactive');
+      const result = cn('base', { active: true, inactive: false });
       expect(result).toContain('base');
       expect(result).toContain('active');
       expect(result).not.toContain('inactive');

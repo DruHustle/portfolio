@@ -24,8 +24,6 @@ jobs:
 
       - name: Setup PNPM
         uses: pnpm/action-setup@v3
-        with:
-          version: 10
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -36,14 +34,34 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Audit production dependencies
-        run: pnpm audit --prod --audit-level=moderate
+      - name: Audit dependencies
+        run: pnpm audit --audit-level=moderate
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Type check
+        run: pnpm check
 
       - name: Run unit tests
         run: pnpm test
 
       - name: Build
         run: pnpm build
+
+      - name: Install browser
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Browser verification
+        run: pnpm exec playwright test
+
+      - name: Upload browser report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-verification
+          path: artifacts/browser
+          if-no-files-found: ignore
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
@@ -60,9 +78,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-
-      - name: Rollback on Failure
-        if: steps.deployment.outcome == 'failure'
-        run: |
-          echo "Deployment failed. Rolling back to the last successful deployment..."
-          exit 1

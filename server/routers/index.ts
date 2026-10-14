@@ -3,7 +3,7 @@ import { publicProcedure, router } from "../trpc";
 
 /**
  * Server Router Configuration
- * 
+ *
  * This module defines the TRPC router for the portfolio application.
  * Following SOLID principles:
  * - Single Responsibility: Router only handles API route definitions
@@ -19,6 +19,24 @@ const authRouter = router({
   }),
 });
 
+const projects = [
+  {
+    id: "imsop",
+    title: "IMSOP",
+    description: "Intelligent Multi-Cloud Supply Chain & Operations Platform",
+  },
+  {
+    id: "sap-btp-ai-hub",
+    title: "Learning Hub",
+    description: "Enterprise AI Education Platform",
+  },
+  {
+    id: "smart-factory-iot",
+    title: "Smart Factory IoT",
+    description: "Real-Time Industrial Monitoring & Control Platform",
+  },
+];
+
 export const appRouter = router({
   auth: authRouter,
 
@@ -27,38 +45,13 @@ export const appRouter = router({
   }),
 
   projects: publicProcedure.query(() => {
-    return {
-      projects: [
-        {
-          id: "imsop",
-          title: "IMSOP",
-          description: "Intelligent Multi-Cloud Supply Chain & Operations Platform",
-        },
-        {
-          id: "sap-btp-ai-hub",
-          title: "Learning Hub",
-          description: "Enterprise AI Education Platform",
-        },
-      ],
-    };
+    return { projects };
   }),
 
   getProject: publicProcedure
     .input(z.object({ id: z.string() }))
     .query(({ input }: { input: { id: string } }) => {
-      const projects: Record<string, any> = {
-        imsop: {
-          id: "imsop",
-          title: "IMSOP",
-          description: "Intelligent Multi-Cloud Supply Chain & Operations Platform",
-        },
-        "sap-btp-ai-hub": {
-          id: "sap-btp-ai-hub",
-          title: "Learning Hub",
-          description: "Enterprise AI Education Platform",
-        },
-      };
-      return projects[input.id] || null;
+      return projects.find(project => project.id === input.id) ?? null;
     }),
 });
 
