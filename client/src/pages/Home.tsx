@@ -371,7 +371,7 @@ export default function Home() {
               I build software connecting industrial assets, engineering information, and enterprise systems—with reliability and interoperability at the centre.
             </p>
             <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-slate-300 mb-8">
-              <span className="font-semibold text-white">Co-Founder, Onesa UG</span>
+              <span className="font-semibold text-white">Founder, Onesa UG</span>
               <span className="inline-flex items-center gap-2"><MapPin aria-hidden="true" className="w-4 h-4 text-cyan-300" /> Heidelberg, Germany</span>
             </div>
             <div className="flex flex-wrap items-center gap-3 sm:gap-4">
@@ -494,7 +494,7 @@ export default function Home() {
             <div className="p-8 md:p-10 rounded-2xl bg-[#03121e] text-white border border-cyan-900/40">
               <span className="inline-flex px-3 py-1 mb-5 rounded-full bg-cyan-400/10 border border-cyan-300/30 text-cyan-300 text-xs font-bold uppercase tracking-wider">In development</span>
               <h2 id="onesa-heading" className="text-3xl md:text-4xl font-bold mb-3">Onesa AI</h2>
-              <p className="text-cyan-300 font-semibold mb-5">Co-Founder, Onesa UG · April 2026</p>
+              <p className="text-cyan-300 font-semibold mb-5">Founder, Onesa UG · April 2026</p>
               <div className="space-y-4 text-slate-300 leading-relaxed">
                 <p>I am developing a general-purpose, modular, self-hosted artificial intelligence platform for developing and deploying intelligent applications across European and international markets.</p>
                 <p>Built on open-weight foundation models, Onesa AI is designed for conversational AI, agentic workflows, enterprise knowledge retrieval, multilingual and multimodal capabilities, and model customization and fine-tuning.</p>
@@ -605,7 +605,7 @@ export default function Home() {
                     <p>Over more than a decade, my career has progressed from railway signalling and electronic interlocking to Industrial IoT, distributed applications, and enterprise software delivery. I combine electrical engineering, industrial software, cloud infrastructure, and applied AI, with reliability and interoperability at the centre.</p>
                     <p>My experience spans C#/.NET, Python, JavaScript, REST APIs, microservices, Docker, and Kubernetes, alongside OPC UA, MQTT, Modbus, ThingWorx, and Kepware.</p>
                     <p>At BASF, I work as a <strong>Senior DevOps Engineer</strong>, supporting software engineering and enterprise delivery through Azure DevOps, CI/CD, Terraform, Azure Bicep, and secure cloud infrastructure. I live in Heidelberg and work remotely, assigned to the Berlin office with regular visits to Berlin.</p>
-                    <p>I co-founded <strong>Onesa UG in April 2026</strong> and am developing Onesa AI. I welcome conversations about senior industrial software engineering, technical leadership, AI platforms, and partnerships that turn digital innovation into useful products.</p>
+                    <p>I founded <strong>Onesa UG in April 2026</strong> and am developing Onesa AI. I welcome conversations about senior industrial software engineering, technical leadership, AI platforms, and partnerships that turn digital innovation into useful products.</p>
                   </div>
                   <a href="mailto:andrewgotora@yahoo.com" className="inline-flex items-center gap-2 mt-6 text-teal-700 font-semibold hover:text-teal-900 transition-colors"><Mail aria-hidden="true" className="w-4 h-4" /> Let’s talk</a>
                 </div>

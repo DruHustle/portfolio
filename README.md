@@ -1,6 +1,6 @@
 # Professional Portfolio - Andrew Gotora
 
-A responsive portfolio for Andrew Gotora, Senior Industrial Software & Digitalization Engineer and Co-Founder of Onesa UG. It showcases Industrial IoT and automation, AI platforms, cloud-native systems, and enterprise integration.
+A responsive portfolio for Andrew Gotora, Senior Industrial Software & Digitalization Engineer and Founder of Onesa UG. It showcases Industrial IoT and automation, AI platforms, cloud-native systems, and enterprise integration.
 
 Onesa AI is a modular, self-hosted platform in development, built on open-weight foundation models. Its proposed model and application profiles are future plans.
 

@@ -13,11 +13,11 @@ export interface ProfessionalExperience {
 // Titles, dates, and responsibilities supplied from Andrew's LinkedIn profile.
 export const professionalExperience: ProfessionalExperience[] = [
   {
-    "title": "Co-Founder",
+    "title": "Founder",
     "company": "Onesa UG",
     "dateRange": "Apr 2026 – Present",
     "employmentType": "Self-employed",
-    "description": "Co-founded Onesa UG in April 2026. Developing Onesa AI, a general-purpose, modular, self-hosted artificial intelligence platform for European and international markets.",
+    "description": "Founded Onesa UG in April 2026. Developing Onesa AI, a general-purpose, modular, self-hosted artificial intelligence platform for European and international markets.",
     "responsibilities": [
       "Developing a platform built on open-weight foundation models for conversational AI, agentic workflows, enterprise knowledge retrieval, multilingual and multimodal capabilities, and model customization and fine-tuning.",
       "Prioritizing AI sovereignty through open-weight models and self-managed infrastructure, with privacy, security, and applicable regulatory requirements informing European market readiness.",
