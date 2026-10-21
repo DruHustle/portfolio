@@ -191,7 +191,7 @@ export default function Home() {
       {
         icon: Award,
         title: "Adaptable AI Platforms",
-        desc: "Building Onesa AI with Chat, Knowledge, Agents, and Travel applications, provider-independent model integration, and a planned Industrial AI track.",
+        desc: "Building Onesa’s portfolio of AI applications, a planned Industrial AI track, and a separate Robotics / Physical AI development line.",
       },
     ],
     []
@@ -487,39 +487,59 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Onesa AI Platform */}
+      {/* Onesa company portfolio: onesa-company-portal main 3fcbde97, Products. */}
       <section id="onesa" aria-labelledby="onesa-heading" className="py-20 bg-[#E0F2FE]">
         <div className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
           <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] gap-8 items-stretch">
             <div className="p-8 md:p-10 rounded-2xl bg-[#03121e] text-white border border-cyan-900/40">
-              <span className="inline-flex px-3 py-1 mb-5 rounded-full bg-cyan-400/10 border border-cyan-300/30 text-cyan-300 text-xs font-bold uppercase tracking-wider">AI applications &amp; Industrial AI</span>
+              <span className="inline-flex px-3 py-1 mb-5 rounded-full bg-cyan-400/10 border border-cyan-300/30 text-cyan-300 text-xs font-bold uppercase tracking-wider">Software · AI · Robotics</span>
               <h2 id="onesa-heading" className="text-3xl md:text-4xl font-bold mb-3">Onesa AI</h2>
               <p className="text-cyan-300 font-semibold mb-5">Founder, Onesa UG · April 2026</p>
               <div className="space-y-4 text-slate-300 leading-relaxed">
-                <p>I am building Onesa AI, a general-purpose AI platform for European and international applications. Its protected workspace brings together Chat, Knowledge, Agents, and Travel.</p>
-                <p>Chat supports streamed conversations and history. Knowledge validates and indexes documents for retrieval with source citations. Agents execute registered tools within explicit permissions and limits, while Travel stores editable itinerary suggestions.</p>
-                <p>A Next.js workspace connects to FastAPI and PostgreSQL/pgvector through a same-origin API boundary. Configurable Cloudflare Workers AI, Ollama, and vLLM adapters keep model serving separate from application logic. The current hosted configuration uses Cloudflare Workers AI; local Ollama development is also supported.</p>
+                <p>I founded Onesa to develop intelligent software, AI, digital platforms, and robotics that turn complex challenges into practical applications.</p>
+                <h3 className="text-xl font-bold text-white">Onesa AI Platform</h3>
+                <p>The platform connects knowledge, reasoning, and tools. Its protected workspace brings together conversations, answers grounded in your documents, bounded agent workflows, and editable travel plans.</p>
               </div>
-              <a href="https://platform.onesa.eu/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 mt-7 text-cyan-300 font-semibold hover:text-cyan-200 transition-colors">
-                Open Onesa AI <ChevronRight aria-hidden="true" className="w-4 h-4" />
-              </a>
+              <ul className="flex flex-wrap gap-2 my-6" aria-label="Onesa application workspace">
+                {["Chat", "Knowledge", "Agents", "Travel"].map((application) => (
+                  <li key={application} className="px-3 py-1.5 rounded-lg bg-cyan-400/10 border border-cyan-300/20 text-cyan-200 text-xs font-medium">{application}</li>
+                ))}
+              </ul>
+              <div className="space-y-5 text-slate-300 leading-relaxed">
+                <div>
+                  <h3 className="text-base font-bold text-white mb-2">Application directions · Planned</h3>
+                  <p>Business feasibility and investment research would help people compare options, assumptions, and risks. Smart farming would support crop selection and cultivation planning using soil, weather, water, costs, and market demand.</p>
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-white mb-2">Onesa Robotics / Physical AI</h3>
+                  <p>A separate development line for intelligent machines. The current protected operator workspace supports a one-joint software simulator, task review, telemetry, and history. Physical hardware integration remains future work.</p>
+                </div>
+              </div>
+              <div className="flex flex-wrap gap-x-6 gap-y-3 mt-7">
+                <a href="https://onesa.eu/en/products" target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center gap-2 text-cyan-300 font-semibold hover:text-cyan-200 transition-colors">Explore Onesa’s portfolio <ChevronRight aria-hidden="true" className="w-4 h-4" /></a>
+                <a href="https://platform.onesa.eu/" target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center gap-2 text-cyan-300 font-semibold hover:text-cyan-200 transition-colors">Open Onesa AI <ChevronRight aria-hidden="true" className="w-4 h-4" /></a>
+              </div>
             </div>
             <div className="p-8 md:p-10 rounded-2xl bg-white border border-blue-100">
-              <h3 className="text-xl font-bold text-slate-900 mb-5">Platform capabilities</h3>
-              <div className="space-y-4 text-slate-600 mb-7">
-                <p><strong className="text-slate-900">Owned knowledge.</strong> Document retrieval respects account ownership and uses versioned embeddings with source citations.</p>
-                <p><strong className="text-slate-900">Controlled workflows.</strong> Secure sessions, CSRF protection, bounded tool execution, and explicit generation failures support predictable application behavior.</p>
-                <p><strong className="text-slate-900">Modular infrastructure.</strong> Vercel delivers the frontend, Oracle hosts the API, and managed data and inference providers retain separate service boundaries.</p>
-              </div>
-                <ul className="flex flex-wrap gap-2 mb-6" aria-label="Onesa application workspace">
-                  {["Chat", "Knowledge", "Agents", "Travel"].map((profile) => (
-                    <li key={profile} className="px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-600 text-xs font-medium">{profile}</li>
-                  ))}
-                </ul>
+              <h3 className="text-xl font-bold text-slate-900 mb-5">Industrial AI · Planned</h3>
+              <p className="text-slate-600 leading-relaxed mb-6">The first focus is investigating unexpected stops, alarms, and recurring faults using authorized event histories, sensor trends, asset information, and versioned manuals. Proposed findings would show sources, uncertainty, and missing information, with an internal work draft for human review.</p>
+              <h4 className="text-base font-bold text-slate-900 mb-4">Core pillars &amp; applications</h4>
+              <ul className="space-y-4 text-sm text-slate-600 mb-6">
+                {[
+                  ["Industrial Troubleshooting & Fault Investigation", "Investigate possible causes and identify checks supported by the available evidence."],
+                  ["Predictive Maintenance & Asset Health", "Use condition signals to investigate anomalies and inform maintenance."],
+                  ["Computer Vision Quality Control", "Explore visual inspection of surfaces, assemblies, and packaging."],
+                  ["Process Optimization & Energy Management", "Assess process parameters, material efficiency, and energy use."],
+                  ["Digital Twins and Physics-Informed ML", "Combine engineering simulations and machine learning to explore asset behavior."],
+                ].map(([title, description]) => (
+                  <li key={title}>
+                    <p className="font-semibold text-slate-900 mb-1">{title}</p>
+                    <p>{description}</p>
+                  </li>
+                ))}
+              </ul>
               <div className="border-t border-blue-100 pt-6">
-                <h3 className="text-base font-bold text-slate-900 mb-3">Industrial AI · Planned</h3>
-                <p className="text-sm text-slate-600 mb-4">The first proposed workflow investigates repeated machine stops using permitted event data and versioned manuals, separates facts from hypotheses, and prepares a cited work draft for human review. Live factory integrations and autonomous industrial control are not implemented. Fine-tuning and multimodal capabilities remain separate future work.</p>
-
+                <p className="text-sm text-slate-600">These areas describe the development direction. Connected production systems require their own implementation and validation; people review conclusions and decide the next steps.</p>
                 <a href="https://docs.onesa.eu/" target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center mt-4 font-semibold text-teal-700 underline underline-offset-4">Read Onesa developer docs</a>
               </div>
             </div>

@@ -17,22 +17,23 @@ export const professionalExperience: ProfessionalExperience[] = [
     "company": "Onesa UG",
     "dateRange": "Apr 2026 – Present",
     "employmentType": "Self-employed",
-    "description": "Founded Onesa UG in April 2026. Building Onesa AI, a general-purpose platform with Chat, Knowledge, Agents, and Travel applications for European and international users.",
+    "description": "Founded Onesa UG in April 2026 to develop intelligent software, AI, digital platforms, and robotics. The company portfolio includes Onesa AI Platform and a separate Robotics / Physical AI development line.",
     "responsibilities": [
-      "Developing a Next.js and FastAPI workspace with PostgreSQL/pgvector for streamed conversations, document retrieval with citations, bounded registered-tool agents, and editable travel suggestions.",
-      "Separating model serving from application contracts through configurable Cloudflare Workers AI, Ollama, and vLLM adapters. Hosted inference and embeddings currently use Cloudflare Workers AI; local Ollama development is supported.",
-      "Implementing account ownership, secure sessions, CSRF protection, versioned retrieval, and explicit limits on agent tool use.",
-      "Maintaining separate frontend, API, and documentation delivery across Vercel and Oracle with provider-specific data and inference boundaries.",
-      "Planning Industrial AI for source-backed machine-stop investigation and human-reviewed work drafts. Live factory connections, autonomous control, fine-tuned Onesa weights, and multimodal adapters are not established capabilities."
+      "Building Onesa AI Platform around Chat, Knowledge, Agents, and Travel: conversations, document-grounded answers, bounded tools, and editable travel plans in a protected workspace.",
+      "Developing the Industrial AI direction across troubleshooting and fault investigation, predictive maintenance, computer vision quality control, process and energy optimization, and digital twins with physics-informed ML. Connected production systems require separate implementation and validation.",
+      "Planning business feasibility, investment research, and smart farming applications for comparing options and supporting practical decisions.",
+      "Developing Onesa Robotics / Physical AI as a separate product line, currently demonstrated through a protected one-joint software simulator with task review, telemetry, and history.",
+      "Combining software engineering, cloud infrastructure, and data engineering with source-backed workflows and human review."
     ],
     "focus": [
       "AI Platforms",
-      "Next.js & FastAPI",
+      "Software & Digital Platforms",
       "Knowledge Retrieval",
       "Bounded Agents",
-      "Industrial AI"
+      "Industrial AI",
+      "Robotics / Physical AI"
     ],
-    "status": "Applications available · Industrial AI planned"
+    "status": "AI applications available · Industrial AI planned · Robotics in simulation"
   },
   {
     "title": "Senior DevOps Engineer",
