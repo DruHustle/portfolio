@@ -109,7 +109,7 @@
     "typescript": "5.9.3",
     "typescript-eslint": "^8.71.2",
     "vite": "^7.3.7",
-    "vitest": "^4.1.11",
+    "vitest": "^4.1.12",
     "web-vitals": "^6.2.3"
   },
   "packageManager": "pnpm@10.34.7",
