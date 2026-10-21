@@ -160,7 +160,7 @@ test("keyboard navigation, menu, section links, and disclosure", async ({
   await expect(page.locator("details").first()).toHaveAttribute("open", "");
 });
 
-test("project/documentation return journey and PDF downloads", async ({
+test("project/documentation return journey and rendered guide PDF access", async ({
   page,
 }) => {
   await page.goto("#/");
@@ -172,13 +172,18 @@ test("project/documentation return journey and PDF downloads", async ({
   );
   await page.getByRole("link", { name: "Documentation", exact: true }).click();
   await expect(page).toHaveTitle("IMSOP Documentation | Andrew Gotora");
-  const downloaded = page.waitForEvent("download");
-  await page
-    .getByRole("link", { name: "Download Architecture Overview PDF" })
-    .click();
-  const download = await downloaded;
-  expect(await download.failure()).toBeNull();
-  expect(download.suggestedFilename()).toBe("architecture.pdf");
+  const opened = page.waitForEvent("popup");
+  await page.getByRole("link", { name: "Open", exact: true }).first().click();
+  const guide = await opened;
+  await expect(guide).toHaveURL(/docs\/imsop\/architecture\.html$/);
+  const pdfLink = guide.getByRole("link", { name: "PDF edition" });
+  await expect(pdfLink).toHaveAttribute("href", "architecture.pdf");
+  const pdf = await guide.request.get(
+    await pdfLink.evaluate(link => (link as HTMLAnchorElement).href)
+  );
+  expect(pdf.status()).toBe(200);
+  expect((await pdf.body()).subarray(0, 4).toString()).toBe("%PDF");
+  await guide.close();
   const fullSize = page.waitForEvent("popup");
   await page
     .getByRole("link", { name: /Open full-size IMSOP Architecture/ })
@@ -259,10 +264,16 @@ for (const [slug, directory] of [
     await expect(
       page.getByText("Production Readiness Review", { exact: true })
     ).toHaveCount(0);
-    const visualLinks = page.getByRole("link", {
-      name: "View Visual Guide",
-      exact: true,
-    });
+    await expect(
+      page.getByRole("link", { name: "Open", exact: true })
+    ).toHaveCount(5);
+    await expect(
+      page.locator('a[href$=".pdf"], a[href$=".md"], .lucide-eye')
+    ).toHaveCount(0);
+    const visualLinks = page
+      .locator("article")
+      .filter({ has: page.getByRole("heading", { level: 3 }) })
+      .getByRole("link", { name: "Open", exact: true });
     await expect(visualLinks).toHaveCount(2);
     const popupEvent = page.waitForEvent("popup");
     await visualLinks.first().click();
@@ -289,6 +300,12 @@ for (const [slug, directory] of [
       const response = await page.goto(`docs/${directory}/${name}.html`);
       expect(response?.status()).toBe(200);
       await expect(page.getByRole("heading", { level: 1 })).toHaveCount(1);
+      await expect(
+        page.getByRole("link", { name: "PDF edition" })
+      ).toHaveAttribute("href", `${name}.pdf`);
+      await expect(
+        page.getByRole("link", { name: "Markdown source" })
+      ).toHaveCount(0);
       expect(await page.locator("figure img").count()).toBeGreaterThan(0);
       expect(await page.locator("pre.mermaid, script").count()).toBe(0);
       for (const image of await page.locator("figure img").all()) {

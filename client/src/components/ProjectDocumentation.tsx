@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Download, Eye, FileText } from "lucide-react";
+import { FileText } from "lucide-react";
 import { ArchitectureDiagram } from "@/components/ArchitectureDiagram";
 import { PageNavigation } from "@/components/PageNavigation";
 import { assetUrl } from "@/lib/urls";
@@ -86,17 +86,7 @@ export function ProjectDocumentation({
         </a>
       )}
       <div className="flex flex-col flex-1 p-6 sm:p-8">
-        <div className="flex items-center justify-between mb-5">
-          <FileText aria-hidden="true" className={`size-8 ${color.text}`} />
-          <a
-            href={path(guide.name, "pdf")}
-            download
-            aria-label={`Download ${guide.title} PDF`}
-            className="size-11 inline-flex items-center justify-center rounded-lg bg-slate-700/50 text-slate-200 hover:bg-slate-600"
-          >
-            <Download aria-hidden="true" className="size-5" />
-          </a>
-        </div>
+        <FileText aria-hidden="true" className={`size-8 mb-5 ${color.text}`} />
         {visual ? (
           <h3 className="text-2xl font-bold mb-3">{guide.title}</h3>
         ) : (
@@ -112,24 +102,7 @@ export function ProjectDocumentation({
             rel="noopener noreferrer"
             className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-slate-700/50 font-bold rounded-xl hover:bg-slate-600"
           >
-            <Eye aria-hidden="true" className="size-4" />{" "}
-            {visual ? "View Visual Guide" : "Read Guide"}
-          </a>
-          <a
-            href={path(guide.name, "pdf")}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex-1 text-center px-4 py-3 rounded-xl bg-slate-700/30 hover:bg-slate-600"
-          >
-            PDF
-          </a>
-          <a
-            href={path(guide.name, "md")}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex-1 text-center px-4 py-3 rounded-xl bg-slate-700/30 hover:bg-slate-600"
-          >
-            Markdown
+            Open
           </a>
         </div>
       </div>
@@ -169,8 +142,7 @@ export function ProjectDocumentation({
               Operational Guides
             </h2>
             <p className="text-slate-400 mb-6">
-              Explore deployment and system flows as visual guides. Every guide
-              also includes PDF and Markdown editions.
+              Explore deployment and system flows as visual guides.
             </p>
             <div className="grid md:grid-cols-2 gap-8">
               {operationalGuides.map(guide => card(guide, true))}
