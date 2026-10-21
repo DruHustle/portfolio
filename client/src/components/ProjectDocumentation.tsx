@@ -100,9 +100,17 @@ export function ProjectDocumentation({
             href={path(guide.name, "html")}
             target="_blank"
             rel="noopener noreferrer"
-            className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-slate-700/50 font-bold rounded-xl hover:bg-slate-600"
+            className="flex-1 inline-flex items-center justify-center px-4 py-3 bg-slate-700/50 font-bold rounded-xl hover:bg-slate-600"
           >
             Open
+          </a>
+          <a
+            href={path(guide.name, "pdf")}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex-1 inline-flex items-center justify-center px-4 py-3 bg-slate-700/30 font-bold rounded-xl hover:bg-slate-600"
+          >
+            PDF
           </a>
         </div>
       </div>

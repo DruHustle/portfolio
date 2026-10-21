@@ -268,8 +268,9 @@ for (const [slug, directory] of [
       page.getByRole("link", { name: "Open", exact: true })
     ).toHaveCount(5);
     await expect(
-      page.locator('a[href$=".pdf"], a[href$=".md"], .lucide-eye')
-    ).toHaveCount(0);
+      page.getByRole("link", { name: "PDF", exact: true })
+    ).toHaveCount(5);
+    await expect(page.locator('a[href$=".md"], .lucide-eye')).toHaveCount(0);
     const visualLinks = page
       .locator("article")
       .filter({ has: page.getByRole("heading", { level: 3 }) })
