@@ -81,9 +81,9 @@ erDiagram
 
 ```mermaid
 flowchart LR
-  Users[users<br/>id PK] -->|assignedToId / resolvedById| Alerts[alerts<br/>id PK<br/>deviceId<br/>errorCode<br/>status<br/>downtimeStartedAt<br/>resolvedAt]
-  Devices[devices<br/>id PK] -->|deviceId| Alerts
-  Devices -->|deviceId| Thresholds[alert_thresholds<br/>id PK<br/>metric<br/>warning and critical limits]
+  Users[Account identity] -->|assignedToId / resolvedById| Alerts[Incident and downtime record]
+  Devices[Device] -->|deviceId| Alerts
+  Devices -->|deviceId| Thresholds[Device warning and critical thresholds]
 ```
 
 Threshold-generated incidents use stable `SF-*` platform classifications. A vendor diagnostic code is stored as supplied when available. The engineer role provides technician assignment and resolution permissions; downtime is explicitly confirmed by the assigned engineer or administrator. A lost device connection does not automatically prove a factory outage. Existing records inferred by migration 0010 need operational review before use in downtime KPIs. Mean downtime-to-resolution uses only records with both downtime and resolution timestamps.

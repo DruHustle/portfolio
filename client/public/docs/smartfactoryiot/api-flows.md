@@ -80,7 +80,7 @@ flowchart TD
   API --> DB["Read bounded current asset, device, telemetry, and incident snapshot"]
   DOCS --> EVIDENCE["Combine evidence; exclude endpoints, secrets, full AAS, and controls"]
   DB --> EVIDENCE
-  EVIDENCE -->|Onesa AI configured| ONESA["Onesa AI — in-house, Llama-based"]
+  EVIDENCE -->|Onesa AI configured| ONESA["Configured Onesa AI provider"]
   EVIDENCE -->|Onesa AI disabled| LOCAL["Local grounded response"]
   ONESA -->|Success| ANSWER["Direct answer with steps, time, and sources"]
   ONESA -->|Unavailable| LOCAL
@@ -88,7 +88,7 @@ flowchart TD
   ANSWER --> UI
 ```
 
-The `assistant.ask` procedure is available to signed-in viewers and higher. It ranks only the explicit focused-guide allowlist in `server/assistantKnowledge.ts` (README files are excluded), adds a bounded snapshot from the dashboard database, and sends recent conversation context plus relevant evidence to Onesa AI when its server-side connection is configured. Onesa is built on the Llama architecture and trained in-house; credentials remain on the server. Answers are formatted for readability and include ordered steps for how-to questions; the UI shows context capture time and source excerpts. When Onesa AI is disabled or unavailable, a local grounded response remains available. The Assistant does not read environment files, README files, full AAS packages, private account records, or machine-control interfaces. See [Assistant configuration and data boundaries](assistant.md).
+The `assistant.ask` procedure is available to signed-in viewers and higher. It ranks only the explicit focused-guide allowlist in `server/assistantKnowledge.ts` (README files are excluded), adds a bounded snapshot from the dashboard database, and sends recent conversation context plus relevant evidence to Onesa AI when its server-side connection is configured. Onesa currently uses Cloudflare Workers AI for hosted generation and embeddings; credentials remain on the server. Answers are formatted for readability and include ordered steps for how-to questions; the UI shows context capture time and source excerpts. When Onesa AI is disabled or unavailable, a local grounded response remains available. The Assistant does not read environment files, README files, full AAS packages, private account records, or machine-control interfaces. See [Assistant configuration and data boundaries](assistant.md).
 
 Asset Analytics sends selected AAS identifiers and a selected time range to `analytics.getAssetTelemetry`; readings are selected by their persisted asset attribution and can be scoped to one asset or filtered into metadata groups. The response includes per-asset means and peaks for power, temperature, vibration, pressure, and speed; linked-device alert counts; alert events in the period; and early-to-recent temperature, vibration, and pressure changes where the observed sample span supports comparison. These changes are descriptive screening indicators: they are not degradation models, failure predictions, or remaining-useful-life estimates. Pressure and vibration retain device-profile scales, so the UI avoids aggregating their charts across multiple assets. The service does not calculate OEE, capacity utilization, kWh, energy per unit, emissions, causal root cause, TCO, or MTBF until its required production, calibrated energy, maintenance, failure, and cost inputs are recorded.
 
@@ -148,6 +148,6 @@ See [authorization and AAS](authorization-and-aas.md) for the role matrix, templ
 
 ## Identity, coverage and incident notifications
 
-In Render mode, `auth.me` delegates to the private IdentityService with the authenticated dashboard account ID and a separate service token; the service reads the current role from PostgreSQL. It never returns an email-provider or AAS access token. `analytics.getCoverage` delegates a bounded selected-asset/time range to AnalyticsService, which aggregates indexed stored samples without treating missing metrics as zero.
+In bundled API mode, `auth.me` delegates to the private IdentityService with the authenticated dashboard account ID and a separate service token; the service reads the current role from PostgreSQL. It never returns an email-provider or AAS access token. `analytics.getCoverage` delegates a bounded selected-asset/time range to AnalyticsService, which aggregates indexed stored samples without treating missing metrics as zero.
 
 Alert writes atomically create the per-user inbox via the database trigger. Account creation queues a password-free welcome message without rolling back the new account if queueing is temporarily unavailable. `notifications.list` and `notifications.markRead` are authenticated owner-only operations. `notifications.retryEmail` requires an engineer/admin owner and an eligible failed/unconfigured/unauthorized incident job. Reading a notification is independent of incident acknowledgment. The UI links incident notifications to event details by ID. NotificationService delivers the durable queue through Resend and checks current account role and recipient policy at delivery time.

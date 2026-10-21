@@ -10,58 +10,46 @@
 
 The Node API is the dashboard account and role authority. Dashboard sessions are HttpOnly cookies. The .NET telemetry bridge and the .NET AAS provisioner use separate service credentials. The private AAS stack has separate AAS and Submodel Repositories, AAS and Submodel Registries, a Concept Description Repository, and an AASX File Server.
 
-Production hosts the React UI on Vercel and runs one reviewed image in two Render roles. The scalable `web` role contains the Node API plus Device, Identity and Analytics services. The singleton `worker` role contains the MQTT Telemetry consumer and Notification delivery service. Aiven, Redis Cloud and CloudAMQP remain managed external systems. The AAS runtime is a separate Oracle Cloud VM running six BaSyx services behind Caddy and a client-credentials token endpoint; it stores AAS data in the dedicated Aiven `basyx` database. Physical Pi gateways, WROVER sensors and ADA031 controllers remain in the factory.
+Production hosts the React UI on Vercel and runs one reviewed ARM64 backend image in separate API and singleton-worker containers on Oracle. The API role contains Node, DeviceService, IdentityService, and AnalyticsService; the worker contains TelemetryService and NotificationService. BaSyx and Caddy run on the same Oracle host with separate service boundaries. Aiven, Redis Cloud, and CloudAMQP remain managed external systems. Physical Pi gateways, WROVER sensors, and ADA031 controllers stay in the factory.
 
 ## Request and data flow
 
 ```mermaid
 flowchart TB
-  Browser[Factory user] -->|HTTPS| Vercel[Vercel React UI and API proxy]
-  subgraph RenderWeb[Render web tier: two or more replicas]
-    API[Node API: accounts assets incidents Assistant]
-    Device[DeviceService: AAS and commands]
-    Identity[IdentityService: current account roles]
-    Analytics[AnalyticsService: sample coverage and gaps]
+  Browser[Factory user] --> Vercel[Vercel React UI and API proxy]
+  Vercel -->|HTTPS| Caddy[Oracle Caddy ingress]
+  subgraph Oracle[Oracle backend roles]
+    Caddy --> API[Node API]
+    API --> Device[DeviceService]
+    API --> Identity[IdentityService]
+    API --> Analytics[AnalyticsService]
+    Telemetry[Singleton TelemetryService] -->|Authenticated bridge| API
+    Notification[NotificationService]
   end
-  subgraph RenderWorker[Render singleton worker]
-    Telemetry[TelemetryService: durable intake and outbox]
-    Notification[NotificationService: transactional email worker]
-  end
-  API -->|Private service token| Device
-  API -->|Account delegation| Identity
-  API -->|Asset range query| Analytics
-  Telemetry -->|Authenticated HTTPS ingestion| API
-  Vercel -->|First-party cookie API rewrite| API
-  API --> AppDB[(Aiven dashboard PostgreSQL)]
+  API --> AppDB[(Dashboard PostgreSQL)]
   Identity --> AppDB
   Analytics --> AppDB
-  Notification -->|Durable incident inbox| AppDB
-  Notification -->|Server-side credentials| Mail[Resend transactional email]
-  Device --> DeviceDB[(Aiven device PostgreSQL)]
-  Telemetry --> TelemetryDB[(Aiven telemetry PostgreSQL)]
+  Notification --> AppDB
+  Notification --> Mail[Configured email provider]
+  Device --> DeviceDB[(Device PostgreSQL)]
+  Telemetry --> TelemetryDB[(Telemetry PostgreSQL)]
   API --> Redis[(Redis Cloud TLS)]
   Device --> Redis
-  Device -->|OAuth and HTTPS| AAS[Oracle VM: Caddy plus six BaSyx services]
-  API -->|Engineer OAuth gateway| AAS
-  AAS --> BaSyxDB[(Aiven basyx PostgreSQL)]
-  subgraph OT[Factory OT network]
-    Sensors[WROVER sensors] -->|Local MQTT TLS| Pi[Pi gateway with durable spool]
-    Machines[Commissioned machines] -->|OPC UA Modbus serial| Pi
-  end
-  Pi -->|MQTT TLS| Broker[CloudAMQP]
-  Direct[Eligible direct MQTT devices] -->|MQTT TLS| Broker
+  Device -->|OAuth HTTPS| AAS[Six private BaSyx services]
+  API -->|Role-checked standards gateway| AAS
+  AAS --> BaSyxDB[(BaSyx PostgreSQL)]
+  Pi[Factory Pi gateway] -->|MQTT TLS| Broker[CloudAMQP]
+  Direct[Scoped native MQTT device] --> Broker
   Broker --> Telemetry
-  Device -->|Scoped MQTT commands| Broker
-  Broker -->|Allowlisted desired state and control| Pi
+  Device -->|Scoped commands| Broker
+  Broker --> Pi
 ```
 
 ## Production deployment topology
 
-Supervisor activates processes according to `RENDER_SERVICE_ROLE`. The `web` role starts Node, Device, Identity and Analytics; it has no persistent disk and can run multiple load-balanced instances with rolling deployment. The `worker` role starts Telemetry and Notification, stays at exactly one instance, and uses a disk only to force sequential deployment of the stable MQTT consumer. Both roles run as the image's non-root user and restart failed child processes.
+Supervisor activates the API and worker processes using the retained `RENDER_SERVICE_ROLE` compatibility variable. On Oracle the API role runs behind Caddy; internal service ports are private and diagnostic binds are loopback-only. The worker remains exactly one instance because it owns the persistent MQTT session. Application state lives in PostgreSQL, while the edge spool and telemetry outbox preserve retryable deliveries. Redis Pub/Sub provides transient fan-out rather than durable records.
 
-Application state lives in PostgreSQL/Redis and edge spools. Web-instance failure does not stop ingestion, while worker restart does not remove the dashboard API. The worker forwards telemetry to the authenticated public web origin and retains undelivered records in its PostgreSQL outbox.
-
-A protected dashboard `main` push starts the sole production release workflow. It resolves immutable revisions for all three repositories, tests one `linux/amd64` image containing the Node API and five .NET services, publishes that exact digest, deploys the worker and web roles from that digest, waits for readiness, and then deploys the separately prebuilt static React artifact to Vercel. The frontend is not a Docker runtime. Independent provider Git/auto-deploy paths remain disabled to prevent an untested or out-of-order release. See [Vercel/Render deployment](../RENDER_DEPLOYMENT.md) for provider configuration, migrations, source-pinned CI/CD and rollback.
+The previous Render services are suspended. Backend image updates currently follow the manual Oracle runbook: qualify a pinned ARM64 image, preserve protected runtime settings, stop the singleton worker, update and verify the API, then start one worker and verify MQTT delivery. The Vercel frontend release workflow waits for matching main-source CI. Shared hosting is a single failure domain and does not establish high availability. See the [visual deployment guide](deployment.md) and [current Oracle source runbook](https://github.com/DruHustle/smart-factory-iot-frontend/blob/main/deploy/oracle/README.md).
 
 ## Assets and AAS
 
@@ -98,7 +86,9 @@ The ADA031 V4 controller has bounded jog, calibrated repeat, demonstration, oper
 
 The dashboard's core HTTP/API path, PostgreSQL sessions/roles, AAS revision checks, and login throttling are shared across replicas. WebSocket broadcasts use Redis Pub/Sub and authenticated upgrade checks, so AAS change notifications reach clients connected to any dashboard replica. Notifications and email retries are durable in PostgreSQL. Production grouping uses persisted asset metadata; the former process-local device-group API has been removed. Set `TRUST_PROXY` to known ingress addresses only; its default is disabled.
 
-The Dashboard is a fleet and asset portfolio summary; Live Monitoring focuses on gateway and edge-device connectivity and latest readings; Alerts combines incident response and searchable event records; Analytics aggregates persisted readings attributed to AAS assets. Threshold breaches create a single coded incident per device and metric; a more severe repeat escalates that incident in place. Operators may acknowledge events. Engineer-role users act as incident technicians: they assign incidents to engineers, record confirmed downtime, and resolve incidents assigned to them; admins can override. Only an authorized technician/admin confirmation starts the downtime clock. Connectivity loss alone does not prove production downtime. The displayed mean downtime-to-resolution uses only incidents with both timestamps; it is an operational measure, not a safety performance metric. The Assistant uses an explicit focused-guide Markdown allowlist (excluding README files) plus a bounded database snapshot visible to the signed-in user. When configured, the Node service sends the question, recent conversation, approved excerpts, and that snapshot to Onesa AI, an in-house system built on the Llama architecture and trained in-house. Onesa credentials remain server-only. Answers use readable Markdown and provide ordered steps for how-to questions; the UI shows context capture time and source excerpts. If Onesa AI is disabled or unavailable, the Assistant answers from local guides and available live data. It is read-only and excludes connection endpoints, full AAS payloads, account details, and machine-control operations.
+The Dashboard summarizes the asset fleet; Live Monitoring shows connectivity and latest readings; Alerts combines incident response and searchable records; Analytics aggregates persisted samples attributed to AAS assets. Threshold repeats escalate an existing incident instead of creating duplicates. Operators acknowledge incidents; assigned engineers record confirmed downtime and resolve their incidents, with admin override. Communication loss alone is not production downtime. Mean downtime-to-resolution includes only incidents with both timestamps.
+
+The read-only Assistant uses approved focused guides and a bounded database snapshot. Its optional server-side Onesa connection uses a configurable model provider; credentials stay on the server. The UI shows context capture time and source excerpts. If the provider is disabled or unavailable, local guides and available data remain usable. Connection endpoints, full AAS packages, account details, and controls are excluded. See [Assistant configuration and data boundaries](assistant.md).
 
 Application user sign-in currently uses the built-in email/password and role model. `AAS_OIDC_*` configures service-to-service client credentials for the AAS runtime; it does not enable Entra user SSO. See [the AAS OIDC configuration guide](authorization-and-aas.md#entra-id-for-aas-service-credentials) for the required app registrations and environment settings.
 
@@ -108,4 +98,4 @@ See [authorization and AAS](authorization-and-aas.md), [API flows](api-flows.md)
 
 The Pi queues normalized telemetry privately on disk before cloud publication and removes it only after PUBACK. The backend persists before MQTT acknowledgement; an independent outbox retries dashboard and AMQP delivery. Stable ingestion/event identities tolerate replay. The dashboard rejects unlinked asset attribution and retains named asset signals. Factory downtime requires explicit confirmation; acknowledged incidents remain open until resolved.
 
-Asset analytics currently caps a query at 93 days and 200,000 samples, with explicit errors instead of silent truncation. Gateway time-bucket aggregation runs in PostgreSQL and ignores null readings. Production retention, rollups, load budgets, recovery objectives, and event-consumer idempotency still require acceptance evidence; see the [readiness review](production-readiness-review.md).
+Asset analytics currently caps a query at 93 days and 200,000 samples, with explicit errors instead of silent truncation. Gateway time-bucket aggregation runs in PostgreSQL and ignores null readings. Production retention, rollups, load budgets, recovery objectives, and event-consumer idempotency still require acceptance evidence in the relevant deployment environment.

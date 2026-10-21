@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Smart Factory IoT Architecture — visual engineering reference for Smart Factory IoT."><title>Smart Factory IoT Architecture | Andrew Gotora</title><style>:root {
+  color-scheme: light;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  color: #172d40;
+  background: #eef3f8;
+  line-height: 1.65;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+a {
+  color: #075c78;
+  text-underline-offset: 3px;
+}
+a:focus-visible {
+  outline: 3px solid #c05812;
+  outline-offset: 4px;
+}
+.skip {
+  position: absolute;
+  top: -100px;
+  padding: 12px;
+  background: white;
+}
+.skip:focus {
+  top: 8px;
+}
+header {
+  background: #0b2236;
+  color: #e7f2fa;
+  padding: 26px max(20px, calc((100% - 1100px) / 2));
+}
+header a {
+  color: #b5ecff;
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  margin-right: 20px;
+}
+header p {
+  margin: 0;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+main {
+  max-width: 1148px;
+  margin: 32px auto;
+  background: white;
+  padding: 32px 40px 48px;
+  border: 1px solid #d5e0e9;
+  border-radius: 16px;
+}
+h1,
+h2,
+h3 {
+  line-height: 1.25;
+  color: #0c2d45;
+}
+h1 {
+  font-size: clamp(28px, 4vw, 42px);
+  border-bottom: 3px solid #087a96;
+  padding-bottom: 20px;
+  margin-top: 0;
+}
+h2 {
+  margin-top: 38px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #d5e0e9;
+}
+h3 {
+  margin-top: 28px;
+}
+p,
+li {
+  max-width: 95ch;
+}
+nav[aria-label="Contents"] {
+  border: 1px solid #d5e0e9;
+  border-radius: 10px;
+  padding: 16px 20px;
+  background: #f3f8fb;
+  margin: 24px 0;
+}
+nav[aria-label="Contents"] ul {
+  padding-left: 20px;
+  margin: 8px 0;
+}
+nav[aria-label="Contents"] a {
+  display: inline-block;
+  padding: 5px 0;
+}
+figure {
+  margin: 24px 0;
+  background: #f5f9fc;
+  border: 1px solid #d5e0e9;
+  border-radius: 10px;
+  padding: 16px;
+  break-inside: avoid;
+}
+figure > a {
+  display: block;
+}
+figure img {
+  display: block;
+  max-width: 100%;
+  width: 100%;
+  height: auto;
+  max-height: 780px;
+  object-fit: contain;
+}
+figcaption {
+  font-size: 13px;
+  color: #3f5669;
+  margin-top: 12px;
+}
+.table-scroll {
+  overflow-x: auto;
+  margin: 20px 0;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+th,
+td {
+  text-align: left;
+  padding: 12px;
+  border: 1px solid #cbd8e3;
+  vertical-align: top;
+}
+th {
+  background: #123b52;
+  color: white;
+}
+tr:nth-child(even) td {
+  background: #f4f8fb;
+}
+pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  background: #edf3f7;
+  border-left: 3px solid #087a96;
+  padding: 16px;
+  font-size: 13px;
+}
+code {
+  font-family: "SFMono-Regular", Consolas, monospace;
+  font-size: 0.91em;
+}
+blockquote {
+  margin-left: 0;
+  padding-left: 16px;
+  border-left: 3px solid #087a96;
+  color: #3f5669;
+}
+footer {
+  max-width: 1100px;
+  margin: 24px auto;
+  padding: 0 20px 32px;
+  color: #3f5669;
+  font-size: 13px;
+}
+@media (max-width: 600px) {
+  main {
+    margin: 16px 10px;
+    padding: 24px 16px;
+  }
+  figure {
+    padding: 8px;
+  }
+  th,
+  td {
+    padding: 8px;
+  }
+}
+@page {
+  size: A4;
+  margin: 18mm 16mm;
+}
+@media print {
+  :root {
+    background: white;
+    font-size: 9.5pt;
+    line-height: 1.45;
+  }
+  header,
+  .skip,
+  nav[aria-label="Contents"],
+  body > footer {
+    display: none;
+  }
+  main {
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+  }
+  h1 {
+    font-size: 25pt;
+  }
+  h2 {
+    font-size: 15pt;
+    margin-top: 20pt;
+  }
+  h3 {
+    font-size: 11pt;
+  }
+  h1,
+  h2,
+  h3 {
+    break-after: avoid;
+  }
+  p,
+  li {
+    orphans: 3;
+    widows: 3;
+  }
+  figure {
+    margin: 12pt 0;
+    padding: 8pt;
+  }
+  figure img {
+    max-height: 135mm;
+  }
+  figcaption {
+    font-size: 8pt;
+  }
+  table {
+    font-size: 8pt;
+  }
+  th,
+  td {
+    padding: 5pt;
+  }
+  tr {
+    break-inside: avoid;
+  }
+  thead {
+    display: table-header-group;
+  }
+  .table-scroll {
+    overflow: visible;
+    break-inside: avoid;
+  }
+  p {
+    margin: 7pt 0;
+  }
+  ul,
+  ol {
+    margin: 7pt 0;
+    padding-left: 18pt;
+  }
+  li {
+    margin: 2pt 0;
+  }
+  .references {
+    break-inside: avoid;
+    font-size: 8pt;
+    line-height: 1.3;
+  }
+  .references h2 {
+    font-size: 11pt;
+    margin-top: 12pt;
+  }
+  .references ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2pt 14pt;
+    list-style: none;
+    padding: 0;
+  }
+  pre {
+    font-size: 8pt;
+    break-inside: avoid;
+  }
+  a {
+    text-decoration: none;
+  }
+}
+</style></head><body><a class="skip" href="#main-content">Skip to guide</a><header><p>Smart Factory IoT / Engineering Documentation</p><nav aria-label="Guide navigation"><a href="../../../#/projects/smart-factory-iot/documentation">Back to Documentation</a><a href="architecture.pdf">PDF edition</a><a href="architecture.md">Markdown source</a></nav></header><main id="main-content" tabindex="-1"><h1 id="smart-factory-iot-architecture">Smart Factory IoT Architecture</h1><nav aria-label="Contents"><strong>In this guide</strong><ul><li><a href="#repository-responsibilities">Repository responsibilities</a></li><li><a href="#request-and-data-flow">Request and data flow</a></li><li><a href="#production-deployment-topology">Production deployment topology</a></li><li><a href="#assets-and-aas">Assets and AAS</a></li><li><a href="#identity-and-access">Identity and access</a></li><li><a href="#demo-data">Demo data</a></li><li><a href="#storage-and-operations">Storage and operations</a></li><li><a href="#recovery-and-analytics-limits">Recovery and analytics limits</a></li></ul></nav>
+<h2 id="repository-responsibilities">Repository responsibilities</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Repository</th>
+<th>Responsibility</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>smart-factory-iot</code></td>
+<td>React dashboard, Node/Express tRPC API, PostgreSQL schema, accounts, roles, asset workflows, lifecycle history, demo data, and standards API gateway</td>
+</tr>
+<tr>
+<td><code>smart-factory-iot-backend</code></td>
+<td>.NET services for identity, telemetry ingestion, MQTT consumption, analytics, notifications, device APIs, and AAS generation/provisioning</td>
+</tr>
+<tr>
+<td><code>smart-factory-iot-edge</code></td>
+<td>Raspberry Pi machine gateway and ESP32 WROVER sensor firmware</td>
+</tr>
+</tbody>
+</table></div>
+<p>The Node API is the dashboard account and role authority. Dashboard sessions are HttpOnly cookies. The .NET telemetry bridge and the .NET AAS provisioner use separate service credentials. The private AAS stack has separate AAS and Submodel Repositories, AAS and Submodel Registries, a Concept Description Repository, and an AASX File Server.</p>
+<p>Production hosts the React UI on Vercel and runs one reviewed ARM64 backend image in separate API and singleton-worker containers on Oracle. The API role contains Node, DeviceService, IdentityService, and AnalyticsService; the worker contains TelemetryService and NotificationService. BaSyx and Caddy run on the same Oracle host with separate service boundaries. Aiven, Redis Cloud, and CloudAMQP remain managed external systems. Physical Pi gateways, WROVER sensors, and ADA031 controllers stay in the factory.</p>
+<h2 id="request-and-data-flow">Request and data flow</h2>
+<figure><a href="architecture-1.svg" target="_blank" rel="noopener noreferrer" aria-label="Open full-size Request and data flow"><img src="architecture-1.svg" alt="Request and data flow"></a><figcaption>Request and data flow · Open the diagram for a full-size view.</figcaption></figure>
+<h2 id="production-deployment-topology">Production deployment topology</h2>
+<p>Supervisor activates the API and worker processes using the retained <code>RENDER_SERVICE_ROLE</code> compatibility variable. On Oracle the API role runs behind Caddy; internal service ports are private and diagnostic binds are loopback-only. The worker remains exactly one instance because it owns the persistent MQTT session. Application state lives in PostgreSQL, while the edge spool and telemetry outbox preserve retryable deliveries. Redis Pub/Sub provides transient fan-out rather than durable records.</p>
+<p>The previous Render services are suspended. Backend image updates currently follow the manual Oracle runbook: qualify a pinned ARM64 image, preserve protected runtime settings, stop the singleton worker, update and verify the API, then start one worker and verify MQTT delivery. The Vercel frontend release workflow waits for matching main-source CI. Shared hosting is a single failure domain and does not establish high availability. See the <a href="deployment.html">visual deployment guide</a> and <a href="https://github.com/DruHustle/smart-factory-iot-frontend/blob/main/deploy/oracle/README.md">current Oracle source runbook</a>.</p>
+<h2 id="assets-and-aas">Assets and AAS</h2>
+<p>The Devices page registers connectivity records as either <code>gateway</code> or <code>edge_device</code>. Both are devices; industrial equipment represented by an AAS belongs under Assets and can be mapped to a gateway.</p>
+<p>An industrial asset is distinct from an edge gateway. Quick Create sends validated equipment identity to the private DeviceService, which generates IDTA template instances, registers them with the AAS and Submodel Repositories, and returns the canonical documents for application persistence. BaSyx can register descriptors automatically with the AAS and Submodel Registries. Import Package uploads a bounded multipart <code>.aasx</code>; DeviceService validates OPC relationships and supported AAS core JSON/XML, registers each shell, submodel, and concept description, and stores the original package in the AASX File Server. The generated AAS Core 3.1 C# SDK validates models through a compatibility view for v3.2 administrative timestamps; this is not full v3.2 metamodel conformance. Node associates returned shell documents with asset rows in the same PostgreSQL database. Imported shells preserve their vendor package and cannot be overwritten through the form editor. <code>asset_devices</code> maps an asset to a gateway, protocol, endpoint, and tag/register mappings. Credentials are not stored in endpoint URLs or published mappings. Lifecycle history remains an application audit log.</p>
+<p>The full standards API is not reimplemented in tRPC. <code>/api/aas/*</code> authenticates the application session, requires the engineer or admin role, and proxies methods to the configured AAS component using an OAuth client-credentials token. Repository, submodel, registry, and file-service URLs are configured independently. The dashboard gateway and DeviceService can resolve the token endpoint from OIDC discovery or use an explicit token URL; an optional scope is sent with the token request. This allows company endpoints to be changed through deployment configuration. Public IDTA demonstrators remain test targets and are not production data stores. If no AAS service is configured, the gateway returns <code>503</code>; dashboard asset records and JSON export remain available from PostgreSQL. DeviceService publishes retained QoS 1 complete desired-state profiles and short-lived non-retained ADA031 V4 jog commands to CloudAMQP gateway command topics. The dashboard signs a short-lived engineer/admin token after checking the current database role, and DeviceService enforces that role on its control route. The Pi applies profiles atomically and only accepts an ADA031 command for an exact local allowlisted asset ID and matching <code>ada031_v4_serial</code> profile. Its one-byte USB serial write acknowledgement is not physical-motion feedback. The WROVER cannot access CloudAMQP; only its Pi gateway consumes that gateway's command topic. CloudAMQP requires TLS and scoped service/gateway credentials. The Pi-local Mosquitto broker uses TLS and per-sensor publish-only ACLs; the WROVER has no cloud credentials. Its optional Pi-local command subscription accepts only commissioned bounded GPIO pulses. Eligible native MQTT devices can connect directly to CloudAMQP with individual TLS identities and per-device ACLs; the backend receives both direct and gateway-originated telemetry. CAEX 3.0 export is available for the asset hierarchy, but it omits machine address mappings and is not validated against AutomationML OWL/SHACL recommendations.</p>
+<p>This is an asset lifecycle, telemetry, and gateway configuration platform, not a safety-rated control system. It must not perform emergency-stop, guarding, interlock, or other protective functions. Keep those functions independent and complete a site-specific risk assessment and validation before production use.</p>
+<p>When no assets exist, <code>ENABLE_DEMO_DATA=true</code> provides the initial demo-data setting and can seed example assets through the API/database layer. Administrators can subsequently change the persisted deployment-wide setting from the Overview page; all replicas refresh it from PostgreSQL. Browser code does not contain fallback equipment records. Local development may build local AAS JSON when the provisioner URL is absent; production asset creation fails closed until the private .NET provisioner is configured.</p>
+<h2 id="identity-and-access">Identity and access</h2>
+<p>The Node API verifies bcrypt password hashes, issues an eight-hour HS256 JWT in an HttpOnly cookie, and reloads the current user role from PostgreSQL for protected requests. Cookie-authenticated unsafe requests with an <code>Origin</code> header must match the same origin or an exact allowed frontend origin. Browser code does not read or store the JWT. <code>viewer</code>, <code>operator</code>, <code>engineer</code>, and <code>admin</code> are the application roles. The AAS client-credentials identity is server-only and must be trusted by the AAS runtime's OIDC/ABAC configuration.</p>
+<h2 id="demo-data">Demo data</h2>
+<p>With demo data enabled, startup seeds a PostgreSQL-backed compressor, transformer, and Windformer wind turbine generator scenario when no live assets exist. Administrators can show or hide those persisted demo records with the Overview toggle without deleting them. The setting is stored centrally in PostgreSQL and refreshed across web replicas. The seed includes gateway connections, telemetry, alerts, template-based AAS documents, and lifecycle history. Windformer identity and operating measurements are synthetic, and the seeded 2.5 MW nameplate is a demo value. An idempotent upgrade adds Windformer to an existing demo scenario without replacing its records. Demo records are visibly simulated and cannot be lifecycle-edited. Demo login seeding remains independent.</p>
+<p>The supplied <code>aas-specs-aasx-3.2.0.zip</code> includes the IDTA-01005 package example, which demonstrates generic shells, submodels, and embedded files. It does not define a Windformer machine model. The import UI renders the imported shell, nested elements, semantic identifiers, concept descriptions, and file references from the package; Windformer is generated separately from the application's IDTA template builder and its synthetic telemetry is marked as demo data.</p>
+<p>The ADA031 V4 controller has bounded jog, calibrated repeat, demonstration, operational stop, and neutral commands—not arbitrary motion setpoints. Each engineer/admin action publishes an expiring command; the Pi checks the local asset allowlist and protocol profile, then writes one allowlisted ASCII byte at 9600 baud. The connected firmware supplies software clamps and controller telemetry, but the application cannot confirm actual position, mechanical travel, or completed movement. The first USB serial open can reset the board and move its five controlled servos to 90°. General industrial motion, speed/angle setpoints, and software emergency stops are not implemented. Gateway and direct-MQTT telemetry paths are both supported; use a gateway for local protocols/control and use direct MQTT only for native-network devices with device-scoped TLS credentials and ACLs. An application command is not a safety-rated emergency stop; emergency-stop and safe-torque functions require a machine-specific safety design and independent safety hardware. See <a href="https://eur-lex.europa.eu/eli/reg/2023/1230/oj">EU Machinery Regulation 2023/1230</a> and <a href="https://webstore.iec.ch/en/publication/71256">IEC 60204-1</a>.</p>
+<h2 id="storage-and-operations">Storage and operations</h2>
+<ul>
+<li>The dashboard API uses PostgreSQL through Drizzle ORM. Production uses Aiven with <code>DATABASE_SSL_MODE=verify-full</code> and the provider CA in <code>DATABASE_CA_CERT</code>; local Compose uses local PostgreSQL with TLS disabled.</li>
+<li>Production Redis Cloud URLs must use <code>rediss://</code>; Redis Pub/Sub is transient notification transport, not durable application data.</li>
+<li>Keep CloudAMQP MQTT (port 8883/TLS) and AMQPS credentials on backend services and the Pi gateway only. The WROVER receives distinct local Mosquitto credentials and the Pi broker CA.</li>
+<li>Store <code>JWT_SECRET</code>, <code>INGESTION_API_TOKEN</code>, AAS OAuth client secret, database credentials, broker credentials, and machine protocol credentials in a secret manager or protected runtime variables.</li>
+<li>Keep the AAS Environment and its database on a private network. Expose <code>/api/aas/*</code> only through the Node role-checking gateway.</li>
+<li>The E2E script uses a disposable PostgreSQL container and does not connect to the developer's <code>.env.local</code> database.</li>
+</ul>
+<p>The dashboard's core HTTP/API path, PostgreSQL sessions/roles, AAS revision checks, and login throttling are shared across replicas. WebSocket broadcasts use Redis Pub/Sub and authenticated upgrade checks, so AAS change notifications reach clients connected to any dashboard replica. Notifications and email retries are durable in PostgreSQL. Production grouping uses persisted asset metadata; the former process-local device-group API has been removed. Set <code>TRUST_PROXY</code> to known ingress addresses only; its default is disabled.</p>
+<p>The Dashboard summarizes the asset fleet; Live Monitoring shows connectivity and latest readings; Alerts combines incident response and searchable records; Analytics aggregates persisted samples attributed to AAS assets. Threshold repeats escalate an existing incident instead of creating duplicates. Operators acknowledge incidents; assigned engineers record confirmed downtime and resolve their incidents, with admin override. Communication loss alone is not production downtime. Mean downtime-to-resolution includes only incidents with both timestamps.</p>
+<p>The read-only Assistant uses approved focused guides and a bounded database snapshot. Its optional server-side Onesa connection uses a configurable model provider; credentials stay on the server. The UI shows context capture time and source excerpts. If the provider is disabled or unavailable, local guides and available data remain usable. Connection endpoints, full AAS packages, account details, and controls are excluded. See <a href="assistant.md">Assistant configuration and data boundaries</a>.</p>
+<p>Application user sign-in currently uses the built-in email/password and role model. <code>AAS_OIDC_*</code> configures service-to-service client credentials for the AAS runtime; it does not enable Entra user SSO. See <a href="authorization-and-aas.md#entra-id-for-aas-service-credentials">the AAS OIDC configuration guide</a> for the required app registrations and environment settings.</p>
+<p>See <a href="authorization-and-aas.md">authorization and AAS</a>, <a href="api-flows.html">API flows</a>, and the <a href="../RENDER_DEPLOYMENT.md">deployment guide</a> for configuration details.</p>
+<h2 id="recovery-and-analytics-limits">Recovery and analytics limits</h2>
+<p>The Pi queues normalized telemetry privately on disk before cloud publication and removes it only after PUBACK. The backend persists before MQTT acknowledgement; an independent outbox retries dashboard and AMQP delivery. Stable ingestion/event identities tolerate replay. The dashboard rejects unlinked asset attribution and retains named asset signals. Factory downtime requires explicit confirmation; acknowledged incidents remain open until resolved.</p>
+<p>Asset analytics currently caps a query at 93 days and 200,000 samples, with explicit errors instead of silent truncation. Gateway time-bucket aggregation runs in PostgreSQL and ignores null readings. Production retention, rollups, load budgets, recovery objectives, and event-consumer idempotency still require acceptance evidence in the relevant deployment environment.</p>
+</main><footer>Andrew Gotora · Engineering reference · Source review: 21 October 2026</footer></body></html>

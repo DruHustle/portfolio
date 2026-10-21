@@ -1,0 +1,415 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="IMSOP System Architecture — visual engineering reference for IMSOP."><title>IMSOP System Architecture | Andrew Gotora</title><style>:root {
+  color-scheme: light;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  color: #172d40;
+  background: #eef3f8;
+  line-height: 1.65;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+a {
+  color: #075c78;
+  text-underline-offset: 3px;
+}
+a:focus-visible {
+  outline: 3px solid #c05812;
+  outline-offset: 4px;
+}
+.skip {
+  position: absolute;
+  top: -100px;
+  padding: 12px;
+  background: white;
+}
+.skip:focus {
+  top: 8px;
+}
+header {
+  background: #0b2236;
+  color: #e7f2fa;
+  padding: 26px max(20px, calc((100% - 1100px) / 2));
+}
+header a {
+  color: #b5ecff;
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  margin-right: 20px;
+}
+header p {
+  margin: 0;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+main {
+  max-width: 1148px;
+  margin: 32px auto;
+  background: white;
+  padding: 32px 40px 48px;
+  border: 1px solid #d5e0e9;
+  border-radius: 16px;
+}
+h1,
+h2,
+h3 {
+  line-height: 1.25;
+  color: #0c2d45;
+}
+h1 {
+  font-size: clamp(28px, 4vw, 42px);
+  border-bottom: 3px solid #087a96;
+  padding-bottom: 20px;
+  margin-top: 0;
+}
+h2 {
+  margin-top: 38px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #d5e0e9;
+}
+h3 {
+  margin-top: 28px;
+}
+p,
+li {
+  max-width: 95ch;
+}
+nav[aria-label="Contents"] {
+  border: 1px solid #d5e0e9;
+  border-radius: 10px;
+  padding: 16px 20px;
+  background: #f3f8fb;
+  margin: 24px 0;
+}
+nav[aria-label="Contents"] ul {
+  padding-left: 20px;
+  margin: 8px 0;
+}
+nav[aria-label="Contents"] a {
+  display: inline-block;
+  padding: 5px 0;
+}
+figure {
+  margin: 24px 0;
+  background: #f5f9fc;
+  border: 1px solid #d5e0e9;
+  border-radius: 10px;
+  padding: 16px;
+  break-inside: avoid;
+}
+figure > a {
+  display: block;
+}
+figure img {
+  display: block;
+  max-width: 100%;
+  width: 100%;
+  height: auto;
+  max-height: 780px;
+  object-fit: contain;
+}
+figcaption {
+  font-size: 13px;
+  color: #3f5669;
+  margin-top: 12px;
+}
+.table-scroll {
+  overflow-x: auto;
+  margin: 20px 0;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+th,
+td {
+  text-align: left;
+  padding: 12px;
+  border: 1px solid #cbd8e3;
+  vertical-align: top;
+}
+th {
+  background: #123b52;
+  color: white;
+}
+tr:nth-child(even) td {
+  background: #f4f8fb;
+}
+pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  background: #edf3f7;
+  border-left: 3px solid #087a96;
+  padding: 16px;
+  font-size: 13px;
+}
+code {
+  font-family: "SFMono-Regular", Consolas, monospace;
+  font-size: 0.91em;
+}
+blockquote {
+  margin-left: 0;
+  padding-left: 16px;
+  border-left: 3px solid #087a96;
+  color: #3f5669;
+}
+footer {
+  max-width: 1100px;
+  margin: 24px auto;
+  padding: 0 20px 32px;
+  color: #3f5669;
+  font-size: 13px;
+}
+@media (max-width: 600px) {
+  main {
+    margin: 16px 10px;
+    padding: 24px 16px;
+  }
+  figure {
+    padding: 8px;
+  }
+  th,
+  td {
+    padding: 8px;
+  }
+}
+@page {
+  size: A4;
+  margin: 18mm 16mm;
+}
+@media print {
+  :root {
+    background: white;
+    font-size: 9.5pt;
+    line-height: 1.45;
+  }
+  header,
+  .skip,
+  nav[aria-label="Contents"],
+  body > footer {
+    display: none;
+  }
+  main {
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+  }
+  h1 {
+    font-size: 25pt;
+  }
+  h2 {
+    font-size: 15pt;
+    margin-top: 20pt;
+  }
+  h3 {
+    font-size: 11pt;
+  }
+  h1,
+  h2,
+  h3 {
+    break-after: avoid;
+  }
+  p,
+  li {
+    orphans: 3;
+    widows: 3;
+  }
+  figure {
+    margin: 12pt 0;
+    padding: 8pt;
+  }
+  figure img {
+    max-height: 135mm;
+  }
+  figcaption {
+    font-size: 8pt;
+  }
+  table {
+    font-size: 8pt;
+  }
+  th,
+  td {
+    padding: 5pt;
+  }
+  tr {
+    break-inside: avoid;
+  }
+  thead {
+    display: table-header-group;
+  }
+  .table-scroll {
+    overflow: visible;
+    break-inside: avoid;
+  }
+  p {
+    margin: 7pt 0;
+  }
+  ul,
+  ol {
+    margin: 7pt 0;
+    padding-left: 18pt;
+  }
+  li {
+    margin: 2pt 0;
+  }
+  .references {
+    break-inside: avoid;
+    font-size: 8pt;
+    line-height: 1.3;
+  }
+  .references h2 {
+    font-size: 11pt;
+    margin-top: 12pt;
+  }
+  .references ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2pt 14pt;
+    list-style: none;
+    padding: 0;
+  }
+  pre {
+    font-size: 8pt;
+    break-inside: avoid;
+  }
+  a {
+    text-decoration: none;
+  }
+}
+</style></head><body><a class="skip" href="#main-content">Skip to guide</a><header><p>IMSOP / Engineering Documentation</p><nav aria-label="Guide navigation"><a href="../../../#/projects/imsop/documentation">Back to Documentation</a><a href="architecture.pdf">PDF edition</a><a href="architecture.md">Markdown source</a></nav></header><main id="main-content" tabindex="-1"><h1 id="imsop-system-architecture">IMSOP System Architecture</h1><nav aria-label="Contents"><strong>In this guide</strong><ul><li><a href="#runtime-and-hosting">Runtime and hosting</a></li><li><a href="#repository-and-service-ownership">Repository and service ownership</a></li><li><a href="#identity-and-authorization">Identity and authorization</a></li><li><a href="#integration-and-data-consistency">Integration and data consistency</a></li><li><a href="#availability-and-operating-boundaries">Availability and operating boundaries</a></li><li><a href="#read-next">Read next</a></li><li><a href="#source-references">Source references</a></li></ul></nav>
+<p>IMSOP (Intelligent Multi-Cloud Supply Chain &amp; Operations Platform) brings shipment visibility, orders, telemetry, mapping, and reports into a React workspace. This reference separates the browser-facing Node API from the companion .NET service model and describes the current Oracle deployment.</p>
+<h2 id="runtime-and-hosting">Runtime and hosting</h2>
+<figure><a href="architecture-1.svg" target="_blank" rel="noopener noreferrer" aria-label="Open full-size Runtime and hosting"><img src="architecture-1.svg" alt="Runtime and hosting"></a><figcaption>Runtime and hosting · Open the diagram for a full-size view.</figcaption></figure>
+<p>Vercel serves the static frontend and proxies <code>/api/*</code> to the Oracle API. GitHub Pages uses an explicitly configured HTTPS backend origin. One ARM64 backend image contains the gateway, Node API, Operations service, and Supply Chain service. Internal service ports stay private behind Caddy. The backend and frontend release independently.</p>
+<h2 id="repository-and-service-ownership">Repository and service ownership</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Boundary</th>
+<th>Responsibility</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Frontend</td>
+<td>React/Vite UI, authentication adapters, API-origin resolution, mapping, charts, exports, and browser tests</td>
+<td><code>imsop-app-frontend</code></td>
+</tr>
+<tr>
+<td>Node REST API</td>
+<td>Real-account authentication, shipments, orders, telemetry, signed provider events, and reports</td>
+<td>Backend <code>server/</code></td>
+</tr>
+<tr>
+<td>.NET gateway</td>
+<td>Unified ingress and routing for the service bundle</td>
+<td>Backend <code>src/IMSOP.Gateway/</code></td>
+</tr>
+<tr>
+<td>Supply Chain service</td>
+<td>Protected purchase-order APIs and the EF Core supply-chain domain</td>
+<td>Backend <code>src/IMSOP.SupplyChainService/</code></td>
+</tr>
+<tr>
+<td>Operations service</td>
+<td>Companion operations service foundation</td>
+<td>Backend <code>src/IMSOP.OperationsService/</code></td>
+</tr>
+<tr>
+<td>PostgreSQL</td>
+<td>Node operational tables and separately migrated EF Core entities</td>
+<td>Node SQL migrations and EF Core migrations</td>
+</tr>
+</tbody>
+</table></div>
+<p>The React application's operational flows use Node REST endpoints. GraphQL, SignalR, Azure Service Bus, and cloud infrastructure templates belong to the companion service model or optional integrations; their presence in source is not evidence that every path is active in the hosted application.</p>
+<h2 id="identity-and-authorization">Identity and authorization</h2>
+<p>Real accounts use bcrypt password verification and a short-lived JWT in the <code>imsop_access</code> HttpOnly cookie. The API validates the HS256 algorithm, issuer <code>imsop-api</code>, audience <code>imsop-web</code>, and expiry. Protected routes enforce roles on the server. Profile and password changes also enforce account ownership. Password-reset tokens have a separate purpose and a version that changes when a reset succeeds.</p>
+<p>Demo identities use a separate frontend mock-auth adapter and browser storage. A successful demo session does not establish access to backend records. Production acceptance should exercise a real authorized test account separately from demonstration workflows.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Capability</th>
+<th>Admin</th>
+<th>Engineer</th>
+<th>Analyst</th>
+<th>User</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Shipment reads</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Operational order reads</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Telemetry reads</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Telemetry writes</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Shipment and order report exports</td>
+<td>Yes</td>
+<td>No</td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+<tr>
+<td>.NET purchase-order APIs</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="integration-and-data-consistency">Integration and data consistency</h2>
+<p>Provider webhooks are timestamped and signed over the exact raw request bytes. A unique <code>(provider, event_id)</code> key suppresses replayed events. Event insertion and the shipment upsert execute in one PostgreSQL transaction. The event's tracking number associates it with a shipment; it is not a declared database foreign key.</p>
+<p>The Node telemetry API records a device ID, metric name, numeric value, and server timestamp. It is a REST ingestion path. MQTT intake, AAS asset models, edge commissioning, and industrial actuation are Smart Factory IoT capabilities and are not inferred for IMSOP.</p>
+<h2 id="availability-and-operating-boundaries">Availability and operating boundaries</h2>
+<p><code>GET /health</code> reports process liveness and <code>GET /ready</code> checks database readiness. Check both through the actual ingress after releases. A shared VM is one host failure domain; container separation does not establish high availability. No availability percentage, latency target, or backup retention is asserted here without deployment evidence.</p>
+<p>PostgreSQL credentials, JWT signing keys, email credentials, and logistics signing secrets stay in protected backend configuration. Browser builds contain only public routing configuration and a restricted Maps browser key when mapping is enabled.</p>
+<section class="references"><h2 id="read-next">Read next</h2><ul>
+<li><a href="database-schema.html">Database schema</a>: actual Node entities, EF Core ownership, migrations, and data integrity.</li>
+<li><a href="api-flows.html">API flows</a>: sessions, endpoints, signed integrations, and failure responses.</li>
+<li><a href="deployment.html">Deployment guide</a>: visual release and recovery sequence.</li>
+<li><a href="system-diagrams.html">System diagrams</a>: identity, integration, and service boundaries.</li>
+</ul></section>
+
+<section class="references"><h2 id="source-references">Source references</h2><p>Reviewed against backend source and current Oracle runbooks on 21 October 2026. Historical README sections still mention MySQL and Render; the current PostgreSQL models and Oracle runbook take precedence for this guide.</p><ul>
+<li><a href="https://github.com/DruHustle/imsop-app-backend">Backend source</a></li>
+<li><a href="https://github.com/DruHustle/imsop-app-backend/blob/main/docs/DATABASE.md">Database guide</a></li>
+<li><a href="https://github.com/DruHustle/imsop-app-backend/blob/main/deploy/oracle/README.md">Oracle deployment runbook</a></li>
+<li><a href="https://github.com/DruHustle/imsop-app-frontend">Frontend source</a></li>
+</ul></section>
+
+
+</main><footer>Andrew Gotora · Engineering reference · Source review: 21 October 2026</footer></body></html>

@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Smart Factory IoT Deployment Guide — visual engineering reference for Smart Factory IoT."><title>Smart Factory IoT Deployment Guide | Andrew Gotora</title><style>:root {
+  color-scheme: light;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  color: #172d40;
+  background: #eef3f8;
+  line-height: 1.65;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+a {
+  color: #075c78;
+  text-underline-offset: 3px;
+}
+a:focus-visible {
+  outline: 3px solid #c05812;
+  outline-offset: 4px;
+}
+.skip {
+  position: absolute;
+  top: -100px;
+  padding: 12px;
+  background: white;
+}
+.skip:focus {
+  top: 8px;
+}
+header {
+  background: #0b2236;
+  color: #e7f2fa;
+  padding: 26px max(20px, calc((100% - 1100px) / 2));
+}
+header a {
+  color: #b5ecff;
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  margin-right: 20px;
+}
+header p {
+  margin: 0;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+main {
+  max-width: 1148px;
+  margin: 32px auto;
+  background: white;
+  padding: 32px 40px 48px;
+  border: 1px solid #d5e0e9;
+  border-radius: 16px;
+}
+h1,
+h2,
+h3 {
+  line-height: 1.25;
+  color: #0c2d45;
+}
+h1 {
+  font-size: clamp(28px, 4vw, 42px);
+  border-bottom: 3px solid #087a96;
+  padding-bottom: 20px;
+  margin-top: 0;
+}
+h2 {
+  margin-top: 38px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #d5e0e9;
+}
+h3 {
+  margin-top: 28px;
+}
+p,
+li {
+  max-width: 95ch;
+}
+nav[aria-label="Contents"] {
+  border: 1px solid #d5e0e9;
+  border-radius: 10px;
+  padding: 16px 20px;
+  background: #f3f8fb;
+  margin: 24px 0;
+}
+nav[aria-label="Contents"] ul {
+  padding-left: 20px;
+  margin: 8px 0;
+}
+nav[aria-label="Contents"] a {
+  display: inline-block;
+  padding: 5px 0;
+}
+figure {
+  margin: 24px 0;
+  background: #f5f9fc;
+  border: 1px solid #d5e0e9;
+  border-radius: 10px;
+  padding: 16px;
+  break-inside: avoid;
+}
+figure > a {
+  display: block;
+}
+figure img {
+  display: block;
+  max-width: 100%;
+  width: 100%;
+  height: auto;
+  max-height: 780px;
+  object-fit: contain;
+}
+figcaption {
+  font-size: 13px;
+  color: #3f5669;
+  margin-top: 12px;
+}
+.table-scroll {
+  overflow-x: auto;
+  margin: 20px 0;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+th,
+td {
+  text-align: left;
+  padding: 12px;
+  border: 1px solid #cbd8e3;
+  vertical-align: top;
+}
+th {
+  background: #123b52;
+  color: white;
+}
+tr:nth-child(even) td {
+  background: #f4f8fb;
+}
+pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  background: #edf3f7;
+  border-left: 3px solid #087a96;
+  padding: 16px;
+  font-size: 13px;
+}
+code {
+  font-family: "SFMono-Regular", Consolas, monospace;
+  font-size: 0.91em;
+}
+blockquote {
+  margin-left: 0;
+  padding-left: 16px;
+  border-left: 3px solid #087a96;
+  color: #3f5669;
+}
+footer {
+  max-width: 1100px;
+  margin: 24px auto;
+  padding: 0 20px 32px;
+  color: #3f5669;
+  font-size: 13px;
+}
+@media (max-width: 600px) {
+  main {
+    margin: 16px 10px;
+    padding: 24px 16px;
+  }
+  figure {
+    padding: 8px;
+  }
+  th,
+  td {
+    padding: 8px;
+  }
+}
+@page {
+  size: A4;
+  margin: 18mm 16mm;
+}
+@media print {
+  :root {
+    background: white;
+    font-size: 9.5pt;
+    line-height: 1.45;
+  }
+  header,
+  .skip,
+  nav[aria-label="Contents"],
+  body > footer {
+    display: none;
+  }
+  main {
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+  }
+  h1 {
+    font-size: 25pt;
+  }
+  h2 {
+    font-size: 15pt;
+    margin-top: 20pt;
+  }
+  h3 {
+    font-size: 11pt;
+  }
+  h1,
+  h2,
+  h3 {
+    break-after: avoid;
+  }
+  p,
+  li {
+    orphans: 3;
+    widows: 3;
+  }
+  figure {
+    margin: 12pt 0;
+    padding: 8pt;
+  }
+  figure img {
+    max-height: 135mm;
+  }
+  figcaption {
+    font-size: 8pt;
+  }
+  table {
+    font-size: 8pt;
+  }
+  th,
+  td {
+    padding: 5pt;
+  }
+  tr {
+    break-inside: avoid;
+  }
+  thead {
+    display: table-header-group;
+  }
+  .table-scroll {
+    overflow: visible;
+    break-inside: avoid;
+  }
+  p {
+    margin: 7pt 0;
+  }
+  ul,
+  ol {
+    margin: 7pt 0;
+    padding-left: 18pt;
+  }
+  li {
+    margin: 2pt 0;
+  }
+  .references {
+    break-inside: avoid;
+    font-size: 8pt;
+    line-height: 1.3;
+  }
+  .references h2 {
+    font-size: 11pt;
+    margin-top: 12pt;
+  }
+  .references ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2pt 14pt;
+    list-style: none;
+    padding: 0;
+  }
+  pre {
+    font-size: 8pt;
+    break-inside: avoid;
+  }
+  a {
+    text-decoration: none;
+  }
+}
+</style></head><body><a class="skip" href="#main-content">Skip to guide</a><header><p>Smart Factory IoT / Engineering Documentation</p><nav aria-label="Guide navigation"><a href="../../../#/projects/smart-factory-iot/documentation">Back to Documentation</a><a href="deployment.pdf">PDF edition</a><a href="deployment.md">Markdown source</a></nav></header><main id="main-content" tabindex="-1"><h1 id="smart-factory-iot-deployment-guide">Smart Factory IoT Deployment Guide</h1><nav aria-label="Contents"><strong>In this guide</strong><ul><li><a href="#deployment-map">Deployment map</a></li><li><a href="#local-development">Local development</a></li><li><a href="#runtime-configuration-boundaries">Runtime configuration boundaries</a></li><li><a href="#image-update-sequence">Image update sequence</a></li><li><a href="#health-and-acceptance">Health and acceptance</a></li><li><a href="#rollback-and-recovery">Rollback and recovery</a></li><li><a href="#source-runbooks">Source runbooks</a></li></ul></nav>
+<p>The React frontend runs on Vercel. The current backend runs on Oracle as separate API and singleton worker containers from one reviewed ARM64 image, alongside the separately managed BaSyx stack and Caddy ingress. PostgreSQL, Redis, and MQTT retain their managed providers. The previous Render services are suspended.</p>
+<h2 id="deployment-map">Deployment map</h2>
+<figure><a href="deployment-1.svg" target="_blank" rel="noopener noreferrer" aria-label="Open full-size Deployment map"><img src="deployment-1.svg" alt="Deployment map"></a><figcaption>Deployment map · Open the diagram for a full-size view.</figcaption></figure>
+<p>The API role contains Node, DeviceService, IdentityService, and AnalyticsService. The worker role contains TelemetryService and NotificationService. <code>RENDER_SERVICE_ROLE</code> remains the role variable for image compatibility; its name does not identify the current hosting provider. Internal service and diagnostic ports remain private or loopback-only.</p>
+<h2 id="local-development">Local development</h2>
+<p>Keep the frontend, backend, and edge repositories side by side. Use Docker Compose v2, the repositories' pinned Node/pnpm versions, Python 3.11, and .NET 8 where needed. Configure ignored <code>.env.local</code> files from the supplied examples, using synthetic accounts and local dependencies.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Frontend repository: local dashboard, PostgreSQL, Redis, and AAS profile</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose <span class="at">--env-file</span> .env.local <span class="at">--profile</span> aas up <span class="at">--build</span> <span class="at">-d</span> <span class="at">--wait</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Backend repository: private .NET services</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose <span class="at">--env-file</span> .env.local up <span class="at">--build</span> <span class="at">-d</span> <span class="at">--wait</span></span></code></pre></div>
+<p>Match the intended service tokens between these local stacks and set <code>BACKEND_DEPLOYMENT_MODE=compose</code>. Local physical-device checks require the appropriate broker subscription configuration; a default local RabbitMQ consumer does not receive a physical Pi's CloudAMQP messages automatically.</p>
+<h2 id="runtime-configuration-boundaries">Runtime configuration boundaries</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Boundary</th>
+<th>Configuration and constraints</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Browser build</td>
+<td>Public frontend routing only; no database, MQTT, AAS, or AI service secrets</td>
+</tr>
+<tr>
+<td>API role</td>
+<td>Dashboard database, Redis, session signing, service tokens, AAS OAuth, exact allowed origins</td>
+</tr>
+<tr>
+<td>Worker role</td>
+<td>Telemetry database, stable MQTT client ID, scoped broker credentials, service tokens, API origin, mail settings</td>
+</tr>
+<tr>
+<td>BaSyx stack</td>
+<td>Independent component URLs, OIDC client credentials, dedicated database, and private component ports</td>
+</tr>
+<tr>
+<td>Edge</td>
+<td>Local allowlists, commissioned protocol mappings, scoped MQTT identities, and durable spool</td>
+</tr>
+</tbody>
+</table></div>
+<p>Use verified TLS for PostgreSQL, Redis, and cloud MQTT. Keep <code>.env.api</code> and <code>.env.worker</code> protected and untracked; the Oracle Compose raw env-file mode requires Compose 2.30 or newer. Preserve literal credentials during transfer without printing resolved configuration.</p>
+<h2 id="image-update-sequence">Image update sequence</h2>
+<figure><a href="deployment-2.svg" target="_blank" rel="noopener noreferrer" aria-label="Open full-size Image update sequence"><img src="deployment-2.svg" alt="Image update sequence"></a><figcaption>Image update sequence · Open the diagram for a full-size view.</figcaption></figure>
+<p>Build from the frontend checkout with the prepared backend context and <code>linux/arm64</code>, then run the repository's bundle smoke and container-audit scripts. Transfer the tested image and preserve the installed configuration. Backend image updates use the manual Oracle procedure; the current Vercel workflow deploys a source revision only after its matching main CI succeeds.</p>
+<p>Do not run multiple production workers with the same stable MQTT consumer identity. During any provider rollback, stop the active worker before starting its replacement. Routine updates do not replace the private environment exports or create new databases.</p>
+<h2 id="health-and-acceptance">Health and acceptance</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Check</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>API <code>/health/live</code></td>
+<td>API process liveness</td>
+</tr>
+<tr>
+<td>API <code>/health/ready</code></td>
+<td>Dashboard database, Redis, and required private services</td>
+</tr>
+<tr>
+<td>Worker readiness and Supervisor state</td>
+<td>Telemetry readiness plus both worker processes</td>
+</tr>
+<tr>
+<td>Real account through Vercel</td>
+<td>Secure session cookie, role delegation, logout, allowed and denied actions</td>
+</tr>
+<tr>
+<td>AAS component descriptions</td>
+<td>Authenticated access to all six BaSyx components</td>
+</tr>
+<tr>
+<td>Commissioned telemetry path</td>
+<td>Fresh device values, correct gateway attribution, stable session, draining queues</td>
+</tr>
+<tr>
+<td>Notifications</td>
+<td>Durable inbox and configured provider state; acceptance is not confirmed mailbox delivery</td>
+</tr>
+</tbody>
+</table></div>
+<p>Use simulated equipment for ordinary acceptance. Hardware commissioning and physical-motion verification are separate site activities. Configuration acknowledgements, broker publication, and controller serial acknowledgements are different events and must not be treated as proof of machine motion.</p>
+<h2 id="rollback-and-recovery">Rollback and recovery</h2>
+<p>Retain the last accepted image, ingress configuration, and protected runtime settings. Restore a compatible backend image, verify API readiness, and start one worker. Restore the previous Vercel artifact if its proxy or contract changed. Schema rollback or database restoration requires its own reviewed plan.</p>
+<p>Managed PostgreSQL holds application state; Redis Pub/Sub is transient transport. Edge spools and the telemetry outbox support retry after interruption. Monitor backlog, spool capacity, database pools, and failed notification jobs. A shared Oracle host is one failure domain and does not establish high availability.</p>
+<h2 id="source-runbooks">Source runbooks</h2>
+<ul>
+<li><a href="https://github.com/DruHustle/smart-factory-iot-frontend/blob/main/deploy/oracle/README.md">Current Oracle API and singleton-worker runbook</a></li>
+<li><a href="https://github.com/DruHustle/smart-factory-iot-backend/tree/main/deploy/oracle-basyx">BaSyx runtime</a></li>
+<li><a href="architecture.html">Architecture</a>, <a href="api-flows.html">API flows</a>, and <a href="system-diagrams.html">system diagrams</a></li>
+</ul>
+<p>Source review: 21 October 2026. The portfolio guide documents the release process and does not perform a deployment.</p>
+</main><footer>Andrew Gotora · Engineering reference · Source review: 21 October 2026</footer></body></html>

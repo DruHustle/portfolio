@@ -1,438 +1,124 @@
-IMSOP - Database Schema
-Entity Relationship Diagram
-mermaiderDiagram
-    ORGANIZATIONS ||--o{ USERS : "has"
-    ORGANIZATIONS ||--o{ SUPPLIERS : "manages"
-    ORGANIZATIONS ||--o{ WAREHOUSES : "operates"
-    ORGANIZATIONS ||--o{ PRODUCTS : "manufactures"
-    
-    USERS ||--o{ ROLES : "has"
-    USERS ||--o{ PERMISSIONS : "has"
-    
-    SUPPLIERS ||--o{ PURCHASE_ORDERS : "receives"
-    SUPPLIERS ||--o{ SHIPMENTS : "sends"
-    SUPPLIERS ||--o{ SUPPLIER_METRICS : "generates"
-    
-    PRODUCTS ||--o{ INVENTORY : "tracked_in"
-    PRODUCTS ||--o{ PURCHASE_ORDER_ITEMS : "in"
-    PRODUCTS ||--o{ SALES_ORDERS : "in"
-    
-    WAREHOUSES ||--o{ INVENTORY : "contains"
-    WAREHOUSES ||--o{ WAREHOUSE_ZONES : "has"
-    
-    PURCHASE_ORDERS ||--o{ PURCHASE_ORDER_ITEMS : "contains"
-    PURCHASE_ORDERS ||--o{ SHIPMENTS : "tracked_by"
-    PURCHASE_ORDERS ||--o{ PURCHASE_ORDER_HISTORY : "has"
-    
-    SALES_ORDERS ||--o{ SALES_ORDER_ITEMS : "contains"
-    SALES_ORDERS ||--o{ SHIPMENTS : "fulfilled_by"
-    
-    SHIPMENTS ||--o{ SHIPMENT_TRACKING : "has"
-    SHIPMENTS ||--o{ SHIPMENT_EVENTS : "generates"
-    
-    INVENTORY ||--o{ INVENTORY_TRANSACTIONS : "has"
-    
-    ANALYTICS_EVENTS ||--o{ ANALYTICS_METRICS : "contains"
-Core Tables
-Organizations
-Central organization management and multi-tenancy support.
-SQLCREATE TABLE organizations (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    name VARCHAR(255) NOT NULL UNIQUE,
-    description TEXT,
-    industry VARCHAR(100),
-    country VARCHAR(100),
-    timezone VARCHAR(50) DEFAULT 'UTC',
-    logo_url VARCHAR(500),
-    website VARCHAR(255),
-    status ENUM('active', 'inactive', 'suspended') DEFAULT 'active',
-    subscription_tier ENUM('starter', 'professional', 'enterprise') DEFAULT 'starter',
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    deleted_at TIMESTAMP NULL,
-    
-    INDEX idx_status (status),
-    INDEX idx_subscription_tier (subscription_tier),
-    UNIQUE KEY unique_active_org (name, deleted_at)
-);
-Users
-User accounts and authentication.
-SQLCREATE TABLE users (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    organization_id UUID NOT NULL,
-    email VARCHAR(255) NOT NULL,
-    password_hash VARCHAR(255) NOT NULL,
-    first_name VARCHAR(100),
-    last_name VARCHAR(100),
-    phone VARCHAR(20),
-    avatar_url VARCHAR(500),
-    status ENUM('active', 'inactive', 'suspended') DEFAULT 'active',
-    last_login TIMESTAMP NULL,
-    mfa_enabled BOOLEAN DEFAULT FALSE,
-    mfa_secret VARCHAR(255),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    deleted_at TIMESTAMP NULL,
-    
-    FOREIGN KEY (organization_id) REFERENCES organizations(id),
-    UNIQUE KEY unique_email_per_org (organization_id, email),
-    INDEX idx_organization_id (organization_id),
-    INDEX idx_status (status),
-    UNIQUE KEY unique_active_user (email, deleted_at)
-);
-Roles & Permissions
-Role-based access control.
-SQLCREATE TABLE roles (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    organization_id UUID NOT NULL,
-    name VARCHAR(100) NOT NULL,
-    description TEXT,
-    is_system BOOLEAN DEFAULT FALSE,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    
-    FOREIGN KEY (organization_id) REFERENCES organizations(id),
-    UNIQUE KEY unique_role_per_org (organization_id, name),
-    INDEX idx_organization_id (organization_id)
-);
+# IMSOP Database Schema
 
-CREATE TABLE permissions (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    name VARCHAR(100) NOT NULL UNIQUE,
-    description TEXT,
-    resource VARCHAR(100) NOT NULL,
-    action VARCHAR(50) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    
-    UNIQUE KEY unique_resource_action (resource, action)
-);
+IMSOP uses PostgreSQL. The Node API owns lowercase operational tables through SQL migrations; the .NET Supply Chain service owns its separate EF Core model. This document describes source models, not a live database inspection or an executable schema dump.
 
-CREATE TABLE role_permissions (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    role_id UUID NOT NULL,
-    permission_id UUID NOT NULL,
-    
-    FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE CASCADE,
-    FOREIGN KEY (permission_id) REFERENCES permissions(id),
-    UNIQUE KEY unique_role_permission (role_id, permission_id)
-);
+## Node operational model
 
-CREATE TABLE user_roles (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID NOT NULL,
-    role_id UUID NOT NULL,
-    assigned_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-    FOREIGN KEY (role_id) REFERENCES roles(id),
-    UNIQUE KEY unique_user_role (user_id, role_id)
-);
-Suppliers
-Supplier management and tracking.
-SQLCREATE TABLE suppliers (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    organization_id UUID NOT NULL,
-    name VARCHAR(255) NOT NULL,
-    email VARCHAR(255),
-    phone VARCHAR(20),
-    country VARCHAR(100),
-    city VARCHAR(100),
-    address TEXT,
-    postal_code VARCHAR(20),
-    contact_person VARCHAR(100),
-    status ENUM('active', 'inactive', 'blocked') DEFAULT 'active',
-    rating DECIMAL(3,2) DEFAULT 0,
-    payment_terms VARCHAR(50),
-    lead_time_days INT DEFAULT 0,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    
-    FOREIGN KEY (organization_id) REFERENCES organizations(id),
-    INDEX idx_organization_id (organization_id),
-    INDEX idx_status (status),
-    INDEX idx_rating (rating)
-);
-Products
-Product catalog and specifications.
-SQLCREATE TABLE products (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    organization_id UUID NOT NULL,
-    sku VARCHAR(100) NOT NULL,
-    name VARCHAR(255) NOT NULL,
-    description TEXT,
-    category VARCHAR(100),
-    unit_of_measure VARCHAR(20),
-    unit_cost DECIMAL(12,4),
-    selling_price DECIMAL(12,4),
-    reorder_level INT DEFAULT 0,
-    reorder_quantity INT DEFAULT 0,
-    status ENUM('active', 'discontinued', 'archived') DEFAULT 'active',
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    
-    FOREIGN KEY (organization_id) REFERENCES organizations(id),
-    UNIQUE KEY unique_sku_per_org (organization_id, sku),
-    INDEX idx_organization_id (organization_id),
-    INDEX idx_category (category),
-    INDEX idx_status (status)
-);
-Warehouses & Inventory
-Warehouse locations and inventory tracking.
-SQLCREATE TABLE warehouses (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    organization_id UUID NOT NULL,
-    name VARCHAR(255) NOT NULL,
-    location VARCHAR(255),
-    country VARCHAR(100),
-    city VARCHAR(100),
-    address TEXT,
-    capacity INT,
-    manager_id UUID,
-    status ENUM('active', 'inactive', 'maintenance') DEFAULT 'active',
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    
-    FOREIGN KEY (organization_id) REFERENCES organizations(id),
-    FOREIGN KEY (manager_id) REFERENCES users(id),
-    INDEX idx_organization_id (organization_id),
-    INDEX idx_status (status)
-);
+```mermaid
+erDiagram
+  SHIPMENTS ||--o{ LOGISTICS_EVENTS : tracking_number_logical_link
+  USERS {
+    serial id PK
+    varchar email UK
+    varchar password
+    varchar name
+    varchar role
+    integer password_reset_version
+    timestamp created_at
+  }
+  SHIPMENTS {
+    serial id PK
+    varchar tracking_number UK
+    varchar origin
+    varchar destination
+    varchar carrier
+    varchar transport_mode
+    numeric latitude
+    numeric longitude
+    varchar status
+    timestamp estimated_arrival
+    timestamp actual_arrival
+  }
+  LOGISTICS_EVENTS {
+    serial id PK
+    varchar provider
+    varchar event_id
+    varchar tracking_number
+    varchar event_type
+    text payload
+    timestamp occurred_at
+    timestamp received_at
+  }
+  ORDERS {
+    serial id PK
+    varchar order_number UK
+    integer customer_id
+    numeric total_amount
+    varchar status
+  }
+  TELEMETRY {
+    serial id PK
+    varchar device_id
+    varchar metric_name
+    numeric metric_value
+    timestamp timestamp
+  }
+```
 
-CREATE TABLE inventory (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    warehouse_id UUID NOT NULL,
-    product_id UUID NOT NULL,
-    quantity_on_hand INT DEFAULT 0,
-    quantity_reserved INT DEFAULT 0,
-    quantity_available INT GENERATED ALWAYS AS (quantity_on_hand - quantity_reserved) STORED,
-    last_counted TIMESTAMP,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    
-    FOREIGN KEY (warehouse_id) REFERENCES warehouses(id),
-    FOREIGN KEY (product_id) REFERENCES products(id),
-    UNIQUE KEY unique_warehouse_product (warehouse_id, product_id),
-    INDEX idx_warehouse_id (warehouse_id),
-    INDEX idx_product_id (product_id)
-);
+The shipment/event connector represents application matching by tracking number. The Node schema does not declare that relationship as a foreign key. `orders.customer_id` is also not a declared user or organization foreign key; do not invent tenant or customer relationships from its name.
 
-CREATE TABLE inventory_transactions (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    inventory_id UUID NOT NULL,
-    transaction_type ENUM('receipt', 'shipment', 'adjustment', 'return') NOT NULL,
-    quantity INT NOT NULL,
-    reference_id VARCHAR(100),
-    notes TEXT,
-    created_by UUID,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    
-    FOREIGN KEY (inventory_id) REFERENCES inventory(id),
-    FOREIGN KEY (created_by) REFERENCES users(id),
-    INDEX idx_inventory_id (inventory_id),
-    INDEX idx_created_at (created_at)
-);
-Purchase Orders
-Purchase order management and tracking.
-SQLCREATE TABLE purchase_orders (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    organization_id UUID NOT NULL,
-    supplier_id UUID NOT NULL,
-    po_number VARCHAR(100) NOT NULL,
-    status ENUM('draft', 'submitted', 'confirmed', 'shipped', 'received', 'cancelled') DEFAULT 'draft',
-    order_date DATE NOT NULL,
-    expected_delivery_date DATE,
-    actual_delivery_date DATE,
-    total_amount DECIMAL(14,2),
-    currency VARCHAR(3) DEFAULT 'USD',
-    notes TEXT,
-    created_by UUID,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    
-    FOREIGN KEY (organization_id) REFERENCES organizations(id),
-    FOREIGN KEY (supplier_id) REFERENCES suppliers(id),
-    FOREIGN KEY (created_by) REFERENCES users(id),
-    UNIQUE KEY unique_po_per_org (organization_id, po_number),
-    INDEX idx_organization_id (organization_id),
-    INDEX idx_supplier_id (supplier_id),
-    INDEX idx_status (status),
-    INDEX idx_order_date (order_date)
-);
+| Table | Purpose | Integrity and interpretation |
+| --- | --- | --- |
+| `users` | Real-account identity, hashed password, role, reset version | Unique email; never export password hashes or reset material into reports |
+| `shipments` | Latest operational shipment state and location | Unique tracking number; coordinates use `numeric(9,6)`; optional location may be absent |
+| `logistics_events` | Original provider events and ingestion audit | Unique provider/event pair; event time and receipt time are separate |
+| `orders` | Operational order summaries | Unique order number; total uses `numeric(10,2)` |
+| `telemetry` | Device/metric observations | Value uses `numeric(10,2)`; server supplies the storage timestamp |
 
-CREATE TABLE purchase_order_items (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    purchase_order_id UUID NOT NULL,
-    product_id UUID NOT NULL,
-    quantity_ordered INT NOT NULL,
-    quantity_received INT DEFAULT 0,
-    unit_price DECIMAL(12,4),
-    line_total DECIMAL(14,2),
-    
-    FOREIGN KEY (purchase_order_id) REFERENCES purchase_orders(id) ON DELETE CASCADE,
-    FOREIGN KEY (product_id) REFERENCES products(id),
-    INDEX idx_purchase_order_id (purchase_order_id)
-);
-Shipments & Tracking
-Shipment management and real-time tracking.
-SQLCREATE TABLE shipments (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    organization_id UUID NOT NULL,
-    reference_id VARCHAR(100),
-    shipment_type ENUM('inbound', 'outbound', 'transfer') NOT NULL,
-    status ENUM('pending', 'in_transit', 'delivered', 'cancelled') DEFAULT 'pending',
-    origin_warehouse_id UUID,
-    destination_warehouse_id UUID,
-    carrier VARCHAR(100),
-    tracking_number VARCHAR(100),
-    ship_date DATE,
-    expected_delivery_date DATE,
-    actual_delivery_date DATE,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    
-    FOREIGN KEY (organization_id) REFERENCES organizations(id),
-    FOREIGN KEY (origin_warehouse_id) REFERENCES warehouses(id),
-    FOREIGN KEY (destination_warehouse_id) REFERENCES warehouses(id),
-    INDEX idx_organization_id (organization_id),
-    INDEX idx_status (status),
-    INDEX idx_tracking_number (tracking_number)
-);
+The Node schema does not establish organization-scoped row-level security or a full warehouse/inventory model. Those concepts belong to the companion .NET model and must not be presented as deployed Node tenancy guarantees.
 
-CREATE TABLE shipment_tracking (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    shipment_id UUID NOT NULL,
-    location VARCHAR(255),
-    latitude DECIMAL(10,8),
-    longitude DECIMAL(11,8),
-    status VARCHAR(50),
-    timestamp TIMESTAMP,
-    
-    FOREIGN KEY (shipment_id) REFERENCES shipments(id) ON DELETE CASCADE,
-    INDEX idx_shipment_id (shipment_id),
-    INDEX idx_timestamp (timestamp)
-);
-Analytics & Metrics
-Analytics and performance metrics.
-SQLCREATE TABLE analytics_events (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    organization_id UUID NOT NULL,
-    event_type VARCHAR(100) NOT NULL,
-    entity_type VARCHAR(100),
-    entity_id VARCHAR(100),
-    user_id UUID,
-    metadata JSON,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    
-    FOREIGN KEY (organization_id) REFERENCES organizations(id),
-    FOREIGN KEY (user_id) REFERENCES users(id),
-    INDEX idx_organization_id (organization_id),
-    INDEX idx_event_type (event_type),
-    INDEX idx_created_at (created_at)
-);
+## .NET supply-chain model
 
-CREATE TABLE analytics_metrics (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    organization_id UUID NOT NULL,
-    metric_name VARCHAR(100) NOT NULL,
-    metric_value DECIMAL(14,4),
-    dimension_date DATE,
-    dimension_category VARCHAR(100),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    
-    FOREIGN KEY (organization_id) REFERENCES organizations(id),
-    INDEX idx_organization_id (organization_id),
-    INDEX idx_metric_name (metric_name),
-    INDEX idx_dimension_date (dimension_date)
-);
-Indexing Strategy
-Primary Indexes
+```mermaid
+erDiagram
+  ORGANIZATIONS ||--o{ USERS : contains
+  ORGANIZATIONS ||--o{ SUPPLIERS : owns
+  ORGANIZATIONS ||--o{ PRODUCTS : owns
+  ORGANIZATIONS ||--o{ WAREHOUSES : owns
+  WAREHOUSES ||--o{ INVENTORY : stores
+  PRODUCTS ||--o{ INVENTORY : stocked_as
+  SUPPLIERS ||--o{ PURCHASE_ORDERS : receives
+  PURCHASE_ORDERS ||--o{ PURCHASE_ORDER_ITEMS : contains
+  PRODUCTS ||--o{ PURCHASE_ORDER_ITEMS : ordered_as
+```
 
-All primary keys indexed automatically
-Foreign keys indexed for join performance
-Organization ID indexed for multi-tenancy filtering
+EF Core owns organizations, domain users, suppliers, products, warehouses, inventory, purchase orders, and their items. These domain entities are distinct from Node account and operational summary tables. Do not merge or rename them during a reporting or migration change without reviewing both service contracts.
 
-Performance Indexes
+## Migration ownership
 
-Status fields indexed for filtering
-Date fields indexed for range queries
-Frequently searched fields indexed
+```mermaid
+flowchart LR
+  NodeSQL[Node SQL migration files] --> Runner[Transactional Node migration runner]
+  Runner --> NodeTables[(Lowercase operational tables)]
+  EF[EF Core migration files] --> EFRunner[Supply Chain migration process]
+  EFRunner --> DomainTables[(EF Core domain tables)]
+```
 
-Composite Indexes
+Node migrations live under `server/migrations`, run in lexical order, and are recorded in `schema_migrations`. Each file is applied transactionally. The production image invokes the migration process at startup. EF Core migrations live under `src/IMSOP.SupplyChainService/Data/Migrations`; standalone auto-migration is disabled by default and must be configured deliberately for the deployed image.
 
-(organization_id, status) for filtered queries
-(warehouse_id, product_id) for inventory lookups
-(created_at, organization_id) for time-series queries
+Before a release, review both migration sets, compatibility with the previous application version, and the restore procedure. Image rollback does not undo a schema migration.
 
-Query Patterns
-Get Inventory by Product
-SQLSELECT i.*, p.name, w.name as warehouse_name
-FROM inventory i
-JOIN products p ON i.product_id = p.id
-JOIN warehouses w ON i.warehouse_id = w.id
-WHERE p.organization_id = ? AND p.sku = ?
-ORDER BY w.name;
-Get Purchase Order Status
-SQLSELECT po.*, GROUP_CONCAT(p.name) as products
-FROM purchase_orders po
-LEFT JOIN purchase_order_items poi ON po.id = poi.purchase_order_id
-LEFT JOIN products p ON poi.product_id = p.id
-WHERE po.organization_id = ? AND po.po_number = ?
-GROUP BY po.id;
-Real-time Shipment Tracking
-SQLSELECT s.*, st.location, st.latitude, st.longitude, st.timestamp
-FROM shipments s
-LEFT JOIN shipment_tracking st ON s.id = st.shipment_id
-WHERE s.organization_id = ? AND s.tracking_number = ?
-ORDER BY st.timestamp DESC
-LIMIT 1;
-Performance Optimization
-Query Optimization
+## Transaction and replay behavior
 
-Use EXPLAIN ANALYZE for query planning
-Avoid SELECT * queries
-Use appropriate JOIN types
-Implement pagination for large result sets
+1. Verify the provider signature and timestamp before opening the ingestion transaction.
+2. Insert the event with conflict handling on `(provider, event_id)`.
+3. For a new event, insert or update the shipment by its tracking number in the same transaction.
+4. Commit both changes together. A duplicate returns an accepted response with `duplicate: true` and skips the shipment write.
 
-Caching Strategy
+Idempotency prevents repeated application of one event. It does not by itself establish event ordering: the current handler does not compare `occurredAt` before updating the shipment. Integrations should account for late and out-of-order updates.
 
-Cache frequently accessed products
-Cache organization settings
-Cache user permissions
-Cache warehouse locations
+## Query and retention considerations
 
-Data Retention
+Use bounded time windows for telemetry and events, explicit columns for reports, and query plans before adding indexes. The documented unique keys are enforced; additional index, partitioning, or retention policies require a separate reviewed change. Timestamp provenance matters: provider occurrence time, API receipt time, and telemetry storage time answer different questions.
 
-Archive old purchase orders (>2 years)
-Archive old shipment tracking (>1 year)
-Archive old analytics events (>6 months)
-Keep current inventory indefinitely
+No fixed retention period or provider backup schedule is assumed. Define retention by data type, restrict access to raw event payloads, and record the actual provider recovery options. Validate a restore into an isolated database and measure recovery time and recoverable data age.
 
-Backup & Recovery
-Backup Strategy
+## Related guides and source
 
-Daily full backups (Aiven automated)
-Hourly incremental backups
-Point-in-time recovery enabled
-Backup retention: 30 days
+- [Architecture](architecture.md)
+- [API flows](api-flows.md)
+- [Deployment and recovery](deployment.md)
+- [Node schema source](https://github.com/DruHustle/imsop-app-backend/blob/main/server/src/models/schema.ts)
+- [Backend database guide](https://github.com/DruHustle/imsop-app-backend/blob/main/docs/DATABASE.md)
 
-Recovery Procedures
-
-Test recovery procedures monthly
-Document recovery time objectives (RTO)
-Document recovery point objectives (RPO)
-Maintain backup verification logs
-
-Security Considerations
-Data Protection
-
-Encrypt sensitive data at rest (Aiven PostgreSQL encryption)
-Use TLS for data in transit
-Hash passwords with bcrypt
-Mask PII in logs
-
-Access Control
-
-Row-level security for multi-tenancy
-Column-level encryption for sensitive data
-Audit trail for all modifications
-Regular security audits
+Source review: 21 October 2026.

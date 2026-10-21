@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="IMSOP Deployment Guide — visual engineering reference for IMSOP."><title>IMSOP Deployment Guide | Andrew Gotora</title><style>:root {
+  color-scheme: light;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  color: #172d40;
+  background: #eef3f8;
+  line-height: 1.65;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+a {
+  color: #075c78;
+  text-underline-offset: 3px;
+}
+a:focus-visible {
+  outline: 3px solid #c05812;
+  outline-offset: 4px;
+}
+.skip {
+  position: absolute;
+  top: -100px;
+  padding: 12px;
+  background: white;
+}
+.skip:focus {
+  top: 8px;
+}
+header {
+  background: #0b2236;
+  color: #e7f2fa;
+  padding: 26px max(20px, calc((100% - 1100px) / 2));
+}
+header a {
+  color: #b5ecff;
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  margin-right: 20px;
+}
+header p {
+  margin: 0;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+main {
+  max-width: 1148px;
+  margin: 32px auto;
+  background: white;
+  padding: 32px 40px 48px;
+  border: 1px solid #d5e0e9;
+  border-radius: 16px;
+}
+h1,
+h2,
+h3 {
+  line-height: 1.25;
+  color: #0c2d45;
+}
+h1 {
+  font-size: clamp(28px, 4vw, 42px);
+  border-bottom: 3px solid #087a96;
+  padding-bottom: 20px;
+  margin-top: 0;
+}
+h2 {
+  margin-top: 38px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #d5e0e9;
+}
+h3 {
+  margin-top: 28px;
+}
+p,
+li {
+  max-width: 95ch;
+}
+nav[aria-label="Contents"] {
+  border: 1px solid #d5e0e9;
+  border-radius: 10px;
+  padding: 16px 20px;
+  background: #f3f8fb;
+  margin: 24px 0;
+}
+nav[aria-label="Contents"] ul {
+  padding-left: 20px;
+  margin: 8px 0;
+}
+nav[aria-label="Contents"] a {
+  display: inline-block;
+  padding: 5px 0;
+}
+figure {
+  margin: 24px 0;
+  background: #f5f9fc;
+  border: 1px solid #d5e0e9;
+  border-radius: 10px;
+  padding: 16px;
+  break-inside: avoid;
+}
+figure > a {
+  display: block;
+}
+figure img {
+  display: block;
+  max-width: 100%;
+  width: 100%;
+  height: auto;
+  max-height: 780px;
+  object-fit: contain;
+}
+figcaption {
+  font-size: 13px;
+  color: #3f5669;
+  margin-top: 12px;
+}
+.table-scroll {
+  overflow-x: auto;
+  margin: 20px 0;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+th,
+td {
+  text-align: left;
+  padding: 12px;
+  border: 1px solid #cbd8e3;
+  vertical-align: top;
+}
+th {
+  background: #123b52;
+  color: white;
+}
+tr:nth-child(even) td {
+  background: #f4f8fb;
+}
+pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  background: #edf3f7;
+  border-left: 3px solid #087a96;
+  padding: 16px;
+  font-size: 13px;
+}
+code {
+  font-family: "SFMono-Regular", Consolas, monospace;
+  font-size: 0.91em;
+}
+blockquote {
+  margin-left: 0;
+  padding-left: 16px;
+  border-left: 3px solid #087a96;
+  color: #3f5669;
+}
+footer {
+  max-width: 1100px;
+  margin: 24px auto;
+  padding: 0 20px 32px;
+  color: #3f5669;
+  font-size: 13px;
+}
+@media (max-width: 600px) {
+  main {
+    margin: 16px 10px;
+    padding: 24px 16px;
+  }
+  figure {
+    padding: 8px;
+  }
+  th,
+  td {
+    padding: 8px;
+  }
+}
+@page {
+  size: A4;
+  margin: 18mm 16mm;
+}
+@media print {
+  :root {
+    background: white;
+    font-size: 9.5pt;
+    line-height: 1.45;
+  }
+  header,
+  .skip,
+  nav[aria-label="Contents"],
+  body > footer {
+    display: none;
+  }
+  main {
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+  }
+  h1 {
+    font-size: 25pt;
+  }
+  h2 {
+    font-size: 15pt;
+    margin-top: 20pt;
+  }
+  h3 {
+    font-size: 11pt;
+  }
+  h1,
+  h2,
+  h3 {
+    break-after: avoid;
+  }
+  p,
+  li {
+    orphans: 3;
+    widows: 3;
+  }
+  figure {
+    margin: 12pt 0;
+    padding: 8pt;
+  }
+  figure img {
+    max-height: 135mm;
+  }
+  figcaption {
+    font-size: 8pt;
+  }
+  table {
+    font-size: 8pt;
+  }
+  th,
+  td {
+    padding: 5pt;
+  }
+  tr {
+    break-inside: avoid;
+  }
+  thead {
+    display: table-header-group;
+  }
+  .table-scroll {
+    overflow: visible;
+    break-inside: avoid;
+  }
+  p {
+    margin: 7pt 0;
+  }
+  ul,
+  ol {
+    margin: 7pt 0;
+    padding-left: 18pt;
+  }
+  li {
+    margin: 2pt 0;
+  }
+  .references {
+    break-inside: avoid;
+    font-size: 8pt;
+    line-height: 1.3;
+  }
+  .references h2 {
+    font-size: 11pt;
+    margin-top: 12pt;
+  }
+  .references ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2pt 14pt;
+    list-style: none;
+    padding: 0;
+  }
+  pre {
+    font-size: 8pt;
+    break-inside: avoid;
+  }
+  a {
+    text-decoration: none;
+  }
+}
+</style></head><body><a class="skip" href="#main-content">Skip to guide</a><header><p>IMSOP / Engineering Documentation</p><nav aria-label="Guide navigation"><a href="../../../#/projects/imsop/documentation">Back to Documentation</a><a href="deployment.pdf">PDF edition</a><a href="deployment.md">Markdown source</a></nav></header><main id="main-content" tabindex="-1"><h1 id="imsop-deployment-guide">IMSOP Deployment Guide</h1><nav aria-label="Contents"><strong>In this guide</strong><ul><li><a href="#deployment-map">Deployment map</a></li><li><a href="#local-setup">Local setup</a></li><li><a href="#configuration-boundaries">Configuration boundaries</a></li><li><a href="#release-sequence">Release sequence</a></li><li><a href="#verification">Verification</a></li><li><a href="#rollback-and-recovery">Rollback and recovery</a></li><li><a href="#references">References</a></li></ul></nav>
+<p>The current deployment serves the React frontend from Vercel and runs the Node API and .NET services in a single reviewed ARM64 image on Oracle. PostgreSQL remains a managed external service. This visual guide summarizes the source runbook; commands run in the IMSOP repositories, not in the portfolio.</p>
+<h2 id="deployment-map">Deployment map</h2>
+<figure><a href="deployment-1.svg" target="_blank" rel="noopener noreferrer" aria-label="Open full-size Deployment map"><img src="deployment-1.svg" alt="Deployment map"></a><figcaption>Deployment map · Open the diagram for a full-size view.</figcaption></figure>
+<p>Only HTTPS ingress is public. The Compose runtime keeps internal service ports private; the diagnostic bind is loopback-only. The former Render service is suspended and is not the current release target.</p>
+<h2 id="local-setup">Local setup</h2>
+<p>Use the frontend and backend repositories side by side. Follow their current toolchain and lockfiles. Create local configuration from the checked-in examples and use a disposable PostgreSQL database.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Backend repository: complete local topology</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Review and configure the checked-in environment examples first.</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose up <span class="at">-d</span> <span class="at">--build</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">--fail</span> http://127.0.0.1:8080/ready</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Frontend repository, separate terminal</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="ex">pnpm</span> install <span class="at">--frozen-lockfile</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="ex">pnpm</span> dev</span></code></pre></div>
+<p>For a standalone Node API, start a local PostgreSQL instance, configure its private connection, and run the Node migration task before <code>pnpm -C server dev</code>. Development seed/reset scripts are for disposable databases only. Earlier README instructions for MySQL are historical; the current schema is PostgreSQL.</p>
+<h2 id="configuration-boundaries">Configuration boundaries</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Location</th>
+<th>Configuration</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Frontend build</td>
+<td>Public API-origin/base-path settings and optional referrer-restricted Maps key</td>
+</tr>
+<tr>
+<td>Backend runtime</td>
+<td>PostgreSQL connection, JWT secret, exact frontend origins, reset URL, email provider settings</td>
+</tr>
+<tr>
+<td>Provider integration</td>
+<td>Separate high-entropy signing secret per logistics provider</td>
+</tr>
+<tr>
+<td>Oracle host</td>
+<td>Tested immutable image tag, private runtime override, ingress configuration</td>
+</tr>
+</tbody>
+</table></div>
+<p>Keep database, JWT, SMTP, and webhook credentials out of browser variables and Git. The Oracle runbook uses a protected untracked runtime override; validate Compose without printing resolved secrets. Do not replace that file during routine image updates.</p>
+<h2 id="release-sequence">Release sequence</h2>
+<figure><a href="deployment-2.svg" target="_blank" rel="noopener noreferrer" aria-label="Open full-size Release sequence"><img src="deployment-2.svg" alt="Release sequence"></a><figcaption>Release sequence · Open the diagram for a full-size view.</figcaption></figure>
+<p>Run backend checks from its checkout:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pnpm</span> <span class="at">-C</span> server test</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">pnpm</span> <span class="at">-C</span> server build</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="ex">dotnet</span> test src/IMSOP.sln <span class="at">-m:1</span></span></code></pre></div>
+<p>Run frontend tests, build, and browser checks from its checkout. The frontend's <code>verify:deployment</code> check rejects retired backend origins in compiled chunks. Pin an immutable backend image rather than a moving <code>latest</code> tag. Build with the Oracle Dockerfile and <code>linux/arm64</code>; the detailed runbook specifies image transfer and private Compose commands.</p>
+<h2 id="verification">Verification</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Check</th>
+<th>Evidence to record</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Liveness and readiness</td>
+<td><code>/health</code> and <code>/ready</code> through Oracle ingress and the actual UI route</td>
+</tr>
+<tr>
+<td>Authentication</td>
+<td>Real test-account session, secure cookie, anonymous rejection, and logout</td>
+</tr>
+<tr>
+<td>Authorization</td>
+<td>Allowed and denied roles; same-account profile rules</td>
+</tr>
+<tr>
+<td>Operations</td>
+<td>Shipment/order reads, locations, and permitted report exports</td>
+</tr>
+<tr>
+<td>Integration</td>
+<td>Synthetic signed event, replay response, and matching shipment update</td>
+</tr>
+<tr>
+<td>Frontend</td>
+<td>Correct API origin, mobile navigation, and explicit error handling</td>
+</tr>
+</tbody>
+</table></div>
+<p>Demo login tests exercise the mock-auth path; they do not replace real backend checks. Do not create production users or mutate production shipments merely to demonstrate deployment.</p>
+<h2 id="rollback-and-recovery">Rollback and recovery</h2>
+<p>Retain the previous tested image, manifest, ingress configuration, and protected runtime settings. Restore the prior image tag through the documented Compose update and verify readiness before restoring traffic. Database changes require a separately reviewed compatibility or restore plan; rolling back an image does not reverse migrations.</p>
+<p>A shared Oracle VM is a single host failure domain. Define the actual recovery point and recovery time objectives, verify provider backup options, and rehearse a restore in an isolated environment. Emergency return to Render is a separate explicit operation in the source runbook, not the default image rollback.</p>
+<section class="references"><h2 id="references">References</h2><ul>
+<li><a href="https://github.com/DruHustle/imsop-app-backend/blob/main/deploy/oracle/README.md">Oracle deployment and rollback runbook</a></li>
+<li><a href="https://github.com/DruHustle/imsop-app-backend/blob/main/docs/DEPLOYMENT.md">Backend deployment reference</a></li>
+<li><a href="system-diagrams.html">System diagrams</a>, <a href="architecture.html">architecture</a>, and <a href="database-schema.html">database schema</a></li>
+</ul><p>Source review: 21 October 2026. This documentation update does not deploy an application.</p></section>
+
+
+</main><footer>Andrew Gotora · Engineering reference · Source review: 21 October 2026</footer></body></html>

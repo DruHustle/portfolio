@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Smart Factory IoT System Diagrams — visual engineering reference for Smart Factory IoT."><title>Smart Factory IoT System Diagrams | Andrew Gotora</title><style>:root {
+  color-scheme: light;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  color: #172d40;
+  background: #eef3f8;
+  line-height: 1.65;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+a {
+  color: #075c78;
+  text-underline-offset: 3px;
+}
+a:focus-visible {
+  outline: 3px solid #c05812;
+  outline-offset: 4px;
+}
+.skip {
+  position: absolute;
+  top: -100px;
+  padding: 12px;
+  background: white;
+}
+.skip:focus {
+  top: 8px;
+}
+header {
+  background: #0b2236;
+  color: #e7f2fa;
+  padding: 26px max(20px, calc((100% - 1100px) / 2));
+}
+header a {
+  color: #b5ecff;
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  margin-right: 20px;
+}
+header p {
+  margin: 0;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+main {
+  max-width: 1148px;
+  margin: 32px auto;
+  background: white;
+  padding: 32px 40px 48px;
+  border: 1px solid #d5e0e9;
+  border-radius: 16px;
+}
+h1,
+h2,
+h3 {
+  line-height: 1.25;
+  color: #0c2d45;
+}
+h1 {
+  font-size: clamp(28px, 4vw, 42px);
+  border-bottom: 3px solid #087a96;
+  padding-bottom: 20px;
+  margin-top: 0;
+}
+h2 {
+  margin-top: 38px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #d5e0e9;
+}
+h3 {
+  margin-top: 28px;
+}
+p,
+li {
+  max-width: 95ch;
+}
+nav[aria-label="Contents"] {
+  border: 1px solid #d5e0e9;
+  border-radius: 10px;
+  padding: 16px 20px;
+  background: #f3f8fb;
+  margin: 24px 0;
+}
+nav[aria-label="Contents"] ul {
+  padding-left: 20px;
+  margin: 8px 0;
+}
+nav[aria-label="Contents"] a {
+  display: inline-block;
+  padding: 5px 0;
+}
+figure {
+  margin: 24px 0;
+  background: #f5f9fc;
+  border: 1px solid #d5e0e9;
+  border-radius: 10px;
+  padding: 16px;
+  break-inside: avoid;
+}
+figure > a {
+  display: block;
+}
+figure img {
+  display: block;
+  max-width: 100%;
+  width: 100%;
+  height: auto;
+  max-height: 780px;
+  object-fit: contain;
+}
+figcaption {
+  font-size: 13px;
+  color: #3f5669;
+  margin-top: 12px;
+}
+.table-scroll {
+  overflow-x: auto;
+  margin: 20px 0;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+th,
+td {
+  text-align: left;
+  padding: 12px;
+  border: 1px solid #cbd8e3;
+  vertical-align: top;
+}
+th {
+  background: #123b52;
+  color: white;
+}
+tr:nth-child(even) td {
+  background: #f4f8fb;
+}
+pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  background: #edf3f7;
+  border-left: 3px solid #087a96;
+  padding: 16px;
+  font-size: 13px;
+}
+code {
+  font-family: "SFMono-Regular", Consolas, monospace;
+  font-size: 0.91em;
+}
+blockquote {
+  margin-left: 0;
+  padding-left: 16px;
+  border-left: 3px solid #087a96;
+  color: #3f5669;
+}
+footer {
+  max-width: 1100px;
+  margin: 24px auto;
+  padding: 0 20px 32px;
+  color: #3f5669;
+  font-size: 13px;
+}
+@media (max-width: 600px) {
+  main {
+    margin: 16px 10px;
+    padding: 24px 16px;
+  }
+  figure {
+    padding: 8px;
+  }
+  th,
+  td {
+    padding: 8px;
+  }
+}
+@page {
+  size: A4;
+  margin: 18mm 16mm;
+}
+@media print {
+  :root {
+    background: white;
+    font-size: 9.5pt;
+    line-height: 1.45;
+  }
+  header,
+  .skip,
+  nav[aria-label="Contents"],
+  body > footer {
+    display: none;
+  }
+  main {
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+  }
+  h1 {
+    font-size: 25pt;
+  }
+  h2 {
+    font-size: 15pt;
+    margin-top: 20pt;
+  }
+  h3 {
+    font-size: 11pt;
+  }
+  h1,
+  h2,
+  h3 {
+    break-after: avoid;
+  }
+  p,
+  li {
+    orphans: 3;
+    widows: 3;
+  }
+  figure {
+    margin: 12pt 0;
+    padding: 8pt;
+  }
+  figure img {
+    max-height: 135mm;
+  }
+  figcaption {
+    font-size: 8pt;
+  }
+  table {
+    font-size: 8pt;
+  }
+  th,
+  td {
+    padding: 5pt;
+  }
+  tr {
+    break-inside: avoid;
+  }
+  thead {
+    display: table-header-group;
+  }
+  .table-scroll {
+    overflow: visible;
+    break-inside: avoid;
+  }
+  p {
+    margin: 7pt 0;
+  }
+  ul,
+  ol {
+    margin: 7pt 0;
+    padding-left: 18pt;
+  }
+  li {
+    margin: 2pt 0;
+  }
+  .references {
+    break-inside: avoid;
+    font-size: 8pt;
+    line-height: 1.3;
+  }
+  .references h2 {
+    font-size: 11pt;
+    margin-top: 12pt;
+  }
+  .references ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2pt 14pt;
+    list-style: none;
+    padding: 0;
+  }
+  pre {
+    font-size: 8pt;
+    break-inside: avoid;
+  }
+  a {
+    text-decoration: none;
+  }
+}
+</style></head><body><a class="skip" href="#main-content">Skip to guide</a><header><p>Smart Factory IoT / Engineering Documentation</p><nav aria-label="Guide navigation"><a href="../../../#/projects/smart-factory-iot/documentation">Back to Documentation</a><a href="system-diagrams.pdf">PDF edition</a><a href="system-diagrams.md">Markdown source</a></nav></header><main id="main-content" tabindex="-1"><h1 id="smart-factory-iot-system-diagrams">Smart Factory IoT System Diagrams</h1><nav aria-label="Contents"><strong>In this guide</strong><ul><li><a href="#related-guides">Related guides</a></li><li><a href="#1-current-runtime">1. Current runtime</a></li><li><a href="#2-durable-telemetry">2. Durable telemetry</a></li><li><a href="#3-identity-and-aas-access">3. Identity and AAS access</a></li><li><a href="#4-asset-configuration-and-acknowledgement">4. Asset configuration and acknowledgement</a></li><li><a href="#5-incidents-and-durable-notifications">5. Incidents and durable notifications</a></li><li><a href="#6-release-flow">6. Release flow</a></li></ul></nav>
+<p>These visual flows show application, factory edge, service identity, and persistence boundaries. They complement the detailed architecture and API references.</p>
+<section class="references"><h2 id="related-guides">Related guides</h2><ul>
+<li><a href="architecture.html">Architecture</a></li>
+<li><a href="api-flows.html">API flows</a></li>
+<li><a href="database-schema.html">Database relationships</a></li>
+<li><a href="assistant.md">Assistant boundaries</a></li>
+<li><a href="https://github.com/DruHustle/smart-factory-iot-frontend/blob/main/deploy/oracle/README.md">Current Oracle source runbook</a></li>
+</ul><p>Source review: 21 October 2026.</p></section>
+
+
+<h2 id="1-current-runtime">1. Current runtime</h2>
+<figure><a href="system-diagrams-1.svg" target="_blank" rel="noopener noreferrer" aria-label="Open full-size 1. Current runtime"><img src="system-diagrams-1.svg" alt="1. Current runtime"></a><figcaption>1. Current runtime · Open the diagram for a full-size view.</figcaption></figure>
+<p>API and worker roles share one reviewed backend image on Oracle. The six BaSyx services retain their own configuration and data boundary. Render is a historical hosting path; it is not the current production tier.</p>
+<h2 id="2-durable-telemetry">2. Durable telemetry</h2>
+<figure><a href="system-diagrams-2.svg" target="_blank" rel="noopener noreferrer" aria-label="Open full-size 2. Durable telemetry"><img src="system-diagrams-2.svg" alt="2. Durable telemetry"></a><figcaption>2. Durable telemetry · Open the diagram for a full-size view.</figcaption></figure>
+<p>WROVER and serial controllers stay behind the Pi. Eligible native MQTT devices can use a direct path with individual credentials. A transient Redis notification is not a durable telemetry record. Publication acknowledgement and application persistence are separate checkpoints.</p>
+<h2 id="3-identity-and-aas-access">3. Identity and AAS access</h2>
+<figure><a href="system-diagrams-3.svg" target="_blank" rel="noopener noreferrer" aria-label="Open full-size 3. Identity and AAS access"><img src="system-diagrams-3.svg" alt="3. Identity and AAS access"></a><figcaption>3. Identity and AAS access · Open the diagram for a full-size view.</figcaption></figure>
+<p>Application identity and AAS service identity are distinct. Service credentials never grant a browser role. Form-managed AAS changes go through the versioned application workflow so direct standards writes cannot bypass revision history.</p>
+<h2 id="4-asset-configuration-and-acknowledgement">4. Asset configuration and acknowledgement</h2>
+<figure><a href="system-diagrams-4.svg" target="_blank" rel="noopener noreferrer" aria-label="Open full-size 4. Asset configuration and acknowledgement"><img src="system-diagrams-4.svg" alt="4. Asset configuration and acknowledgement"></a><figcaption>4. Asset configuration and acknowledgement · Open the diagram for a full-size view.</figcaption></figure>
+<p>QoS 1 publication does not establish that a gateway applied the profile. A configuration acknowledgement does not establish firmware installation or physical movement. Equipment controls require commissioned protocol adapters and remain separate from protective safety functions.</p>
+<h2 id="5-incidents-and-durable-notifications">5. Incidents and durable notifications</h2>
+<figure><a href="system-diagrams-5.svg" target="_blank" rel="noopener noreferrer" aria-label="Open full-size 5. Incidents and durable notifications"><img src="system-diagrams-5.svg" alt="5. Incidents and durable notifications"></a><figcaption>5. Incidents and durable notifications · Open the diagram for a full-size view.</figcaption></figure>
+<p>Connectivity loss alone does not start production downtime. Notification read state and incident acknowledgement are separate. Provider acceptance is not proof of mailbox delivery.</p>
+<h2 id="6-release-flow">6. Release flow</h2>
+<figure><a href="system-diagrams-6.svg" target="_blank" rel="noopener noreferrer" aria-label="Open full-size 6. Release flow"><img src="system-diagrams-6.svg" alt="6. Release flow"></a><figcaption>6. Release flow · Open the diagram for a full-size view.</figcaption></figure>
+<p>See the <a href="deployment.html">visual deployment guide</a> for configuration, rollout, and rollback. Backend updates are currently manual; the frontend workflow waits for matching source CI.</p>
+</main><footer>Andrew Gotora · Engineering reference · Source review: 21 October 2026</footer></body></html>

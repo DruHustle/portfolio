@@ -17,22 +17,22 @@ export const professionalExperience: ProfessionalExperience[] = [
     "company": "Onesa UG",
     "dateRange": "Apr 2026 – Present",
     "employmentType": "Self-employed",
-    "description": "Founded Onesa UG in April 2026. Developing Onesa AI, a general-purpose, modular, self-hosted artificial intelligence platform for European and international markets.",
+    "description": "Founded Onesa UG in April 2026. Building Onesa AI, a general-purpose platform with Chat, Knowledge, Agents, and Travel applications for European and international users.",
     "responsibilities": [
-      "Developing a platform built on open-weight foundation models for conversational AI, agentic workflows, enterprise knowledge retrieval, multilingual and multimodal capabilities, and model customization and fine-tuning.",
-      "Prioritizing AI sovereignty through open-weight models and self-managed infrastructure, with privacy, security, and applicable regulatory requirements informing European market readiness.",
-      "Designing reusable APIs and platform services for knowledge management, automation, and intelligent applications across manufacturing, industrial digitalization, tourism, and business services.",
-      "Working toward efficient inference and scalable deployment across heterogeneous GPU infrastructure.",
-      "Planning independently versioned specializations across domains, languages, and regions while retaining broad foundation-model capabilities and a shared API and application layer.",
-      "Onesa AI is in development. Onesa General, Enterprise, Industrial, Travel, Multilingual, and African Languages are proposed future profiles, not implemented products."
+      "Developing a Next.js and FastAPI workspace with PostgreSQL/pgvector for streamed conversations, document retrieval with citations, bounded registered-tool agents, and editable travel suggestions.",
+      "Separating model serving from application contracts through configurable Cloudflare Workers AI, Ollama, and vLLM adapters. Hosted inference and embeddings currently use Cloudflare Workers AI; local Ollama development is supported.",
+      "Implementing account ownership, secure sessions, CSRF protection, versioned retrieval, and explicit limits on agent tool use.",
+      "Maintaining separate frontend, API, and documentation delivery across Vercel and Oracle with provider-specific data and inference boundaries.",
+      "Planning Industrial AI for source-backed machine-stop investigation and human-reviewed work drafts. Live factory connections, autonomous control, fine-tuned Onesa weights, and multimodal adapters are not established capabilities."
     ],
     "focus": [
       "AI Platforms",
-      "Open-Weight Models",
-      "Self-Hosted Infrastructure",
-      "Model Customization"
+      "Next.js & FastAPI",
+      "Knowledge Retrieval",
+      "Bounded Agents",
+      "Industrial AI"
     ],
-    "status": "In development"
+    "status": "Applications available · Industrial AI planned"
   },
   {
     "title": "Senior DevOps Engineer",

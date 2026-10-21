@@ -1,0 +1,359 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Application Database Schema — visual engineering reference for Smart Factory IoT."><title>Application Database Schema | Andrew Gotora</title><style>:root {
+  color-scheme: light;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  color: #172d40;
+  background: #eef3f8;
+  line-height: 1.65;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+a {
+  color: #075c78;
+  text-underline-offset: 3px;
+}
+a:focus-visible {
+  outline: 3px solid #c05812;
+  outline-offset: 4px;
+}
+.skip {
+  position: absolute;
+  top: -100px;
+  padding: 12px;
+  background: white;
+}
+.skip:focus {
+  top: 8px;
+}
+header {
+  background: #0b2236;
+  color: #e7f2fa;
+  padding: 26px max(20px, calc((100% - 1100px) / 2));
+}
+header a {
+  color: #b5ecff;
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  margin-right: 20px;
+}
+header p {
+  margin: 0;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+main {
+  max-width: 1148px;
+  margin: 32px auto;
+  background: white;
+  padding: 32px 40px 48px;
+  border: 1px solid #d5e0e9;
+  border-radius: 16px;
+}
+h1,
+h2,
+h3 {
+  line-height: 1.25;
+  color: #0c2d45;
+}
+h1 {
+  font-size: clamp(28px, 4vw, 42px);
+  border-bottom: 3px solid #087a96;
+  padding-bottom: 20px;
+  margin-top: 0;
+}
+h2 {
+  margin-top: 38px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #d5e0e9;
+}
+h3 {
+  margin-top: 28px;
+}
+p,
+li {
+  max-width: 95ch;
+}
+nav[aria-label="Contents"] {
+  border: 1px solid #d5e0e9;
+  border-radius: 10px;
+  padding: 16px 20px;
+  background: #f3f8fb;
+  margin: 24px 0;
+}
+nav[aria-label="Contents"] ul {
+  padding-left: 20px;
+  margin: 8px 0;
+}
+nav[aria-label="Contents"] a {
+  display: inline-block;
+  padding: 5px 0;
+}
+figure {
+  margin: 24px 0;
+  background: #f5f9fc;
+  border: 1px solid #d5e0e9;
+  border-radius: 10px;
+  padding: 16px;
+  break-inside: avoid;
+}
+figure > a {
+  display: block;
+}
+figure img {
+  display: block;
+  max-width: 100%;
+  width: 100%;
+  height: auto;
+  max-height: 780px;
+  object-fit: contain;
+}
+figcaption {
+  font-size: 13px;
+  color: #3f5669;
+  margin-top: 12px;
+}
+.table-scroll {
+  overflow-x: auto;
+  margin: 20px 0;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+th,
+td {
+  text-align: left;
+  padding: 12px;
+  border: 1px solid #cbd8e3;
+  vertical-align: top;
+}
+th {
+  background: #123b52;
+  color: white;
+}
+tr:nth-child(even) td {
+  background: #f4f8fb;
+}
+pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  background: #edf3f7;
+  border-left: 3px solid #087a96;
+  padding: 16px;
+  font-size: 13px;
+}
+code {
+  font-family: "SFMono-Regular", Consolas, monospace;
+  font-size: 0.91em;
+}
+blockquote {
+  margin-left: 0;
+  padding-left: 16px;
+  border-left: 3px solid #087a96;
+  color: #3f5669;
+}
+footer {
+  max-width: 1100px;
+  margin: 24px auto;
+  padding: 0 20px 32px;
+  color: #3f5669;
+  font-size: 13px;
+}
+@media (max-width: 600px) {
+  main {
+    margin: 16px 10px;
+    padding: 24px 16px;
+  }
+  figure {
+    padding: 8px;
+  }
+  th,
+  td {
+    padding: 8px;
+  }
+}
+@page {
+  size: A4;
+  margin: 18mm 16mm;
+}
+@media print {
+  :root {
+    background: white;
+    font-size: 9.5pt;
+    line-height: 1.45;
+  }
+  header,
+  .skip,
+  nav[aria-label="Contents"],
+  body > footer {
+    display: none;
+  }
+  main {
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+  }
+  h1 {
+    font-size: 25pt;
+  }
+  h2 {
+    font-size: 15pt;
+    margin-top: 20pt;
+  }
+  h3 {
+    font-size: 11pt;
+  }
+  h1,
+  h2,
+  h3 {
+    break-after: avoid;
+  }
+  p,
+  li {
+    orphans: 3;
+    widows: 3;
+  }
+  figure {
+    margin: 12pt 0;
+    padding: 8pt;
+  }
+  figure img {
+    max-height: 135mm;
+  }
+  figcaption {
+    font-size: 8pt;
+  }
+  table {
+    font-size: 8pt;
+  }
+  th,
+  td {
+    padding: 5pt;
+  }
+  tr {
+    break-inside: avoid;
+  }
+  thead {
+    display: table-header-group;
+  }
+  .table-scroll {
+    overflow: visible;
+    break-inside: avoid;
+  }
+  p {
+    margin: 7pt 0;
+  }
+  ul,
+  ol {
+    margin: 7pt 0;
+    padding-left: 18pt;
+  }
+  li {
+    margin: 2pt 0;
+  }
+  .references {
+    break-inside: avoid;
+    font-size: 8pt;
+    line-height: 1.3;
+  }
+  .references h2 {
+    font-size: 11pt;
+    margin-top: 12pt;
+  }
+  .references ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2pt 14pt;
+    list-style: none;
+    padding: 0;
+  }
+  pre {
+    font-size: 8pt;
+    break-inside: avoid;
+  }
+  a {
+    text-decoration: none;
+  }
+}
+</style></head><body><a class="skip" href="#main-content">Skip to guide</a><header><p>Smart Factory IoT / Engineering Documentation</p><nav aria-label="Guide navigation"><a href="../../../#/projects/smart-factory-iot/documentation">Back to Documentation</a><a href="database-schema.pdf">PDF edition</a><a href="database-schema.md">Markdown source</a></nav></header><main id="main-content" tabindex="-1"><h1 id="application-database-schema">Application Database Schema</h1><nav aria-label="Contents"><strong>In this guide</strong><ul><li><a href="#incident-response-and-downtime-records">Incident response and downtime records</a></li><li><a href="#durable-incident-notifications">Durable incident notifications</a></li></ul></nav>
+<p>The dashboard uses PostgreSQL with Drizzle ORM. The source of truth is drizzle/schema.ts; checked-in SQL migrations live in drizzle/.</p>
+<figure><a href="database-schema-1.svg" target="_blank" rel="noopener noreferrer" aria-label="Open full-size System flow"><img src="database-schema-1.svg" alt="System flow"></a><figcaption>System flow · Open the diagram for a full-size view.</figcaption></figure>
+<h2 id="incident-response-and-downtime-records">Incident response and downtime records</h2>
+<figure><a href="database-schema-2.svg" target="_blank" rel="noopener noreferrer" aria-label="Open full-size Incident response and downtime records"><img src="database-schema-2.svg" alt="Incident response and downtime records"></a><figcaption>Incident response and downtime records · Open the diagram for a full-size view.</figcaption></figure>
+<p>Threshold-generated incidents use stable <code>SF-*</code> platform classifications. A vendor diagnostic code is stored as supplied when available. The engineer role provides technician assignment and resolution permissions; downtime is explicitly confirmed by the assigned engineer or administrator. A lost device connection does not automatically prove a factory outage. Existing records inferred by migration 0010 need operational review before use in downtime KPIs. Mean downtime-to-resolution uses only records with both downtime and resolution timestamps.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Table</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>users</td>
+<td>Local identity, bcrypt password hash in <code>password</code>, role, and sign-in timestamps. Never expose the hash in API responses.</td>
+</tr>
+<tr>
+<td>system_settings</td>
+<td>Durable application-wide settings changed by administrators. <code>demo_data_enabled</code> controls whether demo rows are included; replicas refresh it without requiring a deployment.</td>
+</tr>
+<tr>
+<td>devices</td>
+<td>Connectivity devices. New registrations use enum type <code>gateway</code> or <code>edge_device</code>; legacy sensor/actuator/controller values remain readable. Includes status, location, firmware, and simulator marker. Migration <code>0015_melted_dragon_lord</code> adds <code>edge_device</code>.</td>
+</tr>
+<tr>
+<td>assets</td>
+<td>Equipment identity, manufacturer name/designation, separate required postal fields, article and order codes, optional serial/rated values, lifecycle, current AAS JSON, monotonic AAS revision, and simulator marker.</td>
+</tr>
+<tr>
+<td>asset_devices</td>
+<td>Asset-to-gateway protocol, endpoint, and tag/register mappings. Store credentials on the edge gateway, not in mappings.</td>
+</tr>
+<tr>
+<td>asset_lifecycle_events</td>
+<td>Actor, transition, timestamp, and engineering note audit history.</td>
+</tr>
+<tr>
+<td>asset_versions</td>
+<td>Append-only AAS snapshots keyed by asset and revision, with change note, actor, and SHA-256 integrity digest. Migration baseline rows have no digest because prior revisions were not recorded.</td>
+</tr>
+<tr>
+<td>login_rate_limits</td>
+<td>Hashed IP/email identifiers, fixed-window counters, and expiration timestamps shared across application replicas.</td>
+</tr>
+<tr>
+<td>sensor_readings</td>
+<td>Nullable measurements, AAS asset attribution, named signals, Unix epoch millisecond timestamps, and a unique ingestion digest for retry deduplication. Indexes cover asset/date and device/date queries.</td>
+</tr>
+<tr>
+<td>alerts</td>
+<td>Stable platform/vendor error code, severity/status, metric observation, acknowledging actor/time, assigned engineer/time, confirmed downtime start, resolving actor/time, and lifecycle timestamps. Per-source transaction locks deduplicate threshold incidents by device/asset/metric; query indexes cover status/date and assignee/status.</td>
+</tr>
+<tr>
+<td>alert_thresholds</td>
+<td>Enabled per-device warning and critical bands used to classify telemetry into incidents.</td>
+</tr>
+<tr>
+<td>firmware_versions, ota_deployments</td>
+<td>Firmware catalog metadata and legacy rollout rows. OTA is disabled; a rollout row is not proof that a device downloaded, verified, installed, or booted a release.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Connection and lifecycle ids are application-level relationships, not database-enforced foreign keys in the current schema. Oracle-hosted BaSyx owns separate storage in the Aiven <code>basyx</code> PostgreSQL database; it is not part of the Drizzle application schema. Demo rows are marked <code>isDemo</code>; startup seeding remains conservative when live assets exist, while an explicit admin toggle can seed and reveal isolated demo records alongside them.</p>
+<p>Review migration SQL before applying changes. Set DATABASE_URL to the intended database before running pnpm db:migrate. pnpm e2e uses its own disposable PostgreSQL container.</p>
+<h2 id="durable-incident-notifications">Durable incident notifications</h2>
+<p>Migration <code>0013_incident_notifications</code> adds <code>notification_inbox</code> and an alert trigger. In the alert transaction, new warning/critical incidents and critical escalations notify current engineers/admins; assignment changes notify new/previous assignees and admins; resolution notifies the assigned technician/admins. Migration <code>0016_vengeful_victor_mancha</code> makes the alert link nullable so the same durable queue can carry account-created welcome mail without inventing an incident. The trigger does not backfill historical incidents or emit duplicate messages on unrelated incident updates.</p>
+<p>Each row belongs to one account, optionally links to an alert, and retains title/body, read time, email status, attempts, next attempt time, safe error summary and provider acceptance time. Foreign-key cascades remove rows when their account or associated alert is deleted. The delivery worker atomically claims due rows using a two-minute lease and retries after a crash. <code>accepted</code> means the provider accepted the request, not that the email reached a mailbox. Eight failed attempts become <code>failed</code>; an authorized owner may retry an incident message after correcting configuration. <code>unconfigured</code> and <code>no_recipient</code> remain visible for incident messages; account welcome rows are email-only and do not appear in the incident inbox.</p>
+<p>The inbox is queryable only by its owner. Reads do not acknowledge/resolve the factory incident. Email-provider credentials, sender identity and recipient policy are runtime secrets/configuration, not editable browser notification settings. Plan retention/archive policies for both telemetry and inbox history before long-term production operation.</p>
+<p>Migration <code>0014_account_email_identity</code> adds a case-insensitive unique email index. Null emails remain allowed for legacy identity records. Existing duplicate case-folded email addresses must be reconciled by an administrator before migration. Production self-registration is closed; further accounts are created by an authenticated administrator after private first-admin bootstrap. Passwords are never included in account API responses.</p>
+</main><footer>Andrew Gotora · Engineering reference · Source review: 21 October 2026</footer></body></html>

@@ -184,7 +184,7 @@ test("project/documentation return journey and PDF downloads", async ({
     .getByRole("link", { name: /Open full-size IMSOP Architecture/ })
     .click();
   const diagram = await fullSize;
-  await expect(diagram).toHaveURL(/images\/imsop_arch\.webp$/);
+  await expect(diagram).toHaveURL(/docs\/imsop\/architecture-1\.svg$/);
   await diagram.close();
   await page.getByRole("link", { name: "Back to Project" }).click();
   await page.getByRole("link", { name: "Back to Projects" }).click();
@@ -243,3 +243,82 @@ test("navigation works when browser storage is restricted", async ({
   await page.getByRole("link", { name: "Back to Projects" }).click();
   await expect(page.locator("#projects")).toBeFocused();
 });
+
+for (const [slug, directory] of [
+  ["imsop", "imsop"],
+  ["smart-factory-iot", "smartfactoryiot"],
+]) {
+  test(`${slug}: visual guides render and return to documentation`, async ({
+    page,
+  }, info) => {
+    test.setTimeout(60_000);
+    await page.goto(`#/projects/${slug}/documentation`);
+    await expect(
+      page.getByRole("heading", { name: "Operational Guides", exact: true })
+    ).toBeVisible();
+    await expect(
+      page.getByText("Production Readiness Review", { exact: true })
+    ).toHaveCount(0);
+    const visualLinks = page.getByRole("link", {
+      name: "View Visual Guide",
+      exact: true,
+    });
+    await expect(visualLinks).toHaveCount(2);
+    const popupEvent = page.waitForEvent("popup");
+    await visualLinks.first().click();
+    const guide = await popupEvent;
+    await expect(guide).toHaveURL(
+      new RegExp(`/docs/${directory}/deployment.html$`)
+    );
+    await expect(guide.getByRole("heading", { level: 1 })).toContainText(
+      "Deployment Guide"
+    );
+    await guide.getByRole("link", { name: "Back to Documentation" }).click();
+    await expect(guide.getByRole("heading", { level: 1 })).toContainText(
+      "Documentation"
+    );
+    await guide.close();
+
+    for (const name of [
+      "architecture",
+      "database-schema",
+      "api-flows",
+      "deployment",
+      "system-diagrams",
+    ]) {
+      const response = await page.goto(`docs/${directory}/${name}.html`);
+      expect(response?.status()).toBe(200);
+      await expect(page.getByRole("heading", { level: 1 })).toHaveCount(1);
+      expect(await page.locator("figure img").count()).toBeGreaterThan(0);
+      expect(await page.locator("pre.mermaid, script").count()).toBe(0);
+      for (const image of await page.locator("figure img").all()) {
+        await image.evaluate(node => (node as HTMLImageElement).decode());
+        expect(
+          await image.evaluate(node => (node as HTMLImageElement).naturalWidth)
+        ).toBeGreaterThan(0);
+      }
+      expect(
+        await page.evaluate(() => document.documentElement.scrollWidth)
+      ).toBeLessThanOrEqual(info.project.use.viewport!.width);
+      const pdf = await page.request.get(`docs/${directory}/${name}.pdf`);
+      expect(pdf.status()).toBe(200);
+      expect((await pdf.body()).subarray(0, 4).toString()).toBe("%PDF");
+      expect((await pdf.body()).toString("latin1")).not.toMatch(
+        /file:\/\/\/|\/Users\/|\/home\//
+      );
+      if (["deployment", "system-diagrams"].includes(name)) {
+        const accessibility = await new AxeBuilder({ page })
+          .withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"])
+          .analyze();
+        expect(accessibility.violations).toEqual([]);
+        await page.screenshot({
+          path: path.join(
+            screenshots,
+            `${info.project.name}-${directory}-${name}.png`
+          ),
+          fullPage: true,
+        });
+      }
+    }
+  });
+}

@@ -1,191 +1,33 @@
-import { ArchitectureDiagram } from "@/components/ArchitectureDiagram";
-import { PageNavigation } from "@/components/PageNavigation";
-import { assetUrl } from "@/lib/urls";
-import { FileText, Download, Eye, ExternalLink } from "lucide-react";
-import { useEffect } from "react";
-
-const docs = [
-  {
-    title: "Architecture Overview",
-    description:
-      "Production topology spanning the Vercel proxy, scalable Render web tier, singleton worker, durable MQTT edge paths, managed data services, and the Oracle-hosted BaSyx runtime.",
-    mdPath: "/docs/smartfactoryiot/architecture.md",
-    pdfPath: "/docs/smartfactoryiot/architecture.pdf",
-  },
-  {
-    title: "Database Schema",
-    description:
-      "PostgreSQL model for identities, persisted system settings, AAS assets and revisions, gateway mappings, replay-safe telemetry, incident workflows, downtime, and durable notifications.",
-    mdPath: "/docs/smartfactoryiot/database-schema.md",
-    pdfPath: "/docs/smartfactoryiot/database-schema.pdf",
-  },
-  {
-    title: "API Flows",
-    description:
-      "Role-enforced login, account welcome mail, AAS create/import/version flows, grounded Onesa AI routing, edge profiles, MQTT telemetry, incident response, and service delegation.",
-    mdPath: "/docs/smartfactoryiot/api-flows.md",
-    pdfPath: "/docs/smartfactoryiot/api-flows.pdf",
-  },
-];
-
-const supportingDocs = [
-  {
-    title: "Deployment Guide",
-    description:
-      "Split Render roles, Vercel delivery, migrations, readiness checks, rollback, and production configuration.",
-    path: "/docs/RENDER_DEPLOYMENT.md",
-  },
-  {
-    title: "System Diagrams",
-    description:
-      "Detailed runtime, telemetry, identity, AAS, notification, and release-flow diagrams.",
-    path: "/docs/smartfactoryiot/SYSTEM_DIAGRAMS.md",
-  },
-  {
-    title: "Production Readiness Review",
-    description:
-      "Verified production controls, remaining operational constraints, and acceptance evidence.",
-    path: "/docs/smartfactoryiot/production-readiness-review.md",
-  },
-];
+import { ProjectDocumentation } from "@/components/ProjectDocumentation";
 
 export default function SmartFactoryIoTDocumentation() {
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
   return (
-    <div className="min-h-screen bg-slate-900 text-white font-sans">
-      {/* Navigation */}
-      <PageNavigation
-        backHref="/projects/smart-factory-iot"
-        backLabel="Back to Project"
-      />
-
-      {/* Header */}
-      <main id="main-content" tabIndex={-1}>
-        <header className="bg-gradient-to-br from-slate-900 via-orange-950 to-slate-900 py-16 border-b border-slate-800">
-          <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-400 text-xs font-bold uppercase tracking-wider mb-6">
-              <FileText className="w-3 h-3" /> Project Assets v2
-            </div>
-            <h1 className="text-4xl md:text-5xl font-extrabold mb-4 tracking-tight">
-              Smart Factory IoT Documentation
-            </h1>
-            <p className="text-xl text-slate-400 max-w-2xl mx-auto">
-              Current production topology, security boundaries, API workflows,
-              and data models for the industrial asset and telemetry platform.
-            </p>
-          </div>
-        </header>
-
-        {/* Docs */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {docs.map((doc, i) => (
-              <div
-                key={i}
-                className="flex flex-col p-6 sm:p-8 rounded-2xl bg-slate-800/40 border border-slate-700/50 hover:border-orange-500/30 transition-all group"
-              >
-                <div className="flex items-start justify-between mb-6">
-                  <div className="p-4 rounded-2xl bg-orange-500/10 text-orange-400 group-hover:scale-110 transition-transform">
-                    <FileText className="w-8 h-8" />
-                  </div>
-                  <a
-                    href={assetUrl(doc.pdfPath)}
-                    download
-                    className="size-11 inline-flex items-center justify-center rounded-lg bg-slate-700/50 text-slate-300 hover:bg-orange-500 hover:text-white transition-all"
-                    aria-label={`Download ${doc.title} PDF`}
-                  >
-                    <Download className="w-5 h-5" />
-                  </a>
-                </div>
-
-                <h2 className="text-2xl font-bold mb-3 group-hover:text-orange-400 transition-colors">
-                  {doc.title}
-                </h2>
-
-                <p className="text-slate-400 mb-8 leading-relaxed text-sm">
-                  {doc.description}
-                </p>
-
-                <div className="mt-auto flex flex-wrap gap-3">
-                  <a
-                    href={assetUrl(doc.pdfPath)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex flex-1 min-w-fit items-center justify-center gap-2 px-4 py-3 bg-slate-700/50 text-white font-bold rounded-xl hover:bg-slate-600 transition-all"
-                  >
-                    <Eye className="w-4 h-4" /> PDF
-                  </a>
-                  <a
-                    href={assetUrl(doc.mdPath)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex flex-1 min-w-fit items-center justify-center gap-2 px-4 py-3 bg-slate-700/50 text-white font-bold rounded-xl hover:bg-slate-600 transition-all"
-                  >
-                    <FileText className="w-4 h-4" /> Markdown
-                  </a>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <section className="mt-12">
-            <h2 className="text-2xl font-bold mb-6">
-              Operational &amp; Review Guides
-            </h2>
-            <div className="grid md:grid-cols-3 gap-5">
-              {supportingDocs.map(doc => (
-                <a
-                  key={doc.title}
-                  href={assetUrl(doc.path)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group p-6 rounded-2xl bg-slate-800/40 border border-slate-700/50 hover:border-orange-500/40 transition-all"
-                >
-                  <div className="flex items-center justify-between gap-4 mb-3">
-                    <h3 className="text-lg font-bold text-white group-hover:text-orange-400 transition-colors">
-                      {doc.title}
-                    </h3>
-                    <ExternalLink className="w-4 h-4 text-slate-400 group-hover:text-orange-400 shrink-0" />
-                  </div>
-                  <p className="text-sm leading-relaxed text-slate-400">
-                    {doc.description}
-                  </p>
-                </a>
-              ))}
-            </div>
-          </section>
-
-          {/* System Architecture */}
-          <section className="mt-16 p-4 sm:p-8 rounded-2xl bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700/50">
-            <h2 className="text-3xl font-bold mb-4 text-center text-white">
-              System Architecture
-            </h2>
-            <p className="text-slate-400 mb-10 max-w-2xl mx-auto text-center">
-              Vercel, Render, managed messaging and data services, the private
-              BaSyx standards runtime, and factory edge systems.
-            </p>
-
-            <div className="rounded-2xl overflow-hidden border border-slate-700/50 bg-slate-900/50 p-2 sm:p-6">
-              <ArchitectureDiagram
-                path="images/smart_factory_arch.webp"
-                alt="Smart Factory IoT split production architecture with factory edge, CloudAMQP, Render web and worker tiers, and managed cloud services"
-                width={1672}
-                height={941}
-              />
-            </div>
-          </section>
-        </div>
-      </main>
-
-      {/* Footer */}
-      <footer className="bg-slate-900 border-t border-slate-800 py-12 text-center">
-        <p className="text-slate-400 text-sm">
-          © 2026 Andrew Gotora. All rights reserved.
-        </p>
-      </footer>
-    </div>
+    <ProjectDocumentation
+      project="Smart Factory IoT"
+      slug="smart-factory-iot"
+      directory="smartfactoryiot"
+      accent="orange"
+      description="Current hosting, security boundaries, API workflows, and data models for the industrial asset and telemetry platform."
+      guides={[
+        {
+          title: "Architecture Overview",
+          name: "architecture",
+          description:
+            "Vercel delivery, the Oracle API and singleton worker, durable MQTT edge paths, managed data services, and the BaSyx runtime.",
+        },
+        {
+          title: "Database Schema",
+          name: "database-schema",
+          description:
+            "PostgreSQL identities, system settings, AAS assets and revisions, gateway mappings, replay-safe telemetry, incident workflows, and durable notifications.",
+        },
+        {
+          title: "API Flows",
+          name: "api-flows",
+          description:
+            "Role-enforced login, AAS creation and versioning, configured Assistant routing, edge profiles, MQTT telemetry, incident response, and service delegation.",
+        },
+      ]}
+    />
   );
 }

@@ -1,6 +1,6 @@
 # Smart Factory Assistant — Onesa AI
 
-The Assistant is powered by **Onesa AI**, an in-house AI system built on the Llama architecture and trained in-house. It combines approved application guides with a small, current snapshot from the Smart Factory API. It can explain workflows and answer questions about visible assets, connected gateway/device status, recent telemetry, and incidents. It is advisory and read-only; it cannot issue equipment commands.
+The Assistant is powered by **Onesa AI**, a modular AI platform with configurable model providers. It combines approved application guides with a small, current snapshot from the Smart Factory API. It can explain workflows and answer questions about visible assets, connected gateway/device status, recent telemetry, and incidents. It is advisory and read-only; it cannot issue equipment commands.
 
 ## Onesa AI setup
 
@@ -22,7 +22,7 @@ The API sends Onesa AI the current question, up to 12 recent conversation messag
 
 The snapshot is loaded when each question is submitted. It is not persisted as assistant chat history. The UI shows the context capture time and matched sources. If the database or Onesa AI is unavailable, the Assistant reports that limitation and falls back to approved local guides and any available snapshot.
 
-Onesa AI is built on the Llama architecture and trained in-house. Before enabling live context with production assets, assess the data fields above against the organization's confidentiality, residency, and AI policies. Disable the Onesa AI connection to keep responses local, or disable live context to omit the database snapshot while retaining guide-based answers.
+The current Onesa hosted configuration uses Cloudflare Workers AI generation and semantic embeddings; no proprietary trained Onesa weights are established. Before enabling live context with production assets, assess the data fields above against the organization's confidentiality, residency, and AI policies. Disable the Onesa AI connection to keep responses local, or disable live context to omit the database snapshot while retaining guide-based answers.
 
 ## Retrieval and answer boundaries
 
@@ -33,5 +33,7 @@ Treat generated guidance as advisory. Confirm maintenance and safety procedures 
 ## Model ownership
 
 - Assistant: Onesa AI
-- Foundation: Llama architecture
-- Training: performed in-house
+- Hosted provider: Cloudflare Workers AI (deployment-specific configuration)
+- Other adapters: local Ollama and vLLM protocol adapter
+- Proprietary Onesa weights: not trained or established
+- Integration status: configured service routing; not evidence of a live industrial connection
