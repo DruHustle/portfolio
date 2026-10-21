@@ -175,7 +175,7 @@ test("project/documentation return journey and rendered guide PDF access", async
   });
   await expect(projectImage).toHaveAttribute(
     "src",
-    /images\/imsop_system_architecture_v2\.webp$/
+    /images\/imsop_system_architecture_v3\.webp$/
   );
   const architecturePopup = page.waitForEvent("popup");
   await page
@@ -185,7 +185,7 @@ test("project/documentation return journey and rendered guide PDF access", async
     .click();
   const architectureImage = await architecturePopup;
   await expect(architectureImage).toHaveURL(
-    /images\/imsop_system_architecture_v2\.webp$/
+    /images\/imsop_system_architecture_v3\.webp$/
   );
   await architectureImage.close();
   await page.getByRole("link", { name: "Documentation", exact: true }).click();

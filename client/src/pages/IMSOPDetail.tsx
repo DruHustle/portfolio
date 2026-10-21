@@ -280,7 +280,7 @@ export default function IMSOPDetail() {
             </p>
             <div className="overflow-hidden">
               <ArchitectureDiagram
-                path="images/imsop_system_architecture_v2.webp"
+                path="images/imsop_system_architecture_v3.webp"
                 alt="IMSOP system architecture with Vercel, Oracle Caddy ingress, Node and .NET services, managed PostgreSQL, and signed logistics events"
                 width={1672}
                 height={941}
