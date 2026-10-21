@@ -173,7 +173,7 @@ test("project/documentation return journey and rendered guide PDF access", async
   await page.getByRole("link", { name: "Documentation", exact: true }).click();
   await expect(page).toHaveTitle("IMSOP Documentation | Andrew Gotora");
   const opened = page.waitForEvent("popup");
-  await page.getByRole("link", { name: "Open", exact: true }).first().click();
+  await page.getByRole("link", { name: "View", exact: true }).first().click();
   const guide = await opened;
   await expect(guide).toHaveURL(/docs\/imsop\/architecture\.html$/);
   const pdfLink = guide.getByRole("link", { name: "PDF edition" });
@@ -265,16 +265,26 @@ for (const [slug, directory] of [
       page.getByText("Production Readiness Review", { exact: true })
     ).toHaveCount(0);
     await expect(
-      page.getByRole("link", { name: "Open", exact: true })
+      page.getByRole("link", { name: "View", exact: true })
     ).toHaveCount(5);
     await expect(
       page.getByRole("link", { name: "PDF", exact: true })
     ).toHaveCount(5);
     await expect(page.locator('a[href$=".md"], .lucide-eye')).toHaveCount(0);
+    for (const card of await page.locator("article").all()) {
+      const heading = card.getByRole("heading");
+      const icon = await heading.locator("svg").boundingBox();
+      const title = await heading.locator("span").boundingBox();
+      if (!icon || !title)
+        throw new Error("Guide icon and title must be visible");
+      expect(icon.x + icon.width).toBeLessThan(title.x);
+      expect(icon.y).toBeLessThan(title.y + title.height);
+      expect(icon.y + icon.height).toBeGreaterThan(title.y);
+    }
     const visualLinks = page
       .locator("article")
       .filter({ has: page.getByRole("heading", { level: 3 }) })
-      .getByRole("link", { name: "Open", exact: true });
+      .getByRole("link", { name: "View", exact: true });
     await expect(visualLinks).toHaveCount(2);
     const popupEvent = page.waitForEvent("popup");
     await visualLinks.first().click();

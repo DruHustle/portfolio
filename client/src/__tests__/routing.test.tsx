@@ -74,7 +74,7 @@ describe("Rendered portfolio routes", () => {
     });
     expect(document.title).toBe("IMSOP Documentation | Andrew Gotora");
     assertLocalAssetsExist(container);
-    expect(screen.getAllByRole("link", { name: /^Open$/ })).toHaveLength(5);
+    expect(screen.getAllByRole("link", { name: /^View$/ })).toHaveLength(5);
     expect(screen.getAllByRole("link", { name: /^PDF$/ })).toHaveLength(5);
     expect(container.querySelector('a[href$=".md"]')).toBeNull();
     expect(container.querySelector("a a")).toBeNull();

@@ -62,60 +62,64 @@ export function ProjectDocumentation({
         };
   const path = (name: string, extension: string) =>
     assetUrl(`/docs/${directory}/${name}.${extension}`);
-  const card = (guide: Guide, visual = false) => (
-    <article
-      key={guide.name}
-      className={`flex flex-col overflow-hidden rounded-2xl bg-slate-800/40 border border-slate-700/50 transition-colors ${color.border}`}
-    >
-      {visual && (
-        <a
-          href={path(guide.name, "html")}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label={`Preview ${guide.title}`}
-          className="block bg-slate-100 p-4"
-        >
-          <img
-            src={path(`${guide.name}-1`, "svg")}
-            alt={`${project} ${guide.title.toLowerCase()} overview`}
-            loading="lazy"
-            width={800}
-            height={400}
-            className="w-full h-48 object-contain"
-          />
-        </a>
-      )}
-      <div className="flex flex-col flex-1 p-6 sm:p-8">
-        <FileText aria-hidden="true" className={`size-8 mb-5 ${color.text}`} />
-        {visual ? (
-          <h3 className="text-2xl font-bold mb-3">{guide.title}</h3>
-        ) : (
-          <h2 className="text-2xl font-bold mb-3">{guide.title}</h2>
-        )}
-        <p className="text-slate-400 mb-7 leading-relaxed text-sm">
-          {guide.description}
-        </p>
-        <div className="mt-auto flex flex-wrap gap-3">
+  const card = (guide: Guide, visual = false) => {
+    const Heading = visual ? "h3" : "h2";
+    return (
+      <article
+        key={guide.name}
+        className={`flex flex-col overflow-hidden rounded-2xl bg-slate-800/40 border border-slate-700/50 transition-colors ${color.border}`}
+      >
+        {visual && (
           <a
             href={path(guide.name, "html")}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex-1 inline-flex items-center justify-center px-4 py-3 bg-slate-700/50 font-bold rounded-xl hover:bg-slate-600"
+            aria-label={`Preview ${guide.title}`}
+            className="block bg-slate-100 p-4"
           >
-            Open
+            <img
+              src={path(`${guide.name}-1`, "svg")}
+              alt={`${project} ${guide.title.toLowerCase()} overview`}
+              loading="lazy"
+              width={800}
+              height={400}
+              className="w-full h-48 object-contain"
+            />
           </a>
-          <a
-            href={path(guide.name, "pdf")}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex-1 inline-flex items-center justify-center px-4 py-3 bg-slate-700/30 font-bold rounded-xl hover:bg-slate-600"
-          >
-            PDF
-          </a>
+        )}
+        <div className="flex flex-col flex-1 p-6 sm:p-8">
+          <Heading className="flex items-center gap-3 text-2xl font-bold mb-3">
+            <FileText
+              aria-hidden="true"
+              className={`size-6 shrink-0 ${color.text}`}
+            />
+            <span>{guide.title}</span>
+          </Heading>
+          <p className="text-slate-400 mb-7 leading-relaxed text-sm">
+            {guide.description}
+          </p>
+          <div className="mt-auto flex flex-wrap gap-3">
+            <a
+              href={path(guide.name, "html")}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 inline-flex items-center justify-center px-4 py-3 bg-slate-700/50 font-bold rounded-xl hover:bg-slate-600"
+            >
+              View
+            </a>
+            <a
+              href={path(guide.name, "pdf")}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 inline-flex items-center justify-center px-4 py-3 bg-slate-700/30 font-bold rounded-xl hover:bg-slate-600"
+            >
+              PDF
+            </a>
+          </div>
         </div>
-      </div>
-    </article>
-  );
+      </article>
+    );
+  };
   return (
     <div className="min-h-screen bg-slate-900 text-white font-sans">
       <PageNavigation
