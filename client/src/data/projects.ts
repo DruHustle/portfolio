@@ -66,7 +66,7 @@ export const projects: Project[] = [
       { label: ".NET 8", color: "purple" },
       { label: "GraphQL", color: "purple" },
       { label: "REST API", color: "purple" },
-      { label: "Aiven MySQL", color: "purple" },
+      { label: "Aiven PostgreSQL", color: "purple" },
       { label: "SignalR", color: "purple" },
       { label: "Docker", color: "purple" },
       { label: "GitHub Actions", color: "purple" },

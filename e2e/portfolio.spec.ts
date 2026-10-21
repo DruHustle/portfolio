@@ -170,6 +170,24 @@ test("project/documentation return journey and rendered guide PDF access", async
     "href",
     "https://imsop-app.vercel.app/"
   );
+  const projectImage = page.getByRole("img", {
+    name: /IMSOP system architecture with Vercel/,
+  });
+  await expect(projectImage).toHaveAttribute(
+    "src",
+    /images\/imsop_system_architecture_v2\.webp$/
+  );
+  const architecturePopup = page.waitForEvent("popup");
+  await page
+    .getByRole("link", {
+      name: /Open full-size IMSOP system architecture with Vercel/,
+    })
+    .click();
+  const architectureImage = await architecturePopup;
+  await expect(architectureImage).toHaveURL(
+    /images\/imsop_system_architecture_v2\.webp$/
+  );
+  await architectureImage.close();
   await page.getByRole("link", { name: "Documentation", exact: true }).click();
   await expect(page).toHaveTitle("IMSOP Documentation | Andrew Gotora");
   const opened = page.waitForEvent("popup");

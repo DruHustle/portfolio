@@ -69,7 +69,7 @@ export default function IMSOPDetail() {
           },
           {
             title: "Persistence",
-            desc: "Aiven MySQL and PostgreSQL service model",
+            desc: "Managed PostgreSQL; Node and EF Core models",
             icon: Database,
           },
         ],
@@ -110,8 +110,8 @@ export default function IMSOPDetail() {
           {
             category: "Data",
             items: [
-              "Aiven MySQL",
-              "PostgreSQL",
+              "Aiven PostgreSQL",
+              "Separate Node / EF Core migrations",
               "Telemetry and operations schemas",
             ],
           },
@@ -122,7 +122,8 @@ export default function IMSOPDetail() {
               "Kubernetes manifests",
               "Terraform",
               "Azure Bicep",
-              "Render",
+              "Oracle Cloud",
+              "Vercel",
               "GitHub Pages",
             ],
           },
@@ -149,7 +150,7 @@ export default function IMSOPDetail() {
             phase: "Core Services",
             duration: "Delivered",
             description:
-              "Implement the Node/Express REST API, JWT authentication, Aiven MySQL persistence, shipment, order, and telemetry endpoints.",
+              "Implement the Node/Express REST API, JWT authentication, PostgreSQL persistence, shipment, order, and telemetry endpoints.",
           },
           {
             phase: "Service Architecture",
@@ -159,9 +160,9 @@ export default function IMSOPDetail() {
           },
           {
             phase: "Production",
-            duration: "Automated",
+            duration: "Deployed",
             description:
-              "Containerize services, add health checks and automated tests, and deliver through GitHub Actions with Render and static frontend hosting.",
+              "Containerize services, add health checks and automated tests, and release the Oracle backend independently from the Vercel and GitHub Pages frontend.",
           },
         ],
       },
@@ -269,16 +270,20 @@ export default function IMSOPDetail() {
             </div>
           </section>
           {/* System Architecture */}
-          <section>
-            <h2 className="text-2xl font-bold text-white mb-8">
+          <section className="bg-slate-800/40 rounded-3xl p-4 sm:p-8 md:p-12 border border-slate-700/50">
+            <h2 className="text-3xl font-bold text-white mb-4 text-center">
               System Architecture
             </h2>
-            <div className="bg-slate-900 border border-slate-800 rounded-3xl p-8 overflow-hidden">
+            <p className="text-slate-400 text-center max-w-2xl mx-auto mb-8">
+              Vercel delivery, Oracle-hosted application services, signed
+              logistics integrations, and managed PostgreSQL.
+            </p>
+            <div className="overflow-hidden">
               <ArchitectureDiagram
-                path="images/imsop_arch.webp"
-                alt="IMSOP Architecture"
-                width={3120}
-                height={1576}
+                path="images/imsop_system_architecture_v2.webp"
+                alt="IMSOP system architecture with Vercel, Oracle Caddy ingress, Node and .NET services, managed PostgreSQL, and signed logistics events"
+                width={1672}
+                height={941}
               />
             </div>
           </section>

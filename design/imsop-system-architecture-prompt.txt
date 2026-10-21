@@ -1,0 +1,47 @@
+Mode: built-in image generation; initial generation followed by one targeted edit.
+
+Initial generation prompt:
+Use case: infographic-diagram.
+Asset type: polished architecture infographic image for the "System Architecture" section of the IMSOP engineering portfolio project page.
+Primary request: create a new professional IMSOP architecture image in the same visual family as a dark Smart Factory IoT production architecture infographic: deep navy background, thin cyan rounded panel borders, white high-contrast text, orange flow arrows and numbered section badges, crisp technology/service icons. Landscape 16:9, high resolution, clean straight connectors, readable large labels and generous spacing.
+
+Title, exactly: "IMSOP — System Architecture". White "IMSOP", orange "System Architecture".
+Subtitle: "Current production topology".
+
+Four organized columns, clearly numbered:
+1 "Client & Delivery"
+- Browser user icon labelled "Browser"
+- Vercel triangle + application panel labelled "Vercel React / Vite UI"
+- Small readable feature line "Shipments • Orders • Telemetry • Reports"
+- Separate lower external-provider panel with truck/location icons labelled "Carrier / GPS / IoT"
+
+2 "Secure Ingress"
+- Server/cloud icon labelled "Oracle Cloud"
+- Component panel labelled "Caddy HTTPS Ingress"
+- Component panel labelled ".NET API Gateway"
+
+3 "Application Runtime"
+- A dashed boundary labelled "Private ARM64 Backend Image" contains gateway and application services; visually group columns 2's gateway and 3's services while Caddy is outside this private image boundary.
+- Node.js icon + panel "Node / Express REST API", subtitle "Accounts, operations, telemetry"
+- .NET icon + panel "Supply Chain Service", subtitle "Protected purchase-order APIs"
+- .NET icon + panel "Operations Service", subtitle "Companion service foundation"
+
+4 "Managed Data & Integration"
+- Database cylinder "Managed PostgreSQL" with two internal clearly separated labels "Node-owned tables" and "EF Core-owned tables"
+- Envelope icon + panel "Email Provider", subtitle "Configured server-side delivery"
+
+Accurate arrows, essential:
+- Browser -> Vercel UI -> Caddy HTTPS Ingress -> .NET API Gateway.
+- Label Vercel-to-ingress arrow "Same-origin HTTPS API proxy".
+- Carrier / GPS / IoT -> Caddy, labelled "Signed HMAC events"; keep provider path visibly distinct from the browser session path.
+- .NET API Gateway -> Node / Express REST API.
+- .NET API Gateway -> Supply Chain Service.
+- .NET API Gateway -> Operations Service.
+- Node API -> PostgreSQL Node-owned tables, labelled "TLS".
+- Supply Chain Service -> PostgreSQL EF Core-owned tables.
+- Node API -> Email Provider.
+Use orange external/data-flow arrows and pale blue internal service arrows, arrowheads unmistakable. Put a small two-item legend at bottom: "HTTPS / data flow" and "Private service routing".
+Constraints: visual overview, not a screenshot of code. All component names must be spelled exactly. Do not add technologies or topology: no Azure services, no Redis, no Elasticsearch, no MQTT broker, no factory control, no mobile app, no GraphQL, no high-availability or replica claims. No watermark. Avoid tiny explanatory text, intersecting text/arrows, photo scenery, excessive 3D effects, or decorative unlabeled boxes. The topology must be technically faithful and the diagram should look production-quality and readable when embedded at about 1200 pixels wide.
+
+Targeted edit prompt:
+Edit this IMSOP architecture infographic with one precise correction only. The white dashed rectangle labelled 'Private ARM64 Backend Image' currently incorrectly extends across the Managed Data & Integration column. Shorten that white dashed boundary so it encloses ONLY the .NET API Gateway and the three application service boxes in column 3 (Node / Express REST API, Supply Chain Service, Operations Service). Its right edge must be just left of the cyan separator between column 3 Application Runtime and column 4 Managed Data & Integration, around x=1232 on this 1672-pixel-wide image. Its left edge, top edge, bottom edge, and label can stay as they are. ALL of column 4 including Managed PostgreSQL and Email Provider must clearly be OUTSIDE the white dashed backend image rectangle. Keep the orange and pale-blue arrows that cross that boundary unchanged. Preserve the entire canvas dimensions, composition, title, colors, typography, exact text, service icons, all component positions, all arrows and arrow labels, legend, and every other detail. Do not add a second boundary, any new text, or any new component. This is a boundary-only correction; do not redesign the image.
