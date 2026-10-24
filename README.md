@@ -1,8 +1,8 @@
 # Professional Portfolio - Andrew Gotora
 
-A responsive portfolio for Andrew Gotora, Senior Industrial Software & Digitalization Engineer and Founder of Onesa UG. It showcases Industrial IoT and automation, AI platforms, cloud-native systems, and enterprise integration.
+A responsive portfolio for Andrew Gotora, Senior Industrial Software & Digitalization Engineer and Founder of Onesa UG. It showcases active work in Industrial AI and cybersecurity alongside Industrial IoT and automation, AI platforms, cloud-native systems, and enterprise integration.
 
-Onesa AI provides a Next.js/FastAPI workspace for Chat, Knowledge, Agents, and Travel, backed by PostgreSQL/pgvector and configurable model adapters. Hosted generation and embeddings currently use Cloudflare Workers AI, with local Ollama support and a vLLM adapter. Industrial AI is a planned track for evidence-backed operational investigation and human-reviewed drafts. Fine-tuned Onesa weights, multimodal adapters, and live industrial integrations are not established capabilities.
+Onesa AI provides a Next.js/FastAPI workspace for Chat, Knowledge, Agents, and Travel, backed by PostgreSQL/pgvector and configurable model adapters. Hosted generation and embeddings currently use Cloudflare Workers AI, with local Ollama support and a vLLM adapter. Industrial AI is in active development for evidence-backed operational investigation and human-reviewed drafts. Cybersecurity is another active work area, building on secure software delivery, identity and access management, secrets protection, and cloud infrastructure. Fine-tuned Onesa weights, multimodal adapters, and live industrial integrations are not established capabilities.
 
 ## 🚀 Quick Links
 

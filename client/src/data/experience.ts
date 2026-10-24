@@ -17,10 +17,11 @@ export const professionalExperience: ProfessionalExperience[] = [
     "company": "Onesa UG",
     "dateRange": "Apr 2026 – Present",
     "employmentType": "Self-employed",
-    "description": "Founded Onesa UG in April 2026 to develop intelligent software, AI, digital platforms, and robotics. The company portfolio includes Onesa AI Platform and a separate Robotics / Physical AI development line.",
+    "description": "Founded Onesa UG in April 2026 to develop intelligent software, AI, digital platforms, and robotics. Currently working on Industrial AI and cybersecurity alongside Onesa AI Platform and a separate Robotics / Physical AI development line.",
     "responsibilities": [
       "Building Onesa AI Platform around Chat, Knowledge, Agents, and Travel: conversations, document-grounded answers, bounded tools, and editable travel plans in a protected workspace.",
       "Developing the Industrial AI direction across troubleshooting and fault investigation, predictive maintenance, computer vision quality control, process and energy optimization, and digital twins with physics-informed ML. Connected production systems require separate implementation and validation.",
+      "Actively working on cybersecurity, drawing on experience in secure software delivery, cloud security, identity and access management, and secrets protection.",
       "Planning business feasibility, investment research, and smart farming applications for comparing options and supporting practical decisions.",
       "Developing Onesa Robotics / Physical AI as a separate product line, currently demonstrated through a protected one-joint software simulator with task review, telemetry, and history.",
       "Combining software engineering, cloud infrastructure, and data engineering with source-backed workflows and human review."
@@ -31,9 +32,10 @@ export const professionalExperience: ProfessionalExperience[] = [
       "Knowledge Retrieval",
       "Bounded Agents",
       "Industrial AI",
+      "Cybersecurity",
       "Robotics / Physical AI"
     ],
-    "status": "AI applications available · Industrial AI planned · Robotics in simulation"
+    "status": "AI applications available · Industrial AI & cybersecurity in active development · Robotics in simulation"
   },
   {
     "title": "Senior DevOps Engineer",

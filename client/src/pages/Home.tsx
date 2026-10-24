@@ -110,7 +110,7 @@ export default function Home() {
         ]
       },
       {
-        "title": "AI Platforms & Applied AI",
+        "title": "Industrial AI & AI Platforms",
         "skills": [
           "Open-Weight Foundation Models",
           "Retrieval-Augmented Generation (RAG)",
@@ -164,12 +164,12 @@ export default function Home() {
         ]
       },
       {
-        "title": "Architecture, Security & Quality",
+        "title": "Cybersecurity & Secure Architecture",
         "skills": [
-          "Domain-Driven Design & SOLID",
-          "Test-Driven Development",
           "RBAC & Secrets Management",
-          "Secure API Design & Governance"
+          "Secure API Design & Governance",
+          "Cloud Security & Managed Identities",
+          "Secure Delivery & Supply-Chain Controls"
         ]
       }
     ],
@@ -190,8 +190,8 @@ export default function Home() {
       },
       {
         icon: Award,
-        title: "Adaptable AI Platforms",
-        desc: "Building Onesa’s portfolio of AI applications, a planned Industrial AI track, and a separate Robotics / Physical AI development line.",
+        title: "Industrial AI & Cybersecurity",
+        desc: "Actively working on Industrial AI and cybersecurity alongside Onesa’s AI applications and a separate Robotics / Physical AI development line.",
       },
     ],
     []
@@ -360,7 +360,7 @@ export default function Home() {
         <div className="px-4 sm:px-6 lg:px-8 relative max-w-7xl mx-auto w-full">
           <div className="max-w-[760px] pb-12 sm:pb-16 lg:pb-20">
             <p className="text-cyan-300 text-xs sm:text-sm font-semibold uppercase tracking-[0.18em] mb-5">
-              Industrial software. Intelligent systems.
+              Industrial software. AI. Cybersecurity.
             </p>
             <h1 id="hero-heading" className="text-[2.35rem] sm:text-5xl lg:text-[3.5rem] xl:text-[3.85rem] font-bold tracking-tight leading-[1.1] mb-6">
               <span className="block">Senior Industrial</span>{" "}
@@ -368,7 +368,7 @@ export default function Home() {
               <span className="block text-cyan-300">Digitalization Engineer</span>
             </h1>
             <p className="text-base sm:text-lg text-slate-200 leading-relaxed max-w-[570px] mb-6">
-              I build software connecting industrial assets, engineering information, and enterprise systems—with reliability and interoperability at the centre.
+              I build software connecting industrial assets, engineering information, and enterprise systems—with reliability and interoperability at the centre. My current work focuses on Industrial AI and cybersecurity.
             </p>
             <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-slate-300 mb-8">
               <span className="font-semibold text-white">Founder, Onesa UG</span>
@@ -386,10 +386,11 @@ export default function Home() {
               </a>
             </div>
           </div>
-          <div className="grid sm:grid-cols-3 gap-6 sm:gap-8 py-7 sm:py-8 border-t border-cyan-200/20">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 py-7 sm:py-8 border-t border-cyan-200/20">
             {[
               { icon: Factory, title: "Industrial IoT & Automation", description: "Connected assets. Interoperable systems." },
-              { icon: BrainCircuit, title: "AI Platforms", description: "Open models. Self-managed infrastructure." },
+              { icon: BrainCircuit, title: "Industrial AI & AI Platforms", description: "Fault investigation. AI applications." },
+              { icon: Shield, title: "Cybersecurity", description: "Secure software. Protected infrastructure." },
               { icon: Cloud, title: "Cloud-Native Systems", description: "Reliable software. Secure delivery." },
             ].map((focus) => (
               <div key={focus.title} className="flex gap-3 items-start">
@@ -520,11 +521,13 @@ export default function Home() {
                 <a href="https://platform.onesa.eu/" target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center gap-2 text-cyan-300 font-semibold hover:text-cyan-200 transition-colors">Open Onesa AI <ChevronRight aria-hidden="true" className="w-4 h-4" /></a>
               </div>
             </div>
-            <div className="p-8 md:p-10 rounded-2xl bg-white border border-blue-100">
-              <h3 className="text-xl font-bold text-slate-900 mb-5">Industrial AI · Planned</h3>
-              <p className="text-slate-600 leading-relaxed mb-6">The first focus is investigating unexpected stops, alarms, and recurring faults using authorized event histories, sensor trends, asset information, and versioned manuals. Proposed findings would show sources, uncertainty, and missing information, with an internal work draft for human review.</p>
-              <h4 className="text-base font-bold text-slate-900 mb-4">Core pillars &amp; applications</h4>
-              <ul className="space-y-4 text-sm text-slate-600 mb-6">
+            <div className="p-8 md:p-10 rounded-2xl bg-[#03121e] text-white border border-cyan-900/40">
+              <span className="inline-flex px-3 py-1 mb-5 rounded-full bg-cyan-400/10 border border-cyan-300/30 text-cyan-300 text-xs font-bold uppercase tracking-wider">In active development</span>
+              <h3 className="text-2xl font-bold mb-5">Industrial AI &amp; Cybersecurity</h3>
+              <h4 className="text-base font-bold text-cyan-300 mb-3">Industrial AI</h4>
+              <p className="text-slate-300 leading-relaxed mb-6">I’m actively developing Industrial AI to investigate unexpected stops, alarms, and recurring faults using authorized event histories, sensor trends, asset information, and versioned manuals. The workflow is designed to show sources, uncertainty, and missing information, with an internal work draft for human review.</p>
+              <h4 className="text-base font-bold mb-4">Core pillars &amp; applications</h4>
+              <ul className="space-y-4 text-sm text-slate-300 mb-6">
                 {[
                   ["Industrial Troubleshooting & Fault Investigation", "Investigate possible causes and identify checks supported by the available evidence."],
                   ["Predictive Maintenance & Asset Health", "Use condition signals to investigate anomalies and inform maintenance."],
@@ -533,14 +536,18 @@ export default function Home() {
                   ["Digital Twins and Physics-Informed ML", "Combine engineering simulations and machine learning to explore asset behavior."],
                 ].map(([title, description]) => (
                   <li key={title}>
-                    <p className="font-semibold text-slate-900 mb-1">{title}</p>
+                    <p className="font-semibold text-white mb-1">{title}</p>
                     <p>{description}</p>
                   </li>
                 ))}
               </ul>
-              <div className="border-t border-blue-100 pt-6">
-                <p className="text-sm text-slate-600">These areas describe the development direction. Connected production systems require their own implementation and validation; people review conclusions and decide the next steps.</p>
-                <a href="https://docs.onesa.eu/" target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center mt-4 font-semibold text-teal-700 underline underline-offset-4">Read Onesa developer docs</a>
+              <div className="border-t border-cyan-300/20 pt-6 mb-6">
+                <h4 className="text-base font-bold text-cyan-300 mb-3">Cybersecurity</h4>
+                <p className="text-slate-300 leading-relaxed">I’m also actively working on cybersecurity, building on my experience in secure software delivery, identity and access management, secrets protection, and cloud infrastructure.</p>
+              </div>
+              <div className="border-t border-cyan-300/20 pt-6">
+                <p className="text-sm text-slate-300">Both areas are in active development. Connected production systems require their own implementation and validation; people review conclusions and decide the next steps.</p>
+                <a href="https://docs.onesa.eu/" target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center mt-4 font-semibold text-cyan-300 underline underline-offset-4 hover:text-cyan-200 transition-colors">Read Onesa developer docs</a>
               </div>
             </div>
           </div>
@@ -553,7 +560,7 @@ export default function Home() {
         <div className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Technical Expertise</h2>
-            <p className="text-gray-700 text-lg max-w-3xl mx-auto">Electrical engineering, industrial software, cloud infrastructure, and applied AI—connecting operational technology with modern enterprise systems.</p>
+            <p className="text-gray-700 text-lg max-w-3xl mx-auto">Electrical engineering, industrial software, cloud infrastructure, Industrial AI, and cybersecurity—connecting operational technology with modern enterprise systems.</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {skills.map((category, i) => (
@@ -595,7 +602,7 @@ export default function Home() {
                 </div>
                 {role.location && <p className="text-sm text-slate-600 mb-3">{role.location}</p>}
                 <p className="text-slate-700 max-w-4xl">{role.description}</p>
-                {role.status && <p className="mt-3 text-sm font-semibold text-teal-700">{role.status} · Proposed profiles are future plans.</p>}
+                {role.status && <p className="mt-3 text-sm font-semibold text-teal-700">{role.status}</p>}
                 {role.responsibilities.length > 0 && (
                   <details className="mt-4 group">
                     <summary className="text-sm font-semibold text-teal-700 cursor-pointer w-fit rounded focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-teal-700">Role details</summary>
@@ -627,7 +634,7 @@ export default function Home() {
                     <p>Over more than a decade, my career has progressed from railway signalling and electronic interlocking to Industrial IoT, distributed applications, and enterprise software delivery. I combine electrical engineering, industrial software, cloud infrastructure, and applied AI, with reliability and interoperability at the centre.</p>
                     <p>My experience spans C#/.NET, Python, JavaScript, REST APIs, microservices, Docker, and Kubernetes, alongside OPC UA, MQTT, Modbus, ThingWorx, and Kepware.</p>
                     <p>At BASF, I work as a <strong>Senior DevOps Engineer</strong>, supporting software engineering and enterprise delivery through Azure DevOps, CI/CD, Terraform, Azure Bicep, and secure cloud infrastructure. I live in Heidelberg and work remotely, assigned to the Berlin office with regular visits to Berlin.</p>
-                    <p>I founded <strong>Onesa UG in April 2026</strong> and am developing Onesa AI. I welcome conversations about senior industrial software engineering, technical leadership, AI platforms, and partnerships that turn digital innovation into useful products.</p>
+                    <p>I founded <strong>Onesa UG in April 2026</strong> and am developing Onesa AI, with active work in Industrial AI and cybersecurity. I welcome conversations about senior industrial software engineering, technical leadership, Industrial AI, cybersecurity, and partnerships that turn digital innovation into useful products.</p>
                   </div>
                   <a href="mailto:andrewgotora@yahoo.com" className="inline-flex items-center gap-2 mt-6 text-teal-700 font-semibold hover:text-teal-900 transition-colors"><Mail aria-hidden="true" className="w-4 h-4" /> Let’s talk</a>
                 </div>
