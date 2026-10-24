@@ -14,7 +14,7 @@ import { safeSessionStorage } from "../lib/storage";
 
 const scrollIntoView = vi.fn();
 beforeEach(() => {
-  window.history.replaceState(null, "", "/portfolio/#/");
+  window.history.replaceState(null, "", "/#/");
   safeSessionStorage.clear();
   vi.spyOn(window, "scrollTo").mockImplementation(() => {});
   HTMLElement.prototype.scrollIntoView = scrollIntoView;
@@ -23,7 +23,7 @@ beforeEach(() => {
 
 async function openRoute(path: string) {
   act(() => {
-    window.history.replaceState(null, "", `/portfolio/#${path}`);
+    window.history.replaceState(null, "", `/#${path}`);
     window.dispatchEvent(new HashChangeEvent("hashchange"));
   });
 }
@@ -36,14 +36,14 @@ function assertLocalAssetsExist(container: HTMLElement) {
       element instanceof HTMLImageElement
         ? element.getAttribute("src")!
         : element.getAttribute("href")!;
-    if (!url.startsWith("/portfolio/")) continue;
+    if (!url.startsWith("/")) continue;
     expect(url).not.toContain("//");
     expect(
       existsSync(
         resolve(
           import.meta.dirname,
           "../../public",
-          url.slice("/portfolio/".length)
+          url.slice(1)
         )
       )
     ).toBe(true);

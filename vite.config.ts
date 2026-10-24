@@ -14,7 +14,7 @@ export default defineConfig(({ mode }) => ({
     ),
   },
   plugins,
-  base: "/portfolio/", // CRITICAL: Fix for GitHub Pages asset loading
+  base: "/",
   test: {
     environment: "jsdom",
     setupFiles: ["./src/__tests__/setup.ts"],
@@ -32,7 +32,7 @@ export default defineConfig(({ mode }) => ({
     // This tells Vite to put the final files in /dist at the project root
     outDir: path.resolve(import.meta.dirname, "dist"),
     emptyOutDir: true,
-    // Ensures assets are generated with relative paths
+    // Keep generated assets under the canonical site's root.
     assetsDir: "assets",
   },
 

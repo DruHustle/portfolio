@@ -22,9 +22,11 @@ app.use("/api", (_request, response) => {
   response.status(404).json({ error: "API route not found" });
 });
 
-// Vite writes directly into dist, with a /portfolio/ public asset base.
+// Vite writes the root-based site into dist. Redirect legacy asset URLs.
 const staticPath = path.resolve(directory, "..", "dist");
-app.use("/portfolio", express.static(staticPath));
+app.use("/portfolio", (request, response) => {
+  response.redirect(308, `/${request.url.replace(/^\/+/, "")}`);
+});
 app.use(express.static(staticPath));
 app.get("*", (request, response) => {
   if (path.extname(request.path)) {
@@ -41,5 +43,5 @@ server.on("error", error => {
   process.exitCode = 1;
 });
 server.listen(port, () =>
-  console.log(`Server running on http://localhost:${port}/portfolio/`)
+  console.log(`Server running on http://localhost:${port}/`)
 );

@@ -57,16 +57,12 @@ export class NavigationService {
 
   /**
    * Check if user came from portfolio based on referrer
-   * @returns true if referrer contains portfolio URL
+   * @returns true if referrer belongs to the current portfolio origin
    */
   static checkReferrer(): boolean {
     try {
-      const referrer = document.referrer;
-      return (
-        referrer.includes('druhustle.github.io/portifolio') ||
-        referrer.includes('druhustle.github.io/portfolio') ||
-        referrer.includes('localhost') // For local development
-      );
+      if (!document.referrer) return false;
+      return new URL(document.referrer).origin === window.location.origin;
     } catch (error) {
       console.warn('Unable to check referrer:', error);
       return false;

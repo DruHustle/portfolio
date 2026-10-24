@@ -4,6 +4,7 @@ import { Router } from "wouter";
 import { useHashLocation } from "wouter/use-hash-location";
 import ErrorBoundary from "../components/ErrorBoundary";
 import { assetUrl, demoUrl } from "../lib/urls";
+import { NavigationService } from "../services/navigationService";
 import {
   csvCell,
   exportToPDF,
@@ -12,12 +13,25 @@ import {
 } from "../lib/export";
 
 describe("URL resolution", () => {
+  it("recognizes navigation from the current portfolio origin", () => {
+    vi.spyOn(document, "referrer", "get").mockReturnValue(
+      `${window.location.origin}/#/projects/imsop`
+    );
+    expect(NavigationService.checkReferrer()).toBe(true);
+  });
+  it.each(["", "https://example.com/localhost", "https://example.com/druhustle.github.io/portfolio"])(
+    "does not treat the external referrer %s as internal navigation",
+    referrer => {
+      vi.spyOn(document, "referrer", "get").mockReturnValue(referrer);
+      expect(NavigationService.checkReferrer()).toBe(false);
+    }
+  );
   it.each([
     "docs/imsop/architecture.pdf",
     "/docs/imsop/architecture.pdf",
     "//docs/imsop/architecture.pdf",
   ])("normalizes asset path %s", path => {
-    expect(assetUrl(path)).toBe("/portfolio/docs/imsop/architecture.pdf");
+    expect(assetUrl(path)).toBe("/docs/imsop/architecture.pdf");
   });
   it.each([
     ["imsop", "https://imsop-app.vercel.app/"],

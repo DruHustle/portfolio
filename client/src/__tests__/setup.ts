@@ -3,7 +3,7 @@ import { cleanup } from "@testing-library/react";
 import { beforeEach, afterEach, vi } from "vitest";
 
 beforeEach(() => {
-  vi.stubEnv("BASE_URL", "/portfolio/");
+  vi.stubEnv("BASE_URL", "/");
   vi.stubEnv("VITE_ENABLE_ANALYTICS", "false");
 });
 afterEach(() => {

@@ -4,7 +4,7 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
 
 const currentURL =
-  process.env.PERF_CURRENT_URL || "http://127.0.0.1:4173/portfolio/";
+  process.env.PERF_CURRENT_URL || "http://127.0.0.1:4173/";
 const baselineURL = process.env.PERF_BASELINE_URL;
 const output = path.resolve("artifacts/browser/performance.json");
 const collector = await build({

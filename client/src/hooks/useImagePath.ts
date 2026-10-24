@@ -2,7 +2,7 @@ import { assetUrl } from "@/lib/urls";
 /**
  * Image Path Hook
  * Provides consistent image path resolution across the application
- * Implements DRY principle and handles GitHub Pages base path
+ * Resolves images relative to the configured application base.
  */
 
 export function useImagePath(imagePath: string): string {
