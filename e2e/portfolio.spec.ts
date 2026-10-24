@@ -315,7 +315,7 @@ for (const [slug, directory] of [
     );
     await guide.getByRole("link", { name: "Back to Documentation" }).click();
     await expect(guide).toHaveURL(
-      new RegExp(`/portfolio/#/projects/${slug}/documentation$`)
+      new RegExp(`/#/projects/${slug}/documentation$`)
     );
     await expect(guide.getByRole("heading", { level: 1 })).toContainText(
       "Documentation"

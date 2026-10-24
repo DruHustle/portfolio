@@ -1,4 +1,4 @@
-/** Resolve public assets consistently on GitHub Pages and root deployments. */
+/** Resolve public assets relative to the configured application base. */
 export function assetUrl(path: string): string {
   return `${import.meta.env.BASE_URL.replace(/\/$/, "")}/${path.replace(/^\/+/, "")}`;
 }

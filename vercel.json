@@ -1,14 +1,22 @@
 {
   "version": 2,
+  "framework": "vite",
+  "installCommand": "pnpm install --frozen-lockfile",
+  "buildCommand": "pnpm build",
+  "outputDirectory": "dist",
+  "redirects": [
+    {
+      "source": "/portfolio",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio/:path*",
+      "destination": "/:path*",
+      "permanent": true
+    }
+  ],
   "rewrites": [
-    {
-      "source": "/portfolio/assets/(.*)",
-      "destination": "/assets/$1"
-    },
-    {
-      "source": "/portfolio/(.*)",
-      "destination": "/$1"
-    },
     {
       "source": "/(.*)",
       "destination": "/index.html"

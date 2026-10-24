@@ -1,6 +1,6 @@
 {
   "name": "portfolio",
-  "homepage": "https://DruHustle.github.io/portfolio",
+  "homepage": "https://andrewgotora.com/",
   "version": "1.0.0",
   "type": "module",
   "license": "MIT",
@@ -8,8 +8,6 @@
     "dev": "vite --host",
     "build": "vite build",
     "test": "vitest run",
-    "predeploy": "pnpm lint && pnpm check && pnpm test && pnpm audit --audit-level=moderate && pnpm test:e2e",
-    "deploy": "node scripts/publish.mjs",
     "preview": "vite preview --host",
     "check": "tsc --noEmit && tsc -p tsconfig.node.json && tsc -p tsconfig.e2e.json",
     "start": "tsx server/index.ts",
