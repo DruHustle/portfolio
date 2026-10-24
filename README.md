@@ -71,6 +71,8 @@ Create a branch and open a pull request against `main`. The required **Verify po
 
 The documentation generator derives absolute PDF links from `package.json`'s canonical `homepage`. Downloaded guides link to the production domain rather than a separate hosting service.
 
+Favicon artwork is retained in `design/favicon-source.png`. Run `pnpm icons:build` with Playwright Chromium installed to export the compact, multi-size ICO, browser PNG, and Apple touch icon into `client/public/`.
+
 Vite selects `NODE_ENV` automatically. The checked-in environment files contain example API settings; no credentials are needed to run the static portfolio. Never put private credentials in `VITE_*` variables because Vite exposes them to browsers.
 
 ## ✨ Key Features

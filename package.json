@@ -14,7 +14,8 @@
     "lint": "eslint . --max-warnings=0",
     "test:e2e": "pnpm build && playwright test",
     "perf": "node scripts/measure-performance.mjs",
-    "docs:build": "node scripts/build-docs.mjs"
+    "docs:build": "node scripts/build-docs.mjs",
+    "icons:build": "node scripts/build-favicons.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.9.1",
