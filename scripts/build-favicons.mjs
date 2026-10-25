@@ -2,8 +2,8 @@ import { readFile, writeFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { chromium } from "@playwright/test";
 
-// Re-export the existing artwork; Chromium is an authoring tool only.
-const source = await readFile(new URL("../design/favicon-source.png", import.meta.url));
+// Export the font-independent vector artwork; Chromium is an authoring tool only.
+const source = await readFile(new URL("../design/favicon-source.svg", import.meta.url));
 const sizes = [16, 32, 48, 64, 180];
 const browser = await chromium.launch();
 let images;
@@ -11,7 +11,7 @@ try {
   const page = await browser.newPage();
   images = await page.evaluate(async ({ source, sizes }) => {
     const image = new Image();
-    image.src = `data:image/png;base64,${source}`;
+    image.src = `data:image/svg+xml;base64,${source}`;
     await image.decode();
     return Object.fromEntries(sizes.map(size => {
       const canvas = document.createElement("canvas");
@@ -46,7 +46,8 @@ frames.forEach(({ size, png }, index) => {
   offset += png.length;
 });
 const output = fileURLToPath(new URL("../client/public/", import.meta.url));
+await writeFile(`${output}favicon.svg`, source);
 await writeFile(`${output}favicon.ico`, Buffer.concat([directory, ...frames.map(frame => frame.png)]));
 await writeFile(`${output}favicon.png`, Buffer.from(images[64], "base64"));
 await writeFile(`${output}apple-touch-icon.png`, Buffer.from(images[180], "base64"));
-console.log("Exported multi-size favicon.ico, 64px favicon.png, and 180px apple-touch-icon.png.");
+console.log("Exported vector favicon.svg, multi-size favicon.ico, 64px favicon.png, and 180px apple-touch-icon.png.");

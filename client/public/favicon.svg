@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <title>Andrew Gotora — AG monogram</title>
+  <rect x="1" y="1" width="62" height="62" rx="16" fill="#03121e" stroke="#16465b" stroke-width="1.5"/>
+  <g fill="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M9 46 19 18 29 46M13 36h12" stroke="#67e8f9"/>
+    <path d="M53 23c-3-4-7-5-11-3-5 2-7 7-7 13 0 8 4 13 11 13 4 0 8-3 9-6v-6h-9" stroke="#e6faff"/>
+  </g>
+</svg>
