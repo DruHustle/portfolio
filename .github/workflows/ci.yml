@@ -27,35 +27,72 @@ jobs:
 
       - name: Setup PNPM
         uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+        with:
+          version: 10.34.7
 
       - name: Setup Node
         uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 22
           cache: pnpm
+          cache-dependency-path: |
+            frontend/pnpm-lock.yaml
+            backend/pnpm-lock.yaml
 
-      - name: Install dependencies
+      - name: Install frontend
+        working-directory: frontend
         run: pnpm install --frozen-lockfile
 
-      - name: Audit dependencies
+      - name: Install backend
+        working-directory: backend
+        run: pnpm install --frozen-lockfile
+
+      - name: Audit frontend
+        working-directory: frontend
         run: pnpm audit --audit-level=moderate
 
-      - name: Lint
+      - name: Audit backend
+        working-directory: backend
+        run: pnpm audit --audit-level=moderate
+
+      - name: Lint frontend
+        working-directory: frontend
         run: pnpm lint
 
-      - name: Type check
+      - name: Lint backend
+        working-directory: backend
+        run: pnpm lint
+
+      - name: Type check frontend
+        working-directory: frontend
         run: pnpm check
 
-      - name: Run unit tests
+      - name: Type check backend
+        working-directory: backend
+        run: pnpm check
+
+      - name: Unit tests frontend
+        working-directory: frontend
         run: pnpm test
 
-      - name: Build
+      - name: Unit tests backend
+        working-directory: backend
+        run: pnpm test
+
+      - name: Build frontend
+        working-directory: frontend
+        run: pnpm build
+
+      - name: Build backend
+        working-directory: backend
         run: pnpm build
 
       - name: Install browser
+        working-directory: frontend
         run: pnpm exec playwright install --with-deps chromium
 
       - name: Browser verification
+        working-directory: frontend
         run: pnpm exec playwright test
 
       - name: Upload browser report
@@ -63,6 +100,6 @@ jobs:
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: browser-verification
-          path: artifacts/browser
+          path: frontend/artifacts/browser
           retention-days: 7
           if-no-files-found: ignore

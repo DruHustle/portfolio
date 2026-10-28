@@ -45,7 +45,7 @@ frames.forEach(({ size, png }, index) => {
   directory.writeUInt32LE(offset, entry + 12);
   offset += png.length;
 });
-const output = fileURLToPath(new URL("../client/public/", import.meta.url));
+const output = fileURLToPath(new URL("../public/", import.meta.url));
 await writeFile(`${output}favicon.svg`, source);
 await writeFile(`${output}favicon.ico`, Buffer.concat([directory, ...frames.map(frame => frame.png)]));
 await writeFile(`${output}favicon.png`, Buffer.from(images[64], "base64"));

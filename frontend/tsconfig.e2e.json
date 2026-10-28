@@ -2,6 +2,6 @@
   "extends": "./tsconfig.json",
   "include": ["e2e/**/*.ts", "playwright.config.ts"],
   "compilerOptions": {
-    "tsBuildInfoFile": "./node_modules/typescript/e2e.tsbuildinfo"
+    "tsBuildInfoFile": "./node_modules/.cache/e2e.tsbuildinfo"
   }
 }

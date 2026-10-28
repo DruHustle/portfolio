@@ -1,12 +1,9 @@
 import express from "express";
 import { createServer } from "node:http";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
 import cors from "cors";
 import { createExpressMiddleware } from "@trpc/server/adapters/express";
 import { appRouter } from "./routers/index";
 
-const directory = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
 app.disable("x-powered-by");
 app.use(
@@ -20,20 +17,6 @@ app.use(
 app.use("/api/trpc", createExpressMiddleware({ router: appRouter }));
 app.use("/api", (_request, response) => {
   response.status(404).json({ error: "API route not found" });
-});
-
-// Vite writes the root-based site into dist. Redirect legacy asset URLs.
-const staticPath = path.resolve(directory, "..", "dist");
-app.use("/portfolio", (request, response) => {
-  response.redirect(308, `/${request.url.replace(/^\/+/, "")}`);
-});
-app.use(express.static(staticPath));
-app.get("*", (request, response) => {
-  if (path.extname(request.path)) {
-    response.status(404).send("File not found");
-    return;
-  }
-  response.sendFile(path.join(staticPath, "index.html"));
 });
 
 const server = createServer(app);

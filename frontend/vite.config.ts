@@ -17,19 +17,18 @@ export default defineConfig(({ mode }) => ({
   base: "/",
   test: {
     environment: "jsdom",
+    include: ["src/**/*.test.{ts,tsx}"],
     setupFiles: ["./src/__tests__/setup.ts"],
   },
   resolve: {
     alias: {
-      "@": path.resolve(import.meta.dirname, "client", "src"),
-      "@shared": path.resolve(import.meta.dirname, "shared"),
-      "@assets": path.resolve(import.meta.dirname, "attached_assets"),
+      "@": path.resolve(import.meta.dirname, "src"),
     },
   },
   envDir: path.resolve(import.meta.dirname),
-  root: path.resolve(import.meta.dirname, "client"),
+  root: import.meta.dirname,
   build: {
-    // This tells Vite to put the final files in /dist at the project root
+    // Keep browser build output inside the frontend package.
     outDir: path.resolve(import.meta.dirname, "dist"),
     emptyOutDir: true,
     // Keep generated assets under the canonical site's root.

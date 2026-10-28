@@ -1,0 +1,17 @@
+{
+  "include": ["src/**/*.ts", "tests/**/*.ts", "vitest.config.ts"],
+  "compilerOptions": {
+    "target": "ES2022",
+    "incremental": true,
+    "noEmit": true,
+    "module": "ESNext",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "allowImportingTsExtensions": true,
+    "moduleResolution": "bundler",
+    "tsBuildInfoFile": "./node_modules/.cache/backend.tsbuildinfo",
+    "lib": ["ES2022"],
+    "types": ["node"]
+  }
+}

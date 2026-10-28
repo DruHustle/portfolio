@@ -5,9 +5,7 @@ import jsxA11y from "eslint-plugin-jsx-a11y";
 import globals from "globals";
 
 export default tseslint.config(
-  {
-    ignores: ["dist/**", "node_modules/**", "client/public/**", "artifacts/**"],
-  },
+  { ignores: ["dist/**", "node_modules/**", "public/**", "artifacts/**"] },
   js.configs.recommended,
   ...tseslint.configs.recommended,
   {
@@ -18,10 +16,26 @@ export default tseslint.config(
         "error",
         { argsIgnorePattern: "^_", caughtErrors: "none" },
       ],
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: [
+                "**/backend/**",
+                "**/shared/**",
+                "@portfolio/backend",
+                "@portfolio/shared",
+              ],
+              message: "The frontend must be independent of sibling packages.",
+            },
+          ],
+        },
+      ],
     },
   },
   {
-    files: ["client/src/**/*.{ts,tsx}"],
+    files: ["src/**/*.{ts,tsx}"],
     plugins: { "react-hooks": hooks, "jsx-a11y": jsxA11y },
     settings: { "jsx-a11y": { components: { Link: "a" } } },
     rules: {

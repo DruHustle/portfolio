@@ -23,12 +23,12 @@ This document outlines how SOLID principles are implemented throughout the Portf
 #### Services Layer
 Each service handles a specific domain concern:
 
-**ProjectService** (`client/src/services/projectService.ts`)
+**ProjectService** (`frontend/src/services/projectService.ts`)
 - **Responsibility**: Manage project data operations
 - **Methods**: `getAllProjects()`, `getProjectById()`, `getIMSOPProject()`, `getSAPBTPAIHubProject()`, `getSmartFactoryIoTProject()`
 - **Single Concern**: Project data retrieval and management
 
-**NavigationService** (`client/src/services/navigationService.ts`)
+**NavigationService** (`frontend/src/services/navigationService.ts`)
 - **Responsibility**: Manage navigation state
 - **Methods**: `setFromFeaturedProjects()`, `isFromFeaturedProjects()`, `clearNavigationState()`, `checkReferrer()`, `initializeFromReferrer()`
 - **Single Concern**: Navigation state persistence and detection
