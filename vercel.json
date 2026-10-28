@@ -1,8 +1,8 @@
 {
   "version": 2,
   "framework": "vite",
-  "installCommand": "pnpm install --frozen-lockfile",
-  "buildCommand": "pnpm build:frontend",
+  "installCommand": "cd frontend && npx --yes pnpm@10.34.7 install --frozen-lockfile",
+  "buildCommand": "cd frontend && npx --yes pnpm@10.34.7 build",
   "outputDirectory": "frontend/dist",
   "redirects": [
     {

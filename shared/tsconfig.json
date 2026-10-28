@@ -1,9 +1,0 @@
-{
-  "extends": "../tsconfig.base.json",
-  "include": ["*.ts"],
-  "compilerOptions": {
-    "tsBuildInfoFile": "./node_modules/.cache/shared.tsbuildinfo",
-    "lib": ["ES2022"],
-    "types": []
-  }
-}

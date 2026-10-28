@@ -1,8 +1,16 @@
 {
-  "extends": "../tsconfig.base.json",
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist", "**/*.test.ts"],
   "compilerOptions": {
+    "target": "ES2022",
+    "incremental": true,
+    "noEmit": true,
+    "module": "ESNext",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "allowImportingTsExtensions": true,
+    "moduleResolution": "bundler",
     "tsBuildInfoFile": "./node_modules/.cache/app.tsbuildinfo",
     "lib": ["esnext", "dom", "dom.iterable"],
     "jsx": "preserve",
