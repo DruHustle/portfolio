@@ -6,7 +6,12 @@ import globals from "globals";
 
 export default tseslint.config(
   {
-    ignores: ["dist/**", "node_modules/**", "client/public/**", "artifacts/**"],
+    ignores: [
+      "**/dist/**",
+      "**/node_modules/**",
+      "frontend/public/**",
+      "**/artifacts/**",
+    ],
   },
   js.configs.recommended,
   ...tseslint.configs.recommended,
@@ -21,13 +26,55 @@ export default tseslint.config(
     },
   },
   {
-    files: ["client/src/**/*.{ts,tsx}"],
+    files: ["frontend/src/**/*.{ts,tsx}"],
     plugins: { "react-hooks": hooks, "jsx-a11y": jsxA11y },
     settings: { "jsx-a11y": { components: { Link: "a" } } },
     rules: {
       "react-hooks/rules-of-hooks": "error",
       "react-hooks/exhaustive-deps": "error",
       ...jsxA11y.flatConfigs.recommended.rules,
+      "no-restricted-imports": [
+        "error",
+        {
+          paths: [
+            {
+              name: "@portfolio/backend/router",
+              allowTypeImports: true,
+              message: "The frontend may only import backend router types.",
+            },
+          ],
+          patterns: [
+            {
+              group: [
+                "**/backend/**",
+                "**/server/**",
+                "!@portfolio/backend/router",
+              ],
+              message: "Use the type-only @portfolio/backend/router contract.",
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    files: ["backend/**/*.ts"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: [
+                "**/frontend/**",
+                "@portfolio/frontend",
+                "@portfolio/frontend/*",
+              ],
+              message: "Backend code must not depend on the frontend.",
+            },
+          ],
+        },
+      ],
     },
   }
 );

@@ -1,12 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { ProjectService } from "../services/projectService";
-import { appRouter } from "../../../server/routers/index";
+import { appRouter } from "../src/routers/index";
 
-describe("Project lookups", () => {
+describe("Project API", () => {
   it.each(["toString", "constructor", "__proto__", "unknown"])(
-    "treats %s as an unknown ID in both registries",
+    "treats %s as an unknown API project ID",
     async id => {
-      expect(ProjectService.getProjectById(id)).toBeNull();
       expect(await appRouter.createCaller({}).getProject({ id })).toBeNull();
     }
   );

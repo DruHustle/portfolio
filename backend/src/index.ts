@@ -22,8 +22,8 @@ app.use("/api", (_request, response) => {
   response.status(404).json({ error: "API route not found" });
 });
 
-// Vite writes the root-based site into dist. Redirect legacy asset URLs.
-const staticPath = path.resolve(directory, "..", "dist");
+// Both src/index.ts and dist/index.js resolve the sibling frontend build.
+const staticPath = path.resolve(directory, "..", "..", "frontend", "dist");
 app.use("/portfolio", (request, response) => {
   response.redirect(308, `/${request.url.replace(/^\/+/, "")}`);
 });

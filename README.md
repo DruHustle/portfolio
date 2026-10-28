@@ -14,15 +14,27 @@ Onesa AI provides a Next.js/FastAPI workspace for Chat, Knowledge, Agents, and T
 
 ```text
 portfolio/
-├── client/                 # Frontend React application (Vite + TS + Tailwind)
-│   ├── public/             # Static assets (images, resume)
-│   └── src/                # Application source code
-│       ├── data/           # Project and skill data definitions
-│       ├── pages/          # Main pages and project detail views
-│       └── components/     # Reusable UI components
-├── server/                 # Optional backend for advanced features
-└── .github/workflows/      # Pull-request and main-branch quality checks
+├── frontend/               # React application and all browser tooling
+│   ├── src/                # Pages, components, data, and UI unit tests
+│   ├── public/             # Images, résumé, and published engineering guides
+│   ├── e2e/                # Playwright browser tests
+│   ├── scripts/            # Documentation, favicon, and performance tools
+│   ├── design/             # Editable frontend artwork and design sources
+│   ├── package.json        # Frontend dependencies and commands
+│   └── vite.config.ts      # Vite/Vitest configuration; builds frontend/dist/
+├── backend/                # Optional Express and tRPC service
+│   ├── src/                # HTTP server, API routers, and tRPC setup
+│   ├── tests/              # API contract tests in a Node environment
+│   └── package.json        # Backend dependencies and commands
+├── shared/                 # Browser-safe constants used across packages
+├── .github/workflows/      # Repository quality checks
+├── pnpm-workspace.yaml     # Package membership and local workspace links
+├── tsconfig.base.json      # Common TypeScript compiler settings
+├── eslint.config.mjs       # Shared lint rules and application boundaries
+└── vercel.json             # Builds and publishes frontend/dist/ from the repo root
 ```
+
+Each application owns its source, dependencies, tests, and build configuration. The root package coordinates commands and holds common lint/format tooling. `shared/` contains only browser-safe code. The optional frontend tRPC helper imports `AppRouter` as a type from `@portfolio/backend/router`; backend implementation code is never loaded into the browser. Lint rules enforce this boundary and reject backend imports of frontend code.
 
 ## 🛠️ Getting Started
 
@@ -43,8 +55,8 @@ Open the root URL printed by Vite (normally `http://localhost:3000/`). If that p
 
 ```bash
 pnpm lint                    # TypeScript, React hooks, and JSX accessibility rules
-pnpm check                   # Strict application and Vite configuration type checks
-pnpm test                    # Rendered routes, navigation, recovery, exports, and local publication fixtures
+pnpm check                   # Separate frontend, backend, and shared TypeScript checks
+pnpm test                    # Frontend UI tests and backend API contract tests
 pnpm audit --audit-level=moderate
 pnpm build
 pnpm preview --host 127.0.0.1 --port 4173
@@ -53,27 +65,40 @@ pnpm preview --host 127.0.0.1 --port 4173
 The browser suite covers all routes at 375, 768, and 1440 pixels, with overflow checks, real image loading, console and network failures, WCAG A/AA scans, keyboard and mobile-menu behavior, project/documentation navigation, downloads, full-size diagrams, and fault recovery.
 
 ```bash
-pnpm exec playwright install chromium   # Once per browser version
+pnpm --filter @portfolio/frontend exec playwright install chromium # Once per browser version
 pnpm test:e2e                           # Build and run isolated Chromium checks
-pnpm exec playwright show-report artifacts/browser/report
+pnpm --filter @portfolio/frontend exec playwright show-report artifacts/browser/report
 ```
 
-Screenshots, accessibility results, traces for failures, and the HTML report are written to ignored `artifacts/browser/`. CI runs lint, type checks, unit tests, dependency audit, build, and browser tests on pull requests and pushes to `main`. Browser reports are retained for seven days.
+Screenshots, accessibility results, traces for failures, and the HTML report are written to ignored `frontend/artifacts/browser/`. CI runs lint, type checks, unit tests, dependency audit, build, and browser tests on pull requests and pushes to `main`. Browser reports are retained for seven days.
 
-For repeatable local performance measurements, serve the current production build on port 4173 and run `pnpm perf`. Optionally set `PERF_BASELINE_URL` to a separately served original build for alternating before-and-after samples. The collector records three cold samples at 375 and 1440 pixels with 150 ms latency, 1.6 Mbps download, 750 Kbps upload, and 4× CPU throttling. Results are in `artifacts/browser/performance.json`. These are synthetic LCP, CLS, and scripted-navigation interaction measurements, not production field Core Web Vitals.
+For repeatable local performance measurements, serve the current production build on port 4173 and run `pnpm perf`. Optionally set `PERF_BASELINE_URL` to a separately served original build for alternating before-and-after samples. The collector records three cold samples at 375 and 1440 pixels with 150 ms latency, 1.6 Mbps download, 750 Kbps upload, and 4× CPU throttling. Results are in `frontend/artifacts/browser/performance.json`. These are synthetic LCP, CLS, and scripted-navigation interaction measurements, not production field Core Web Vitals.
 
-`pnpm start` optionally serves the build and the existing tRPC router from Express on port 3000. Set `PORT` to choose another port, and `ALLOWED_ORIGIN` for an allowed cross-origin frontend. The portfolio itself is static and needs no API or login. The optional `auth.me` and `auth.logout` procedures remain anonymous placeholders, not an authentication system.
+The packages can also be developed and checked separately:
+
+```bash
+pnpm dev:frontend            # Vite frontend, normally http://localhost:3000/
+PORT=3001 pnpm dev:backend    # Optional API alongside Vite, http://localhost:3001/api/trpc
+pnpm test:frontend           # Browser-side unit tests only
+pnpm test:backend            # Node API contract tests only
+pnpm build:frontend          # frontend/dist/; static hosting needs only this output
+pnpm build:backend           # backend/dist/index.js
+```
+
+From either application folder, `pnpm dev`, `pnpm build`, `pnpm check`, and `pnpm test` run that package's commands. Run the frozen install from the repository root so pnpm links all workspace packages.
+
+`pnpm build` builds both applications. Afterward, `pnpm start` optionally serves `frontend/dist/` and the existing tRPC router from the compiled Express entry point on port 3000. Set `PORT` to choose another port, and `ALLOWED_ORIGIN` for an allowed cross-origin frontend. The portfolio itself is static and needs no API or login. The optional `auth.me` and `auth.logout` procedures remain anonymous placeholders, not an authentication system.
 
 ## 🌐 Deployment
-The portfolio is hosted on **Vercel** at **https://andrewgotora.com/**, using hash-based routing and root-relative assets. The connected Vercel project publishes `main` with a frozen pnpm install, `pnpm build`, and `dist` as the output directory. `vercel.json` defines these settings and redirects legacy `/portfolio/` URLs to the equivalent root paths.
+The portfolio is hosted on **Vercel** at **https://andrewgotora.com/**, using hash-based routing and root-relative assets. The connected Vercel project publishes `main` with a frozen pnpm install, `pnpm build:frontend`, and `frontend/dist` as the output directory. Keep the Vercel project root at the repository root so it can install the workspace. `vercel.json` defines these settings and redirects legacy `/portfolio/` URLs to the equivalent root paths.
 
 Create a branch and open a pull request against `main`. The required **Verify portfolio** check must pass before merging; `main` is protected against direct pushes, including administrator bypass. Vercel provides pull-request previews and publishes the merged revision to production. GitHub Actions performs verification only; GitHub Pages publishing and the old manual publication scripts have been retired.
 
 The documentation generator derives absolute PDF links from `package.json`'s canonical `homepage`. Downloaded guides link to the production domain rather than a separate hosting service.
 
-The favicon is a font-independent AG monogram in the portfolio's navy and cyan palette. Its editable vector source is `design/favicon-source.svg`. Run `pnpm icons:build` with Playwright Chromium installed to export the SVG, multi-size ICO, browser PNG, and Apple touch icon into `client/public/`.
+The favicon is a font-independent AG monogram in the portfolio's navy and cyan palette. Its editable vector source is `frontend/design/favicon-source.svg`. Run `pnpm icons:build` with Playwright Chromium installed to export the SVG, multi-size ICO, browser PNG, and Apple touch icon into `frontend/public/`.
 
-Vite selects `NODE_ENV` automatically. The checked-in environment files contain example API settings; no credentials are needed to run the static portfolio. Never put private credentials in `VITE_*` variables because Vite exposes them to browsers.
+Vite selects `NODE_ENV` automatically. Frontend environment files live in `frontend/` and contain example API settings; no credentials are needed to run the static portfolio. Never put private credentials in `VITE_*` variables because Vite exposes them to browsers.
 
 ## ✨ Key Features
 - **Dynamic Project Details**: Deep-dive views for major projects like IMSOP and SAP BTP AI Hub.
@@ -99,7 +124,7 @@ Developed by **Andrew Gotora**
 
 ### Engineering guide editions
 
-IMSOP and Smart Factory IoT share the same five-guide structure and page component. Markdown under `client/public/docs/{imsop,smartfactoryiot}/` is the authoring source. After editing a guide, regenerate its static HTML, rendered SVG diagrams, and PDF editions:
+IMSOP and Smart Factory IoT share the same five-guide structure and page component. Markdown under `frontend/public/docs/{imsop,smartfactoryiot}/` is the authoring source. After editing a guide, regenerate its static HTML, rendered SVG diagrams, and PDF editions:
 
 ```bash
 # Requires pandoc on PATH and Playwright Chromium installed locally.
@@ -107,4 +132,4 @@ pnpm install --frozen-lockfile
 pnpm docs:build
 ```
 
-The renderer also refreshes the résumé PDF from its HTML source and writes `client/public/docs/manifest.json` with source/output hashes. Generated HTML uses local SVG files and requires no JavaScript, external renderer, or model call. Commit the generated editions with their sources; `pnpm build` only packages these assets. Preview both project documentation routes and their visual guides after regeneration.
+The renderer also refreshes the résumé PDF from its HTML source and writes `frontend/public/docs/manifest.json` with source/output hashes. Generated HTML uses local SVG files and requires no JavaScript, external renderer, or model call. Commit the generated editions with their sources; `pnpm build` only packages these assets. Preview both project documentation routes and their visual guides after regeneration.

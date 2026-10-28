@@ -43,7 +43,7 @@ const manifest = { generator: "scripts/build-docs.mjs", documents: {} };
 const browser = await chromium.launch();
 try {
   for (const project of projects) {
-    const directory = path.join(root, "client/public/docs", project.directory);
+    const directory = path.join(root, "public/docs", project.directory);
     for (const name of guides) {
       const source = await readFile(path.join(directory, `${name}.md`), "utf8");
       const content = execFileSync(
@@ -231,11 +231,11 @@ try {
   const resume = await browser.newPage();
   try {
     await resume.goto(
-      pathToFileURL(path.join(root, "client/public/resume/resume.html")).href
+      pathToFileURL(path.join(root, "public/resume/resume.html")).href
     );
     await resume.evaluate(() => document.fonts.ready);
     await resume.pdf({
-      path: path.join(root, "client/public/resume/resume_download.pdf"),
+      path: path.join(root, "public/resume/resume_download.pdf"),
       format: "A4",
       printBackground: true,
       preferCSSPageSize: true,
@@ -248,6 +248,6 @@ try {
   await browser.close();
 }
 await writeFile(
-  path.join(root, "client/public/docs/manifest.json"),
+  path.join(root, "public/docs/manifest.json"),
   `${JSON.stringify(manifest, null, 2)}\n`
 );

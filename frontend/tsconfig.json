@@ -1,0 +1,15 @@
+{
+  "extends": "../tsconfig.base.json",
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist", "**/*.test.ts"],
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.cache/app.tsbuildinfo",
+    "lib": ["esnext", "dom", "dom.iterable"],
+    "jsx": "preserve",
+    "baseUrl": ".",
+    "types": ["node", "vite/client"],
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  }
+}

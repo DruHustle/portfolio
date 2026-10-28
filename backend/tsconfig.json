@@ -1,0 +1,9 @@
+{
+  "extends": "../tsconfig.base.json",
+  "include": ["src/**/*.ts", "tests/**/*.ts", "vitest.config.ts"],
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.cache/backend.tsbuildinfo",
+    "lib": ["ES2022"],
+    "types": ["node"]
+  }
+}
