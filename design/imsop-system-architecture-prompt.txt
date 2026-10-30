@@ -3,7 +3,7 @@ Mode: built-in image generation; initial generation followed by one targeted edi
 Initial generation prompt:
 Use case: infographic-diagram.
 Asset type: polished architecture infographic image for the "System Architecture" section of the IMSOP engineering portfolio project page.
-Primary request: create a new professional IMSOP architecture image in the same visual family as a dark Smart Factory IoT production architecture infographic: deep navy background, thin cyan rounded panel borders, white high-contrast text, orange flow arrows and numbered section badges, crisp technology/service icons. Landscape 16:9, high resolution, clean straight connectors, readable large labels and generous spacing.
+Primary request: create a new professional IMSOP architecture image in the same visual family as a dark Smart Factory production architecture infographic: deep navy background, thin cyan rounded panel borders, white high-contrast text, orange flow arrows and numbered section badges, crisp technology/service icons. Landscape 16:9, high resolution, clean straight connectors, readable large labels and generous spacing.
 
 Title, exactly: "IMSOP — System Architecture". White "IMSOP", orange "System Architecture".
 Subtitle: "Current production topology".

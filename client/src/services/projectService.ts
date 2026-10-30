@@ -198,7 +198,7 @@ export class ProjectService {
 
   private static getSmartFactoryIoTProject(): ProjectData {
     return {
-      title: 'Smart Factory IoT Dashboard',
+      title: 'Smart Factory',
       subtitle: 'Industrial IoT Asset, Telemetry & Edge Platform',
       description:
         'A production-oriented industrial IoT platform spanning a Vercel React/Node control plane, five private .NET services, durable MQTT telemetry, incident response, analytics, secure edge integration, and an OAuth-protected BaSyx AAS runtime.',

@@ -24,7 +24,7 @@ export default function SmartFactoryIoTDetail() {
 
   const projectData = useMemo(
     () => ({
-      title: "Smart Factory IoT",
+      title: "Smart Factory",
       subtitle: "Real-Time Industrial Monitoring & Control Platform",
       description:
         "A production-oriented industrial IoT platform for asset lifecycle management, durable telemetry, incident response, analytics, and bounded machine control. It combines a Vercel-hosted React UI and API proxy with a scalable Render web tier, a singleton telemetry and notification worker, five .NET services, managed PostgreSQL and Redis, MQTT edge gateways, and an OAuth-protected BaSyx AAS runtime.",
@@ -207,7 +207,7 @@ export default function SmartFactoryIoTDetail() {
                   </a>
 
                   <Link
-                    href="/projects/smart-factory-iot/documentation"
+                    href="/projects/smart-factory/documentation"
                     className="inline-flex items-center gap-2 px-6 py-3 bg-slate-800 text-white font-bold rounded-xl hover:bg-slate-700 transition-all hover:scale-105 border border-slate-700"
                   >
                     <FileText className="w-5 h-5 text-orange-400" />{" "}
@@ -279,7 +279,7 @@ export default function SmartFactoryIoTDetail() {
             <div className="overflow-hidden">
               <ArchitectureDiagram
                 path="images/smart_factory_arch.webp"
-                alt="Smart Factory IoT split production architecture with factory edge, CloudAMQP, Render web and worker tiers, and managed cloud services"
+                alt="Smart Factory split production architecture with factory edge, CloudAMQP, Render web and worker tiers, and managed cloud services"
                 width={1672}
                 height={941}
               />

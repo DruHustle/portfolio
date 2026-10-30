@@ -2,7 +2,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { lazy, Suspense, useEffect, useRef } from "react";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { Route, Switch, Router, useLocation } from "wouter";
+import { Route, Switch, Router, Redirect, useLocation } from "wouter";
 import { useHashLocation } from "wouter/use-hash-location";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
@@ -26,9 +26,9 @@ const titles: Record<string, string> = {
   "/projects/imsop": "IMSOP | Andrew Gotora",
   "/projects/imsop/documentation": "IMSOP Documentation | Andrew Gotora",
   "/projects/sap-btp-ai-hub": "Learning Hub | Andrew Gotora",
-  "/projects/smart-factory-iot": "Smart Factory IoT | Andrew Gotora",
-  "/projects/smart-factory-iot/documentation":
-    "Smart Factory IoT Documentation | Andrew Gotora",
+  "/projects/smart-factory": "Smart Factory | Andrew Gotora",
+  "/projects/smart-factory/documentation":
+    "Smart Factory Documentation | Andrew Gotora",
 };
 
 function AppRouter() {
@@ -101,13 +101,19 @@ function AppRouter() {
                 component={LearningHubDetail}
               />
               <Route
-                path="/projects/smart-factory-iot"
+                path="/projects/smart-factory"
                 component={SmartFactoryIoTDetail}
               />
               <Route
-                path="/projects/smart-factory-iot/documentation"
+                path="/projects/smart-factory/documentation"
                 component={SmartFactoryIoTDocumentation}
               />
+              <Route path="/projects/smart-factory-iot">
+                <Redirect to="/projects/smart-factory" replace />
+              </Route>
+              <Route path="/projects/smart-factory-iot/documentation">
+                <Redirect to="/projects/smart-factory/documentation" replace />
+              </Route>
               <Route component={NotFound} />
             </Switch>
           </Suspense>

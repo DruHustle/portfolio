@@ -99,7 +99,9 @@ Developed by **Andrew Gotora**
 
 ### Engineering guide editions
 
-IMSOP and Smart Factory IoT share the same five-guide structure and page component. Markdown under `client/public/docs/{imsop,smartfactoryiot}/` is the authoring source. After editing a guide, regenerate its static HTML, rendered SVG diagrams, and PDF editions:
+IMSOP and Smart Factory share the same five-guide structure and page component. Smart Factory uses `/#/projects/smart-factory` and `/#/projects/smart-factory/documentation`; the corresponding `smart-factory-iot` routes redirect to these URLs and replace the old history entry. The `smart-factory-iot` project ID, repository links, and `smartfactoryiot` documentation directory remain compatible with existing integrations.
+
+Markdown under `client/public/docs/{imsop,smartfactoryiot}/` is the authoring source. After editing a guide, regenerate its static HTML, rendered SVG diagrams, and PDF editions:
 
 ```bash
 # Requires pandoc on PATH and Playwright Chromium installed locally.

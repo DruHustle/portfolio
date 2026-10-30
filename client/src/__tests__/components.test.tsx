@@ -45,7 +45,7 @@ describe('ProjectService', () => {
   it('should retrieve IoT project data', () => {
     const project = ProjectService.getProjectById('smart-factory-iot');
     expect(project).toBeDefined();
-    expect(project?.title).toBe('Smart Factory IoT Dashboard');
+    expect(project?.title).toBe('Smart Factory');
     expect(project?.subtitle).toContain('IoT');
   });
 

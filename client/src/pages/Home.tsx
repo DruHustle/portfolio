@@ -458,11 +458,11 @@ export default function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {[
               {
-                title: "Smart Factory IoT",
+                title: "Smart Factory",
                 sub: "Industrial Asset, Telemetry & Edge Platform",
                 desc: "Production-oriented IoT platform spanning asset lifecycle management, AAS integration, durable MQTT telemetry, incident workflows, analytics, and secure edge gateways.",
                 tech: ["React", "Node.js", ".NET 8", "PostgreSQL", "MQTT", "AAS"],
-                link: "/projects/smart-factory-iot",
+                link: "/projects/smart-factory",
                 color:"from-orange-500 to-red-500"
               },
               {
