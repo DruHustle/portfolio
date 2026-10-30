@@ -459,9 +459,9 @@ export default function Home() {
             {[
               {
                 title: "Smart Factory",
-                sub: "Industrial Asset, Telemetry & Edge Platform",
-                desc: "Production-oriented IoT platform spanning asset lifecycle management, AAS integration, durable MQTT telemetry, incident workflows, analytics, and secure edge gateways.",
-                tech: ["React", "Node.js", ".NET 8", "PostgreSQL", "MQTT", "AAS"],
+                sub: "Digital Twins, Industrial Networks & Operations",
+                desc: "Interactive 3D factory layouts and equipment inspection, OPC UA FX/TSN diagnostics, AAS lifecycle, OT security, and evidence-aware operations.",
+                tech: ["React", "Three.js", ".NET 10", "OPC UA FX", "TSN", "AAS"],
                 link: "/projects/smart-factory",
                 color:"from-orange-500 to-red-500"
               },

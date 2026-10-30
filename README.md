@@ -97,6 +97,12 @@ Vite selects `NODE_ENV` automatically. The checked-in environment files contain 
 Developed by **Andrew Gotora**
 **Last Updated**: October 2026
 
+### Smart Factory feature page
+
+The project page and project service share capability data in `client/src/data/smartFactory.ts`. Product descriptions are based on the current [Smart Factory engineering guides](https://github.com/DruHustle/smart-factory-frontend/tree/main/docs), including factory layouts, component inspection, FX/TSN diagnostics, OT security and the editable demo. FX/TSN monitoring is described separately from commissioned local control and hardware timing.
+
+The interactive preview loads Three.js and the 6.4 MB original pump/motor GLB only after the visitor selects **Explore the 3D model**. It renders on demand, disposes its resources on navigation, and retains a static image and guide when WebGL or model loading is unavailable. Model provenance and the source hash are recorded in `client/public/models/smart-factory/README.txt`; authored component mappings and explosion transforms live in `client/src/data/smartFactoryModel.ts`. Browser checks cover actual view changes, selection, reset, failed-download recovery and unsupported WebGL.
+
 ### Engineering guide editions
 
 IMSOP and Smart Factory share the same five-guide structure and page component. Smart Factory uses `/#/projects/smart-factory` and `/#/projects/smart-factory/documentation`; the corresponding `smart-factory-iot` routes redirect to these URLs and replace the old history entry. The `smart-factory-iot` project ID, repository links, and `smartfactoryiot` documentation directory remain compatible with existing integrations.

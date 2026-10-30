@@ -1,3 +1,4 @@
+import { smartFactoryProject } from "@/data/smartFactory";
 import type { LucideIcon } from "lucide-react";
 
 /**
@@ -197,70 +198,6 @@ export class ProjectService {
   }
 
   private static getSmartFactoryIoTProject(): ProjectData {
-    return {
-      title: 'Smart Factory',
-      subtitle: 'Industrial IoT Asset, Telemetry & Edge Platform',
-      description:
-        'A production-oriented industrial IoT platform spanning a Vercel React/Node control plane, five private .NET services, durable MQTT telemetry, incident response, analytics, secure edge integration, and an OAuth-protected BaSyx AAS runtime.',
-      stats: [
-        { label: 'Runtime', value: '2 Render Roles', icon: null },
-        { label: 'Edge Transport', value: 'MQTT TLS', icon: null },
-        { label: 'Asset Standard', value: 'AAS', icon: null },
-      ],
-      problemStatement:
-        'Manufacturing facilities require real-time visibility into equipment status, environmental conditions, and production metrics. Traditional systems lack live updates, flexible alerting, and the ability to organize devices by production zones.',
-      requirements: [
-        'Durable replay-safe telemetry ingestion from gateway and direct MQTT devices',
-        'Role-aware incident ownership, notifications, and downtime confirmation',
-        'AAS creation, import, versioning, registry, and standards API integration',
-        'Secure edge configuration and bounded machine-control workflows',
-      ],
-      solution: {
-        architecture: [
-          { title: 'Frontend', desc: 'React + TypeScript + Vite', icon: null },
-          { title: 'Public API', desc: 'Node.js + Express + tRPC', icon: null },
-          { title: 'Private Services', desc: 'Five .NET 8 services', icon: null },
-          { title: 'Messaging', desc: 'CloudAMQP + MQTT TLS', icon: null },
-          { title: 'Database', desc: 'Aiven PostgreSQL + Drizzle', icon: null },
-          { title: 'Asset Standards', desc: 'BaSyx repositories, registries and gateway', icon: null },
-          { title: 'Edge', desc: 'Pi, WROVER, OPC UA, Modbus, serial', icon: null },
-        ],
-        techStack: [
-          { category: 'Frontend', items: ['React 19', 'TypeScript', 'Vite', 'TailwindCSS'] },
-          { category: 'Backend', items: ['Node.js', 'Express', 'tRPC', '.NET 8', 'ASP.NET Core'] },
-          { category: 'Data', items: ['Aiven PostgreSQL', 'Drizzle ORM', 'Redis Cloud'] },
-          { category: 'IoT & Edge', items: ['CloudAMQP', 'MQTT TLS', 'Raspberry Pi', 'ESP32', 'OPC UA', 'Modbus'] },
-          { category: 'Delivery', items: ['Vercel', 'Render Web + Worker', 'Docker', 'Supervisor', 'GitHub Actions', 'Immutable Images'] },
-        ],
-      },
-      implementation: [
-        {
-          phase: 'Platform Foundation',
-          duration: 'Weeks 1-2',
-          description: 'Build foundational dashboard with device management, sensor data visualization, and alert monitoring.',
-        },
-        {
-          phase: 'Service Integration',
-          duration: 'Weeks 3-4',
-          description: 'Integrate the private .NET services for devices, telemetry, identity, analytics, and notifications across scalable web and singleton worker roles.',
-        },
-        {
-          phase: 'Edge & Telemetry',
-          duration: 'Weeks 5-6',
-          description: 'Connect secure MQTT gateways, durable ingestion, PostgreSQL persistence, and alert workflows.',
-        },
-        {
-          phase: 'AAS & Production',
-          duration: 'Weeks 7-8',
-          description: 'Add AAS lifecycle integration and source-pinned immutable delivery across Vercel plus the split Render web and worker tiers.',
-        },
-      ],
-      results: [
-        'Durable replay-tolerant MQTT telemetry ingestion',
-        'Versioned AAS lifecycle and standards gateway',
-        'Role-aware incidents and durable notifications',
-        'Source-pinned multi-repository production delivery',
-      ],
-    };
+    return smartFactoryProject;
   }
 }
