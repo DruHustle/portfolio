@@ -1,367 +1,222 @@
-import { ArchitectureDiagram } from "@/components/ArchitectureDiagram";
+import { useEffect } from "react";
 import { Link } from "wouter";
 import {
-  ExternalLink,
-  Server,
-  Shield,
-  Zap,
+  ArrowRight,
   BarChart3,
-  Database,
-  Globe,
+  ClipboardCheck,
+  ExternalLink,
   FileText,
+  MessageSquare,
+  PackageCheck,
+  PlugZap,
+  Server,
+  Truck,
 } from "lucide-react";
-import { useMemo, useEffect } from "react";
+import { ArchitectureDiagram } from "@/components/ArchitectureDiagram";
 import { PageNavigation } from "@/components/PageNavigation";
+import { ProjectHighlights } from "@/components/ProjectHighlights";
+import { imsopCapabilities, imsopGuide, imsopProject } from "@/data/imsop";
 import { demoUrl } from "@/lib/urls";
 import { analyticsService } from "@/services/analyticsService";
+
+const highlightIcons = [Truck, ClipboardCheck, PackageCheck];
+const capabilityIcons = {
+  shipments: Truck,
+  review: ClipboardCheck,
+  purchasing: PackageCheck,
+  analytics: BarChart3,
+  integration: PlugZap,
+  assistant: MessageSquare,
+};
 
 export default function IMSOPDetail() {
   useEffect(() => {
     analyticsService.trackPageVisit("imsop-detail");
     window.scrollTo(0, 0);
   }, []);
-
-  const projectData = useMemo(
-    () => ({
-      title: "IMSOP",
-      subtitle: "Supply Chain Operations, Telemetry & Integration Platform",
-      description:
-        "A full-stack platform for supply chain visibility and operational workflows. IMSOP combines a React dashboard with shipment, order, telemetry, analytics, mapping, reporting, and role-based access features; a Node/Express REST API provides the deployed application backend, while a companion .NET 8 solution models gateway, supply-chain, and operations microservices with GraphQL and SignalR.",
-      stats: [
-        { label: "Frontend", value: "React 19", icon: Shield },
-        { label: "APIs", value: "REST + GraphQL", icon: Zap },
-        { label: "Services", value: "Node + .NET", icon: BarChart3 },
-      ],
-      problemStatement:
-        "Supply chain teams need a unified view of shipments, orders, telemetry, operational performance, and geographic activity. Fragmented tools make it difficult to coordinate workflows, investigate delays, enforce access controls, and evolve integrations without coupling the user experience to one backend implementation.",
-      requirements: [
-        "Shipment, order, telemetry, analytics, and reporting workflows",
-        "JWT authentication with role-based application access",
-        "REST APIs for the deployed application and GraphQL in the .NET gateway",
-        "Containerized services with repeatable CI/CD and cloud deployment",
-      ],
-      solution: {
-        architecture: [
-          {
-            title: "Experience",
-            desc: "React dashboard, charts, maps, exports",
-            icon: Globe,
-          },
-          {
-            title: "Application API",
-            desc: "Node.js, Express, TypeScript, REST",
-            icon: Server,
-          },
-          {
-            title: "Identity",
-            desc: "JWT, bcrypt, RBAC, protected routes",
-            icon: Shield,
-          },
-          {
-            title: "Operations",
-            desc: "Shipments, orders, telemetry, reports",
-            icon: BarChart3,
-          },
-          {
-            title: ".NET Services",
-            desc: "Gateway, supply chain, operations",
-            icon: Zap,
-          },
-          {
-            title: "Persistence",
-            desc: "Managed PostgreSQL; Node and EF Core models",
-            icon: Database,
-          },
-        ],
-        techStack: [
-          {
-            category: "Frontend",
-            items: [
-              "React 19",
-              "TypeScript",
-              "Vite",
-              "Tailwind CSS",
-              "Recharts",
-              "Google Maps / OpenStreetMap",
-            ],
-          },
-          {
-            category: "Application API",
-            items: [
-              "Node.js",
-              "Express",
-              "TypeScript",
-              "Drizzle ORM",
-              "Zod",
-              "JWT",
-              "bcrypt",
-            ],
-          },
-          {
-            category: ".NET Backend",
-            items: [
-              ".NET 8",
-              "ASP.NET Core",
-              "HotChocolate GraphQL",
-              "SignalR",
-              "Entity Framework Core",
-            ],
-          },
-          {
-            category: "Data",
-            items: [
-              "Aiven PostgreSQL",
-              "Separate Node / EF Core migrations",
-              "Telemetry and operations schemas",
-            ],
-          },
-          {
-            category: "Infrastructure",
-            items: [
-              "Docker",
-              "Kubernetes manifests",
-              "Terraform",
-              "Azure Bicep",
-              "Oracle Cloud",
-              "Vercel",
-              "GitHub Pages",
-            ],
-          },
-          {
-            category: "Delivery & Quality",
-            items: [
-              "GitHub Actions",
-              "Azure DevOps",
-              "Vitest",
-              "Playwright",
-              "Health endpoints",
-            ],
-          },
-        ],
-
-        implementation: [
-          {
-            phase: "Foundation",
-            duration: "Delivered",
-            description:
-              "Build the React operations experience, application routing, dashboards, maps, exports, and reusable UI system.",
-          },
-          {
-            phase: "Core Services",
-            duration: "Delivered",
-            description:
-              "Implement the Node/Express REST API, JWT authentication, PostgreSQL persistence, shipment, order, and telemetry endpoints.",
-          },
-          {
-            phase: "Service Architecture",
-            duration: "Implemented",
-            description:
-              "Develop the companion .NET gateway, supply-chain, and operations services with GraphQL, SignalR, and PostgreSQL support.",
-          },
-          {
-            phase: "Production",
-            duration: "Deployed",
-            description:
-              "Containerize services, add health checks and automated tests, and release the Oracle backend independently from the Vercel and GitHub Pages frontend.",
-          },
-        ],
-      },
-      results: [
-        "Unified shipment, order, telemetry, analytics, and mapping experience",
-        "Authenticated REST workflows with role-aware access controls",
-        "Extensible .NET gateway and domain-service architecture",
-        "CSV/PDF reporting and operational visualization",
-        "Automated test, container, and deployment workflows",
-      ],
-    }),
-    []
-  );
-
+  const project = imsopProject;
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-200 font-sans">
+    <div className="min-h-screen bg-slate-950 font-sans text-slate-200">
       <PageNavigation />
-
       <main id="main-content" tabIndex={-1}>
-        <section className="relative bg-gradient-to-br from-slate-950 via-blue-950/20 to-slate-950 py-16 lg:py-24 border-b border-slate-800">
-          <div className="relative z-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
-            <div className="grid lg:grid-cols-3 gap-12 items-center">
+        <section className="relative border-b border-slate-800 bg-gradient-to-br from-slate-950 via-blue-950/20 to-slate-950 py-16 lg:py-24">
+          <div className="relative z-10 mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="grid items-center gap-12 lg:grid-cols-3">
               <div className="lg:col-span-2">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-xs font-bold uppercase tracking-wider mb-6">
-                  <Server className="w-3 h-3" /> Enterprise Platform
+                <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-cyan-500/20 bg-cyan-500/10 px-3 py-1 text-xs font-bold uppercase tracking-wider text-cyan-400">
+                  <Server aria-hidden="true" className="size-3" />
+                  Supply Chain Operations
                 </div>
-                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold mb-6 tracking-tight text-white">
-                  {projectData.title}
+                <h1 className="mb-6 text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">
+                  {project.title}
                 </h1>
-                <p className="text-xl text-slate-400 mb-8 leading-relaxed">
-                  {projectData.subtitle}
+                <p className="mb-8 text-xl leading-relaxed text-slate-400">
+                  {project.subtitle}
                 </p>
                 <div className="flex flex-wrap gap-4">
-                  {/* Possible future use of GitHub link
-                <a href="https://github.com/DruHustle/imsop-app" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-6 py-3 bg-cyan-300 text-slate-950 font-bold rounded-xl hover:bg-cyan-200 transition-all">
-                  <Github className="w-5 h-5" /> Source Code
-                </a>
-                 */}
-
                   <a
                     href={demoUrl("imsop")}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-6 py-3 bg-cyan-300 text-slate-950 font-bold rounded-xl hover:bg-cyan-200 transition-all"
+                    className="inline-flex items-center gap-2 rounded-xl bg-cyan-300 px-6 py-3 font-bold text-slate-950 transition-colors hover:bg-cyan-200"
                   >
-                    <ExternalLink className="w-5 h-5" /> Live Demo
+                    <ExternalLink aria-hidden="true" className="size-5" />
+                    Live Demo
                   </a>
-
                   <Link
                     href="/projects/imsop/documentation"
-                    className="inline-flex items-center gap-2 px-6 py-3 bg-slate-800 text-white font-bold rounded-xl hover:bg-slate-700 transition-all border border-slate-700"
+                    className="inline-flex items-center gap-2 rounded-xl border border-slate-700 bg-slate-800 px-6 py-3 font-bold text-white transition-colors hover:bg-slate-700"
                   >
-                    <FileText className="w-5 h-5 text-cyan-400" /> Documentation
+                    <FileText
+                      aria-hidden="true"
+                      className="size-5 text-cyan-400"
+                    />
+                    Documentation
                   </Link>
                 </div>
               </div>
-              <div className="grid gap-4">
-                {projectData.stats.map((stat, i) => (
-                  <div
-                    key={i}
-                    className="p-6 rounded-2xl bg-slate-900 border border-slate-800 flex items-center gap-6"
-                  >
-                    <stat.icon className="w-8 h-8 text-cyan-400" />
-                    <div>
-                      <div className="text-2xl font-bold text-white">
-                        {stat.value}
-                      </div>
-                      <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">
-                        {stat.label}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
+              <ProjectHighlights
+                highlights={project.stats}
+                icons={highlightIcons}
+                accent="cyan"
+              />
             </div>
           </div>
         </section>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-20">
-          {/* Problem & Requirements */}
-          <section className="grid lg:grid-cols-2 gap-12">
-            <div className="space-y-6">
-              <h2 className="text-2xl font-bold text-white">
-                Problem Statement
+        <div className="mx-auto max-w-7xl space-y-14 px-4 py-12 sm:px-6 lg:space-y-16 lg:px-8 lg:py-16">
+          <section aria-labelledby="imsop-capabilities" className="space-y-6">
+            <div className="max-w-4xl">
+              <p className="mb-3 text-xs font-bold uppercase tracking-widest text-cyan-400">
+                Connected supply-chain workflows
+              </p>
+              <h2
+                id="imsop-capabilities"
+                className="text-3xl font-bold text-white"
+              >
+                From shipment visibility to warehouse stock
               </h2>
-              <p className="text-slate-400 text-lg leading-relaxed">
-                {projectData.problemStatement}
+              <p className="mt-4 text-lg leading-relaxed text-slate-300">
+                {project.description}
               </p>
             </div>
-            <div className="space-y-6">
-              <h2 className="text-2xl font-bold text-white">
-                Core Requirements
-              </h2>
-              <div className="grid sm:grid-cols-2 gap-4">
-                {projectData.requirements.map((req, i) => (
-                  <div
-                    key={i}
-                    className="p-4 bg-slate-900 rounded-xl border border-slate-800 flex gap-3"
+            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {imsopCapabilities.map(capability => {
+                const Icon =
+                  capabilityIcons[
+                    capability.icon as keyof typeof capabilityIcons
+                  ];
+                return (
+                  <article
+                    key={capability.title}
+                    className="rounded-2xl border border-slate-800 bg-slate-900 p-6"
                   >
-                    <div className="w-1.5 h-1.5 bg-cyan-500 rounded-full mt-2 shrink-0"></div>
-                    <p className="text-slate-400 text-sm">{req}</p>
-                  </div>
-                ))}
-              </div>
+                    <Icon
+                      aria-hidden="true"
+                      className="mb-4 size-6 text-cyan-400"
+                    />
+                    <h3 className="text-xl font-bold text-white">
+                      {capability.title}
+                    </h3>
+                    <p className="mt-3 text-sm leading-relaxed text-slate-300">
+                      {capability.description}
+                    </p>
+                  </article>
+                );
+              })}
             </div>
-          </section>
-          {/* System Architecture */}
-          <section className="bg-slate-800/40 rounded-3xl p-4 sm:p-8 md:p-12 border border-slate-700/50">
-            <h2 className="text-3xl font-bold text-white mb-4 text-center">
-              System Architecture
-            </h2>
-            <p className="text-slate-400 text-center max-w-2xl mx-auto mb-8">
-              Vercel delivery, Oracle-hosted application services, signed
-              logistics integrations, and managed PostgreSQL.
-            </p>
-            <div className="overflow-hidden">
-              <ArchitectureDiagram
-                path="images/imsop_system_architecture_v3.webp"
-                alt="IMSOP system architecture with Vercel, Oracle Caddy ingress, Node and .NET services, managed PostgreSQL, and signed logistics events"
-                width={1672}
-                height={941}
-              />
-            </div>
+            <a
+              href={imsopGuide}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex min-h-11 items-center gap-2 font-semibold text-cyan-300 underline underline-offset-4 hover:text-cyan-200"
+            >
+              Current capability guide{" "}
+              <ArrowRight aria-hidden="true" className="size-4" />
+            </a>
           </section>
 
-          <div className="grid lg:grid-cols-3 gap-12">
-            {/* Tech Stack */}
-            <div className="lg:col-span-2 space-y-8">
-              <h2 className="text-2xl font-bold text-white">Tech Stack</h2>
-              <div className="grid sm:grid-cols-2 gap-6">
-                {projectData.solution.techStack.map((stack, i) => (
-                  <div
-                    key={i}
-                    className="p-6 bg-slate-900 border border-slate-800 rounded-2xl"
-                  >
-                    <h3 className="text-xs font-bold uppercase tracking-widest text-cyan-400 mb-4">
-                      {stack.category}
-                    </h3>
-                    <div className="flex flex-wrap gap-2">
-                      {stack.items.map((item, j) => (
-                        <span
-                          key={j}
-                          className="px-3 py-1 bg-slate-800 rounded-lg text-xs text-slate-300"
-                        >
-                          {item}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-            {/* Project Results */}
-            <div className="space-y-8">
-              <h2 className="text-2xl font-bold text-white">Key Results</h2>
-              <div className="space-y-4">
-                {projectData.results.map((result, i) => (
-                  <div
-                    key={i}
-                    className="flex gap-4 p-4 bg-cyan-500/5 border border-cyan-500/10 rounded-xl"
-                  >
-                    <Zap className="w-5 h-5 text-cyan-400 shrink-0" />
-                    <p className="text-sm font-medium text-slate-300">
-                      {result}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-          {/* Implementation Roadmap */}
-          <div className="lg:col-span-2 space-y-8">
-            <h2 className="text-3xl font-bold">Implementation Roadmap</h2>
-            <div className="flex flex-col gap-6">
-              {projectData.solution.implementation.map((phase, i) => (
+          <section
+            aria-labelledby="imsop-architecture"
+            className="rounded-3xl border border-slate-700/50 bg-slate-800/40 p-5 sm:p-8"
+          >
+            <h2
+              id="imsop-architecture"
+              className="mb-4 text-center text-3xl font-bold text-white"
+            >
+              System Architecture
+            </h2>
+            <p className="mx-auto mb-6 max-w-3xl text-center leading-relaxed text-slate-400">
+              Vercel delivery, Oracle Caddy ingress, a .NET YARP gateway, Node
+              operations and supply-chain services, signed logistics events and
+              managed PostgreSQL.
+            </p>
+            <ArchitectureDiagram
+              path="images/imsop_system_architecture_v3.webp"
+              alt="IMSOP system architecture with Vercel, Oracle Caddy ingress, Node and .NET services, managed PostgreSQL, and signed logistics events"
+              width={1672}
+              height={941}
+            />
+          </section>
+
+          <section aria-labelledby="imsop-stack">
+            <h2 id="imsop-stack" className="mb-6 text-3xl font-bold text-white">
+              Engineering stack
+            </h2>
+            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {project.solution.techStack.map(stack => (
                 <div
-                  key={i}
-                  className="flex flex-col sm:flex-row items-start gap-6 p-6 rounded-2xl bg-slate-800/50 border border-slate-700/50"
+                  key={stack.category}
+                  className="rounded-2xl border border-slate-800 bg-slate-900 p-6"
                 >
-                  <div className="sm:w-[100px] text-xs font-bold text-cyan-400 uppercase">
-                    {phase.duration}
+                  <h3 className="mb-4 text-sm font-bold text-cyan-300">
+                    {stack.category}
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                    {stack.items.map(item => (
+                      <span
+                        key={item}
+                        className="rounded-lg bg-slate-800 px-3 py-1.5 text-xs font-semibold text-slate-300"
+                      >
+                        {item}
+                      </span>
+                    ))}
                   </div>
-                  <div className="sm:w-[140px] text-xl font-bold text-white">
-                    {phase.phase}
-                  </div>
-                  <p className="text-sm text-slate-400 leading-relaxed flex-1">
-                    {phase.description}
-                  </p>
                 </div>
               ))}
             </div>
-          </div>
+          </section>
+
+          <section aria-labelledby="imsop-workflow">
+            <h2
+              id="imsop-workflow"
+              className="mb-6 text-3xl font-bold text-white"
+            >
+              From signed intake to operational action
+            </h2>
+            <ol className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+              {project.implementation.map(step => (
+                <li
+                  key={step.phase}
+                  className="rounded-2xl border border-slate-800 p-6"
+                >
+                  <span className="text-sm font-bold text-cyan-400">
+                    {step.duration}
+                  </span>
+                  <h3 className="mt-3 text-lg font-bold text-white">
+                    {step.phase}
+                  </h3>
+                  <p className="mt-3 text-sm leading-relaxed text-slate-300">
+                    {step.description}
+                  </p>
+                </li>
+              ))}
+            </ol>
+          </section>
         </div>
       </main>
-
-      <footer className="border-t border-slate-800 py-12 text-center">
-        <p className="text-slate-400 text-sm">
-          © 2026 Andrew Gotora. All rights reserved.
-        </p>
+      <footer className="border-t border-slate-800 py-10 text-center text-sm text-slate-400">
+        <p>© 2026 Andrew Gotora. All rights reserved.</p>
       </footer>
     </div>
   );

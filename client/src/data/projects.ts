@@ -60,17 +60,17 @@ export const projects: Project[] = [
   {
     id: "imsop",
     title: "IMSOP",
-    subtitle: "Supply Chain Operations, Telemetry & Integration Platform",
+    subtitle: "Supply Chain Visibility, Exceptions & Purchasing",
     description:
-      "Full-stack supply chain platform combining a React operations dashboard, a Node/Express API, shipment and telemetry workflows, analytics, mapping, JWT/RBAC, and an extensible .NET microservices backend.",
+      "Shipment visibility, durable exception review, purchase orders and warehouse receiving, with scoped analytics, maps, signed logistics intake and record-grounded assistance.",
     tags: [
       { label: "React 19", color: "purple" },
       { label: "Node.js", color: "purple" },
       { label: ".NET 8", color: "purple" },
-      { label: "GraphQL", color: "purple" },
+      { label: "YARP", color: "purple" },
       { label: "REST API", color: "purple" },
       { label: "Aiven PostgreSQL", color: "purple" },
-      { label: "SignalR", color: "purple" },
+      { label: "Signed events", color: "purple" },
       { label: "Docker", color: "purple" },
       { label: "GitHub Actions", color: "purple" },
     ],

@@ -1,3 +1,4 @@
+import { imsopProject } from "@/data/imsop";
 import { smartFactoryProject } from "@/data/smartFactory";
 import type { LucideIcon } from "lucide-react";
 
@@ -65,69 +66,7 @@ export class ProjectService {
   }
 
   private static getIMSOPProject(): ProjectData {
-    return {
-      title: 'IMSOP',
-      subtitle: 'Supply Chain Operations, Telemetry & Integration Platform',
-      description:
-        'A full-stack operations platform combining a React dashboard, Node/Express REST API, shipment and telemetry workflows, analytics, mapping, JWT/RBAC, and an extensible .NET microservices backend.',
-      stats: [
-        { label: 'Frontend', value: 'React 19', icon: null },
-        { label: 'APIs', value: 'REST + GraphQL', icon: null },
-        { label: 'Services', value: 'Node + .NET', icon: null },
-      ],
-      problemStatement:
-        'The organization faced critical challenges in managing legacy monolithic systems that couldn\'t scale with growing demand. Peak traffic loads exceeding 5M requests per day caused frequent outages and high operational costs.',
-      requirements: [
-        'Unify shipment, order, telemetry, analytics, and reporting workflows',
-        'Protect application operations with JWT and role-based access',
-        'Support deployed REST APIs and an extensible GraphQL service gateway',
-        'Automate testing, containers, and cloud delivery',
-      ],
-      solution: {
-        architecture: [
-          { title: 'Experience', desc: 'React dashboards, maps, charts, exports', icon: null },
-          { title: 'Application API', desc: 'Node.js, Express, TypeScript, REST', icon: null },
-          { title: 'Identity', desc: 'JWT, bcrypt, RBAC, protected routes', icon: null },
-          { title: 'Operations', desc: 'Shipments, orders, telemetry, reports', icon: null },
-          { title: '.NET Services', desc: 'Gateway, supply chain, operations', icon: null },
-          { title: 'Persistence', desc: 'Managed PostgreSQL; Node and EF Core models', icon: null },
-        ],
-        techStack: [
-          { category: 'Frontend', items: ['React 19', 'TypeScript', 'Vite', 'Recharts', 'Google Maps'] },
-          { category: 'Backend', items: ['Node.js', 'Express', '.NET 8', 'GraphQL', 'SignalR'] },
-          { category: 'Data', items: ['Aiven PostgreSQL', 'Drizzle ORM', 'EF Core'] },
-          { category: 'Delivery', items: ['Docker', 'GitHub Actions', 'Azure DevOps', 'Terraform', 'Azure Bicep'] },
-        ],
-      },
-      implementation: [
-        {
-          phase: 'Foundation',
-          duration: 'Weeks 1-4',
-          description: 'Set up cloud infrastructure, establish CI/CD pipelines, and deploy initial microservices framework.',
-        },
-        {
-          phase: 'Core Services',
-          duration: 'Weeks 5-12',
-          description: 'Develop and deploy core business services with event-driven communication using Azure Service Bus.',
-        },
-        {
-          phase: 'Optimization',
-          duration: 'Weeks 13-16',
-          description: 'Integrate all services, optimize performance, and implement distributed tracing with App Insights.',
-        },
-        {
-          phase: 'Production',
-          duration: 'Weeks 17-20',
-          description: 'Deploy to production, implement security hardening, and establish operational procedures.',
-        },
-      ],
-      results: [
-        'Unified operations, telemetry, analytics, and mapping experience',
-        'Authenticated REST workflows with role-aware access',
-        'Extensible .NET gateway and domain-service architecture',
-        'Automated test, container, and deployment workflows',
-      ],
-    };
+    return imsopProject;
   }
 
   private static getSAPBTPProject(): ProjectData {
