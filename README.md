@@ -81,7 +81,7 @@ Vite selects `NODE_ENV` automatically. The checked-in environment files contain 
 - **Documentation Hub**: Integrated viewing and downloading of project documentation.
 - **Analytics Status**: The public analytics route explains configuration; visitor reports require the owner's Vercel dashboard. The tracking script is included once on Vercel builds, or when `VITE_ENABLE_ANALYTICS=true` is explicitly set. Local builds leave it disabled by default. Enabling the Vercel integration and verifying collection remain deployment-side steps; this page does not claim live collection or display mock metrics.
 - **Accessible Navigation**: Skip link, visible keyboard focus, section focus management, reduced-motion support, and consistently available return navigation.
-- **Deferred Assets**: Project routes load on demand; compact avatars and dimensioned, lazy-loaded architecture images reduce the initial transfer. Original full-resolution images remain available.
+- **Deferred Assets**: Project routes load on demand; compact avatars and dimensioned, lazy-loaded architecture images reduce the initial transfer. Full-size links open the current diagrams.
 - **Modern Tech Stack**: Built with React, TypeScript, Tailwind CSS, and Wouter.
 
 ## 🛠️ Technology Stack
@@ -107,7 +107,13 @@ Native factory rendering helpers live in `client/src/components/smart-factory/`,
 
 ### Project page layout and IMSOP
 
-Both project heroes use `ProjectHighlights` to retain their original compact card heights and hero spacing. Smart Factory uses the scalable navy architecture image in `client/public/images/smart_factory_arch.svg`, with real text and consistent vector icons. Edit `scripts/build-smart-factory-architecture.mjs` and run `pnpm architecture:build` to refresh the SVG and 2× lossless PNG/WebP exports. The generator requires Playwright Chromium and `cwebp`. The full-width 3D preview and balanced feature grids avoid empty columns.
+Both project heroes use `ProjectHighlights` to retain their original compact card heights and hero spacing. Smart Factory uses the scalable navy architecture image in `client/public/images/smart_factory_arch.svg`, with real text and consistent vector icons. Edit `scripts/build-smart-factory-architecture.mjs` and run `pnpm architecture:build` to refresh and validate the SVG. The generator requires Playwright Chromium. The full-width 3D preview and balanced feature grids avoid empty columns.
+
+### Image replacement and cleanup
+
+`scripts/current-images.json` lists the current files in the managed `client/public/images/` directory, including the profile photo used by social metadata. When replacing an image, update its references and this manifest in the same change. `pnpm images:clean` deletes files outside the manifest from that directory; `pnpm images:check` reports leftovers without deleting them. Cleanup validates the manifest and current files before deleting anything and refuses unexpected directories or symlinks. It never touches models, documentation diagrams, design sources or unrelated local files.
+
+Every `pnpm build` cleans the managed source images, then Vite empties `dist` before creating the new output. Vercel runs the same command, so retired images are absent from the current production deployment. Image responses require cache revalidation, so stable image URLs are refreshed after replacement. Historical immutable Vercel deployments and Git history are separate from the current live site and are not deleted by this build process.
 
 IMSOP's page, project service and overview cards describe shipment visibility, durable exception review, signed event intake, purchasing and partial warehouse receiving. Shared detail data is in `client/src/data/imsop.ts`, reviewed against the [current IMSOP capability guide](https://github.com/DruHustle/imsop-app-backend/blob/main/docs/CURRENT_PLATFORM.md). Optional providers and integrations remain explicitly configured capabilities.
 

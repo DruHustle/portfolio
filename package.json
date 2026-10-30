@@ -6,8 +6,10 @@
   "license": "MIT",
   "scripts": {
     "dev": "vite --host",
-    "build": "vite build",
-    "test": "vitest run",
+    "build": "pnpm images:clean && vite build",
+    "test": "node --test scripts/verify-image-cleanup.mjs && vitest run",
+    "images:clean": "node scripts/clean-images.mjs",
+    "images:check": "node scripts/clean-images.mjs --check",
     "preview": "vite preview --host",
     "check": "tsc --noEmit && tsc -p tsconfig.node.json && tsc -p tsconfig.e2e.json",
     "start": "tsx server/index.ts",
