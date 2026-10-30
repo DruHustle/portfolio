@@ -6,7 +6,7 @@ test.use({ launchOptions: { args: ["--enable-unsafe-swiftshader"] } });
 const folder = "artifacts/browser/twin";
 mkdirSync(folder, { recursive: true });
 
-test("3D preview loads on demand and changes the actual model view", async ({
+test("whole factory starts automatically and supports selection, movement and zones", async ({
   page,
 }, info) => {
   test.setTimeout(90_000);
@@ -18,18 +18,19 @@ test("3D preview loads on demand and changes the actual model view", async ({
   page.on("pageerror", error => errors.push(error.message));
   await page.goto("#/projects/smart-factory");
   await expect(
-    page.getByRole("heading", { name: "OPC UA FX & TSN, made visible" })
-  ).toBeVisible();
-  expect(models).toEqual([]);
-  await page.getByRole("button", { name: "Explore the 3D model" }).click();
-  const explode = page.getByRole("button", {
-    name: "Exploded view",
-    exact: true,
-  });
-  await expect(explode).toBeEnabled({ timeout: 30_000 });
+    page.getByRole("button", { name: "Explore the 3D model" })
+  ).toHaveCount(0);
+  await expect(page.getByText(/Loads on demand/)).toHaveCount(0);
   const canvas = page.locator('[data-testid="twin-viewport"] canvas');
   await expect(canvas).toBeVisible();
-  expect(models).toHaveLength(1);
+  await expect(canvas).toHaveAttribute("data-floor-node-count", "40");
+  await expect
+    .poll(
+      () => page.getByTestId("factory-scene").getAttribute("data-models-ready"),
+      { timeout: 45_000 }
+    )
+    .toBe("25");
+  expect(new Set(models).size).toBe(7);
   expect(
     await page.evaluate(() => document.documentElement.scrollWidth)
   ).toBeLessThanOrEqual(info.project.use.viewport!.width);
@@ -37,39 +38,50 @@ test("3D preview loads on demand and changes the actual model view", async ({
     .withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"])
     .analyze();
   expect(accessibility.violations).toEqual([]);
-  await page.locator('section[aria-labelledby="digital-twins"]').screenshot({
-    path: `${folder}/${info.project.name}-workspace.png`,
+  await canvas.screenshot({
+    path: `${folder}/${info.project.name}-factory.png`,
   });
-  const assembled = await canvas.screenshot({
-    path: `${folder}/${info.project.name}-assembled.png`,
-  });
-  await explode.click();
-  await expect(explode).toHaveAttribute("aria-pressed", "true");
-  const exploded = await canvas.screenshot({
-    path: `${folder}/${info.project.name}-exploded.png`,
-  });
-  expect(exploded.equals(assembled)).toBe(false);
-  await explode.click();
-  await page.getByLabel("Inspect a component").selectOption("Motor");
-  await expect(page.getByLabel("Inspect a component")).toHaveValue("Motor");
-  await expect(page.getByText(/^Motor ·/)).toBeVisible();
-  const motor = await canvas.screenshot();
-  const reveal = page.getByRole("button", {
-    name: "Reveal internals",
-    exact: true,
-  });
-  await reveal.click();
-  await expect(reveal).toHaveAttribute("aria-pressed", "true");
-  const internals = await canvas.screenshot({
-    path: `${folder}/${info.project.name}-motor-internals.png`,
-  });
-  expect(internals.equals(motor)).toBe(false);
-  await page.getByRole("button", { name: "Reset view", exact: true }).click();
-  await expect(explode).toHaveAttribute("aria-pressed", "false");
-  await expect(reveal).toHaveAttribute("aria-pressed", "false");
-  await expect(page.getByLabel("Inspect a component")).toHaveValue("Assembly");
-  const reset = await canvas.screenshot();
-  expect(reset.equals(exploded)).toBe(false);
+  await page.getByLabel("Select equipment").selectOption("equipment:robot-01");
+  await expect(
+    page.getByText(/^Assembly pick and place robot · Assembly/)
+  ).toBeVisible();
+  const selected = await canvas.screenshot();
+  await canvas.focus();
+  await page.keyboard.press("ArrowRight");
+  await expect(
+    page.getByRole("button", { name: "Reset layout", exact: true })
+  ).toBeVisible();
+  expect((await canvas.screenshot()).equals(selected)).toBe(false);
+  await page.getByRole("button", { name: "Reset layout", exact: true }).click();
+  await expect(page.getByLabel("Select equipment")).toHaveValue("");
+  await page.getByLabel("Factory zone").selectOption("Assembly");
+  await expect(canvas).toHaveAttribute("data-floor-node-count", "12");
+  await page.getByLabel("Factory zone").selectOption("all");
+  await expect(canvas).toHaveAttribute("data-floor-node-count", "40");
+  await page.getByRole("button", { name: "Floor plan", exact: true }).click();
+  await expect(
+    page.getByRole("group", {
+      name: "Accessible factory floor plan",
+      exact: true,
+    })
+  ).toBeVisible();
+  await expect(canvas).toHaveCount(0);
+  await page.getByRole("button", { name: "3D view", exact: true }).click();
+  await expect(canvas).toBeVisible();
+  if (info.project.name === "desktop-1440") {
+    await page
+      .getByRole("button", { name: "Enter fullscreen", exact: true })
+      .click();
+    await expect
+      .poll(() => page.evaluate(() => !!document.fullscreenElement))
+      .toBe(true);
+    await page
+      .getByRole("button", { name: "Exit fullscreen", exact: true })
+      .click();
+    await expect
+      .poll(() => page.evaluate(() => !!document.fullscreenElement))
+      .toBe(false);
+  }
   await page
     .getByRole("link", { name: "Back to Projects", exact: true })
     .click();
@@ -77,28 +89,37 @@ test("3D preview loads on demand and changes the actual model view", async ({
   expect(errors).toEqual([]);
 });
 
-test("failed model download can be retried without losing the page", async ({
+test("missing reference keeps the factory usable and can be retried", async ({
   page,
 }) => {
-  const path = "**/models/smart-factory/pump-motor.glb";
+  test.setTimeout(90_000);
+  const path = "**/models/smart-factory/robot-arm.glb";
   await page.route(path, route => route.abort());
   await page.goto("#/projects/smart-factory");
-  await page.getByRole("button", { name: "Explore the 3D model" }).click();
-  await expect(page.getByRole("alert")).toContainText("preview is unavailable");
-  await expect(
-    page.getByRole("heading", { level: 1, name: "Smart Factory", exact: true })
-  ).toBeVisible();
-  await page.unroute(path);
-  await page.getByRole("button", { name: "Retry 3D preview" }).click();
-  await expect(
-    page.getByRole("button", { name: "Exploded view", exact: true })
-  ).toBeEnabled({ timeout: 30_000 });
+  const retry = page.getByRole("button", {
+    name: "Retry detailed models",
+    exact: true,
+  });
+  await expect(retry).toBeVisible({ timeout: 30_000 });
   await expect(
     page.locator('[data-testid="twin-viewport"] canvas')
   ).toBeVisible();
+  await page.getByLabel("Select equipment").selectOption("equipment:robot-01");
+  await expect(
+    page.getByText(/^Assembly pick and place robot · Assembly/)
+  ).toBeVisible();
+  await page.unroute(path);
+  await retry.click();
+  await expect
+    .poll(
+      () => page.getByTestId("factory-scene").getAttribute("data-models-ready"),
+      { timeout: 45_000 }
+    )
+    .toBe("25");
+  await expect(retry).toHaveCount(0);
 });
 
-test("unsupported WebGL keeps a useful model image and product information", async ({
+test("no WebGL retains an interactive, keyboard-accessible whole-factory plan", async ({
   page,
 }) => {
   await page.addInitScript(() => {
@@ -116,18 +137,31 @@ test("unsupported WebGL keeps a useful model image and product information", asy
     });
   });
   await page.goto("#/projects/smart-factory");
-  await page.getByRole("button", { name: "Explore the 3D model" }).click();
-  await expect(page.getByRole("alert")).toContainText("preview is unavailable");
   await expect(
-    page.getByRole("img", {
-      name: "Smart Factory pump and motor reference model",
+    page.getByText("3D unavailable on this device · Showing floor plan", {
       exact: true,
     })
   ).toBeVisible();
+  const plan = page.getByRole("group", {
+    name: "Accessible factory floor plan",
+    exact: true,
+  });
+  await expect(plan).toBeVisible();
+  const robot = page.getByRole("button", {
+    name: "Select Assembly pick and place robot",
+    exact: true,
+  });
+  await robot.focus();
+  await robot.press("Enter");
+  await expect(page.getByLabel("Select equipment")).toHaveValue(
+    "equipment:robot-01"
+  );
+  await robot.press("ArrowRight");
   await expect(
-    page.getByRole("link", { name: "Full inspection guide" })
+    page.getByRole("button", { name: "Reset layout", exact: true })
   ).toBeVisible();
-  await expect(
-    page.getByRole("heading", { name: "OPC UA FX & TSN, made visible" })
-  ).toBeVisible();
+  const accessibility = await new AxeBuilder({ page })
+    .withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"])
+    .analyze();
+  expect(accessibility.violations).toEqual([]);
 });
