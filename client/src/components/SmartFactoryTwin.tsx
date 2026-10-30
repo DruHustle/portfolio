@@ -140,6 +140,7 @@ export function SmartFactoryTwin() {
           <button
             className={control}
             aria-label="Fit factory view"
+            title="Show the complete factory"
             onClick={fit}
           >
             <Scan aria-hidden="true" className="size-4" />
@@ -158,7 +159,7 @@ export function SmartFactoryTwin() {
         </div>
       </div>
       <div
-        className={`relative bg-[#182532] ${expanded ? "min-h-0 flex-1" : "h-[340px] sm:h-[460px] lg:h-[520px]"}`}
+        className={`relative w-full bg-[#182532] ${expanded ? "min-h-0 flex-1" : "aspect-[3/2] min-h-[220px] max-h-[76svh]"}`}
         data-testid="twin-viewport"
       >
         {view === "3d" && loaded && !error ? (
@@ -221,7 +222,7 @@ export function SmartFactoryTwin() {
         >
           {active
             ? `${active.name} · ${active.zone}. Drag to move this item; arrow keys make small adjustments.`
-            : "Drag equipment to rearrange · drag the floor to pan · right-drag to rotate · scroll or pinch to zoom."}
+            : "Move the mouse to rotate · drag equipment or the floor · scroll or pinch to zoom."}
         </p>
       </div>
       <div className="flex shrink-0 flex-wrap items-center justify-between gap-3 border-t border-slate-700 px-5 py-3 text-sm">

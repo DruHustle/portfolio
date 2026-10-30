@@ -1,3 +1,7 @@
+import {
+  frameFactoryView,
+  type FactoryFraming,
+} from "./smart-factory/factory-framing";
 import { useEffect, useRef, useState } from "react";
 import { FloorPlan } from "./smart-factory/FactoryFloorPlan";
 import {
@@ -13,6 +17,11 @@ import {
   createEquipmentProxy,
 } from "./smart-factory/FactoryEnvironment";
 import { loadSmartFactoryStudio } from "./SmartFactoryStudio";
+import { floorItemAtRay } from "./smart-factory/floor-picking";
+import {
+  factoryAreas,
+  factoryAreaColors,
+} from "./smart-factory/factory-spaces";
 import {
   optimizeFactoryReference,
   instantiateFactoryReference,
@@ -115,6 +124,31 @@ function label(text: string, color: string, size = 3.4) {
   return sprite;
 }
 
+function areaSign(text: string, color: string, width: number) {
+  const canvas = document.createElement("canvas");
+  canvas.width = 512;
+  canvas.height = 128;
+  const context = canvas.getContext("2d")!;
+  context.fillStyle = color;
+  context.fillRect(0, 0, 512, 128);
+  context.fillStyle = "#ffffff";
+  context.textAlign = "center";
+  const [title, ...rest] = text.split(/\s*\/\s*/);
+  const subtitle = rest.join(" / ");
+  context.font = `600 ${Math.min(subtitle ? 78 : 112, 456 / Math.max(1, title.length * 0.64))}px sans-serif`;
+  context.fillText(title, 256, subtitle ? 77 : 101, 472);
+  if (subtitle) {
+    context.font = `500 ${Math.min(34, 456 / Math.max(1, subtitle.length * 0.6))}px sans-serif`;
+    context.fillText(subtitle, 256, 116, 472);
+  }
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.colorSpace = THREE.SRGBColorSpace;
+  return new THREE.Mesh(
+    new THREE.PlaneGeometry(width, width / 4),
+    new THREE.MeshBasicMaterial({ map: texture, toneMapped: false })
+  );
+}
+
 export default function FactoryFloorScene({
   layout,
   links,
@@ -163,7 +197,7 @@ export default function FactoryFloorScene({
     JSON.stringify(layout.zones.map(({ count: _count, ...zone }) => zone));
   useEffect(() => {
     if (failed) return;
-    // Structural keys rebuild the scene; positions and selection update it in place.
+    // Structural changes rebuild the scene; positions and selection update in place.
     const { layout, links } = sceneInputs.current;
     let cleanup: (() => void) | undefined;
     let secondFrame = 0;
@@ -255,11 +289,13 @@ export default function FactoryFloorScene({
       renderer.domElement.tabIndex = 0;
       renderer.domElement.setAttribute(
         "aria-description",
-        "Press and hold equipment to grab it; drag empty floor to pan. Release to drop. Right-drag or Shift-drag rotates; scroll or pinch zooms. Hold Space to pan over equipment. Arrow keys move selected equipment; Escape cancels an item grab or clears selection."
+        "Move the mouse without pressing to rotate the view; stop moving to stop rotation. Press and hold equipment to grab it; drag empty floor to pan. Rotation pauses while grabbing. Release to drop. Right-drag or Shift-drag also rotates; scroll or pinch zooms. Hold Space to pan over equipment. Arrow keys move selected equipment; Escape cancels an item grab or clears selection."
       );
       renderer.domElement.dataset.floorNodeCount = String(
         layout.placements.length
       );
+      const flowAreas = factoryAreas(layout);
+      renderer.domElement.dataset.factoryAreas = JSON.stringify(flowAreas);
       element.appendChild(renderer.domElement);
       const camera = new THREE.OrthographicCamera(
         -20,
@@ -279,6 +315,12 @@ export default function FactoryFloorScene({
       controls.minZoom = 0.4;
       controls.maxZoom = 10;
       controls.screenSpacePanning = true;
+      let hoverPoint: { x: number; y: number } | undefined;
+      const resetHover = () => {
+        hoverPoint = undefined;
+      };
+      const hoverOffset = new THREE.Vector3(),
+        hoverRotation = new THREE.Spherical();
       scene.add(new THREE.HemisphereLight(0xdceaff, 0x4b535b, 0.75));
       const span = Math.max(layout.width, layout.depth, 20);
       const sun = new THREE.DirectionalLight(0xfff1de, 3.1);
@@ -329,10 +371,57 @@ export default function FactoryFloorScene({
         ? "efficient-pbr"
         : "high-pbr";
       renderer.domElement.dataset.shadowResolution = String(shadowSize);
-      scene.add(createWorkshop(layout, dark));
+      const workshop = createWorkshop(layout, dark);
+      scene.add(workshop);
+      for (const area of flowAreas) {
+        const color = factoryAreaColors[area.kind];
+        if (area.door) {
+          const door = area.door;
+          for (const side of [-1, 1]) {
+            const sign = areaSign(
+              area.kind === "inbound" ? "IN" : "EXIT",
+              color,
+              door.width * 0.7
+            );
+            const offset = new THREE.Vector3(
+              0,
+              3.45,
+              side * 0.22
+            ).applyAxisAngle(new THREE.Vector3(0, 1, 0), door.rotation);
+            sign.position.set(door.x + offset.x, offset.y, door.z + offset.z);
+            sign.rotation.y = door.rotation + (side < 0 ? Math.PI : 0);
+            scene.add(sign);
+          }
+        }
+        if (area.origin === "reference" || area.kind === "storage") {
+          const sign = areaSign(
+            area.kind === "storage"
+              ? `WAREHOUSE / ${area.origin === "zone" ? area.name : "Inventory"}`
+              : area.name,
+            color,
+            Math.min(5, Math.max(1, area.width * 0.9))
+          );
+          if (area.kind === "storage") {
+            sign.position.set(
+              area.x + area.width / 2,
+              3.1,
+              area.z +
+                Math.min(area.depth / 2, 0.8) +
+                Math.min(0.9, Math.max(0.45, area.depth - 0.2)) / 2 +
+                0.02
+            );
+          } else {
+            sign.rotation.x = -Math.PI / 2;
+            sign.position.set(
+              area.x + area.width / 2,
+              0.017,
+              area.z + area.depth * 0.8
+            );
+          }
+          scene.add(sign);
+        }
+      }
       const objects = new Map<string, THREE.Group>(),
-        hits: THREE.Object3D[] = [],
-        grabTargets: THREE.Object3D[] = [],
         indicators = new Map<string, THREE.Mesh>(),
         markers = new Map<
           string,
@@ -359,22 +448,6 @@ export default function FactoryFloorScene({
         group.position.set(p.x, 0, p.z);
         group.rotation.y = THREE.MathUtils.degToRad(p.rotation ?? 0);
         group.userData.ref = p.item.ref;
-        // Keep small equipment easy to grab without masking a neighboring visible model.
-        const footprint = p.item.kind === "device" ? 1.2 : 2.8;
-        const grabTarget = new THREE.Mesh(
-          new THREE.BoxGeometry(footprint, 3.2, footprint),
-          new THREE.MeshBasicMaterial({
-            transparent: true,
-            opacity: 0,
-            depthWrite: false,
-            colorWrite: false,
-          })
-        );
-        grabTarget.visible = false;
-        grabTarget.position.y = 1.6;
-        grabTarget.userData.grabTarget = true;
-        group.add(grabTarget);
-        grabTargets.push(grabTarget);
         const contact = new THREE.Mesh(contactGeometry, contactMaterial);
         contact.rotation.x = -Math.PI / 2;
         contact.position.y = 0.018;
@@ -386,6 +459,7 @@ export default function FactoryFloorScene({
         contact.userData.nonSelectable = true;
         group.add(contact);
         const body = createEquipmentProxy(p.model, p.item.itemType);
+        body.userData.floorItemRef = p.item.ref;
         group.add(body);
         const name = label(p.item.name, "#203c4b");
         name.position.set(0, 3.05, 0);
@@ -399,6 +473,7 @@ export default function FactoryFloorScene({
           })
         );
         marker.position.set(-0.64, 2.55, 0);
+        marker.userData.nonSelectable = true;
         const rim = new THREE.Mesh(
           new THREE.TorusGeometry(0.16, 0.035, 8, 16),
           new THREE.MeshBasicMaterial({ color: 0xf7fafc })
@@ -419,11 +494,11 @@ export default function FactoryFloorScene({
         halo.rotation.x = -Math.PI / 2;
         halo.position.y = 0.025;
         halo.visible = false;
+        halo.userData.nonSelectable = true;
         group.add(halo);
         indicators.set(p.item.ref, halo);
         scene.add(group);
         objects.set(p.item.ref, group);
-        hits.push(group);
         if (p.model && (p.model !== "raspberry-pi-4b" || p.item.equipmentId))
           void referenceModel(p.model)
             .then(model => {
@@ -442,6 +517,7 @@ export default function FactoryFloorScene({
                 Math.max(size.x, size.y, size.z, 0.001);
               copy.position.sub(center);
               const normalized = new THREE.Group();
+              normalized.userData.floorItemRef = p.item.ref;
               normalized.add(copy);
               normalized.scale.setScalar(scale);
               normalized.position.y = (size.y * scale) / 2 + 0.025;
@@ -453,12 +529,6 @@ export default function FactoryFloorScene({
                 height + 0.32,
                 0
               );
-              grabTarget.scale.set(
-                Math.max(footprint, size.x * scale) / footprint,
-                Math.max(1, height + 0.5) / 3.2,
-                Math.max(footprint, size.z * scale) / footprint
-              );
-              grabTarget.position.y = Math.max(1, height + 0.5) / 2;
               normalized.traverse(o => {
                 if (o instanceof THREE.Mesh) {
                   o.castShadow = true;
@@ -476,7 +546,7 @@ export default function FactoryFloorScene({
               dirty = true;
             })
             .catch(() => {
-              // The labelled proxy remains available when a reference cannot load.
+              // Keep the labelled proxy available when a reference cannot load.
               if (!disposed) setFailedReferences(value => value + 1);
             });
       }
@@ -518,36 +588,27 @@ export default function FactoryFloorScene({
         }
         dirty = true;
       };
+      let framing: FactoryFraming = "fill";
       const size = () => {
+        resetHover();
         cancelForResize();
         const width = element.clientWidth,
-          height = element.clientHeight,
-          aspect = width / Math.max(height, 1);
-        camera.updateMatrixWorld(true);
-        let halfWidth = 0,
-          halfHeight = 0;
-        // Fit the projected bounds, including the outermost equipment labels.
-        // A width/depth heuristic clips corners after an isometric rotation.
-        for (const x of [-layout.width / 2 - 2, layout.width / 2 + 2])
-          for (const y of [-0.5, 5])
-            for (const z of [-layout.depth / 2 - 2, layout.depth / 2 + 2]) {
-              const point = new THREE.Vector3(x, y, z).applyMatrix4(
-                camera.matrixWorldInverse
-              );
-              halfWidth = Math.max(halfWidth, Math.abs(point.x));
-              halfHeight = Math.max(halfHeight, Math.abs(point.y));
-            }
-        const extent =
-          Math.max(halfWidth / Math.max(aspect, 0.1), halfHeight, 9) * 1.06;
-        camera.left = -extent * aspect;
-        camera.right = extent * aspect;
-        camera.top = extent;
-        camera.bottom = -extent;
-        camera.updateProjectionMatrix();
+          height = element.clientHeight;
+        if (!width || !height) return;
+        const bounds = frameFactoryView(
+          camera,
+          workshop,
+          width,
+          height,
+          framing
+        );
+        renderer.domElement.dataset.floorFraming = framing;
+        renderer.domElement.dataset.frameBounds = JSON.stringify(bounds);
         renderer.setSize(width, height);
         dirty = true;
       };
-      const fit = () => {
+      const fit = (mode: FactoryFraming = "fit") => {
+        framing = mode;
         // Clear remaining orbit/pan inertia before establishing the fitted view.
         const damping = controls.enableDamping;
         controls.enableDamping = false;
@@ -611,7 +672,7 @@ export default function FactoryFloorScene({
       runtime.current.focus(selection.current);
       const observer = new ResizeObserver(size);
       observer.observe(element);
-      fit();
+      fit("fill");
       const change = () => {
         dirty = true;
         renderer.domElement.dataset.cameraView = JSON.stringify({
@@ -650,6 +711,7 @@ export default function FactoryFloorScene({
       renderer.domElement.dataset.interaction = "grab";
       hand();
       const setRay = (e: PointerEvent) => {
+        camera.updateMatrixWorld();
         const rect = renderer.domElement.getBoundingClientRect();
         point.set(
           ((e.clientX - rect.left) / rect.width) * 2 - 1,
@@ -657,35 +719,12 @@ export default function FactoryFloorScene({
         );
         ray.setFromCamera(point, camera);
       };
-      const picked = () => {
-        const visible = (object: THREE.Object3D) => {
-          for (
-            let node: THREE.Object3D | null = object;
-            node;
-            node = node.parent
-          )
-            if (!node.visible) return false;
-          return true;
-        };
-        const body = ray
-          .intersectObjects(hits, true)
-          .find(
-            hit =>
-              !hit.object.userData.grabTarget &&
-              !hit.object.userData.nonSelectable &&
-              visible(hit.object)
-          );
-        let node: THREE.Object3D | null =
-          body?.object ??
-          ray.intersectObjects(grabTargets, false)[0]?.object ??
-          null;
-        while (node && !node.userData.ref) node = node.parent;
-        return node?.userData.ref as string | undefined;
-      };
+      const picked = () => floorItemAtRay(scene, ray);
       const unlockView = () => {
         controls.enablePan = controls.enableRotate = controls.enableZoom = true;
       };
       const cancel = (releaseCapture = true) => {
+        resetHover();
         start = undefined;
         if (dragging) {
           const ended = dragging;
@@ -703,6 +742,7 @@ export default function FactoryFloorScene({
         hand();
       };
       const down = (e: PointerEvent) => {
+        resetHover();
         if (e.button !== 0 && e.button !== 1 && e.button !== 2) return;
         pointers.add(e.pointerId);
         if (!e.isPrimary || pointers.size > 1) {
@@ -742,6 +782,44 @@ export default function FactoryFloorScene({
         }
         hand();
       };
+      const hoverOrbit = (e: PointerEvent) => {
+        if (
+          e.pointerType !== "mouse" ||
+          e.buttons !== 0 ||
+          pointers.size ||
+          panModifier ||
+          !controls.enabled ||
+          document.hidden
+        ) {
+          resetHover();
+          return;
+        }
+        const previous = hoverPoint;
+        hoverPoint = { x: e.clientX, y: e.clientY };
+        if (!previous) return;
+        const rect = renderer.domElement.getBoundingClientRect();
+        if (!rect.width || !rect.height) return;
+        const x = (e.clientX - previous.x) / rect.width,
+          y = (e.clientY - previous.y) / rect.height;
+        if (!x && !y) return;
+        // Follow actual mouse motion only: no idle spin, inertia, pan or zoom.
+        // Bound an individual event so re-entry/device jumps cannot swing the view.
+        hoverOffset.copy(camera.position).sub(controls.target);
+        hoverRotation.setFromVector3(hoverOffset);
+        hoverRotation.theta -=
+          THREE.MathUtils.clamp(x, -0.1, 0.1) * Math.PI * 0.8;
+        hoverRotation.phi = THREE.MathUtils.clamp(
+          hoverRotation.phi -
+            THREE.MathUtils.clamp(y, -0.1, 0.1) * Math.PI * 0.4,
+          Math.max(controls.minPolarAngle, 0.12),
+          controls.maxPolarAngle
+        );
+        hoverRotation.makeSafe();
+        camera.position
+          .copy(controls.target)
+          .add(hoverOffset.setFromSpherical(hoverRotation));
+        controls.update();
+      };
       const pointerMove = (e: PointerEvent) => {
         if (dragging && dragging.pointerId === e.pointerId) {
           if (
@@ -766,15 +844,17 @@ export default function FactoryFloorScene({
           updateConnections();
           e.preventDefault();
         } else if (!pointers.size) {
+          hoverOrbit(e);
           setRay(e);
           const ref = panModifier ? undefined : picked();
           renderer.domElement.dataset.grabTarget = ref ?? "floor";
           renderer.domElement.title = ref
             ? `Grab ${layout.placements.find(p => p.item.ref === ref)?.item.name ?? "equipment"}`
-            : "Grab to move the floor";
+            : "Move the mouse to rotate; grab to move the floor";
         }
       };
       const up = (e: PointerEvent) => {
+        resetHover();
         pointers.delete(e.pointerId);
         const began = start;
         start = undefined;
@@ -802,6 +882,7 @@ export default function FactoryFloorScene({
         hand();
       };
       const focusEquipment = (e: MouseEvent) => {
+        resetHover();
         setRay(e as PointerEvent);
         const ref = picked(),
           object = ref && objects.get(ref);
@@ -834,6 +915,10 @@ export default function FactoryFloorScene({
         controls.disconnect();
         controls.connect(renderer.domElement);
         controls.cursorStyle = "grab";
+      };
+      const visibility = () => {
+        if (document.hidden) blur();
+        else resetHover();
       };
       cancelForResize = () => {
         if (pointers.size || dragging) blur();
@@ -913,12 +998,15 @@ export default function FactoryFloorScene({
       renderer.domElement.addEventListener("pointercancel", pointerCancel);
       renderer.domElement.addEventListener("lostpointercapture", pointerCancel);
       renderer.domElement.addEventListener("pointermove", pointerMove);
+      renderer.domElement.addEventListener("pointerenter", resetHover);
+      renderer.domElement.addEventListener("pointerleave", resetHover);
       renderer.domElement.addEventListener("keydown", keyDown);
       renderer.domElement.addEventListener("pointerdown", down, true);
       renderer.domElement.addEventListener("pointerup", up, true);
       window.addEventListener("keydown", spaceDown);
       window.addEventListener("keyup", keyUp);
       window.addEventListener("blur", blur);
+      document.addEventListener("visibilitychange", visibility);
       const lost = (event: Event) => {
         event.preventDefault();
         cancelAnimationFrame(frame);
@@ -956,7 +1044,10 @@ export default function FactoryFloorScene({
         window.removeEventListener("keydown", spaceDown);
         window.removeEventListener("keyup", keyUp);
         window.removeEventListener("blur", blur);
+        document.removeEventListener("visibilitychange", visibility);
         renderer.domElement.removeEventListener("pointermove", pointerMove);
+        renderer.domElement.removeEventListener("pointerenter", resetHover);
+        renderer.domElement.removeEventListener("pointerleave", resetHover);
         renderer.domElement.removeEventListener("keydown", keyDown);
         renderer.domElement.removeEventListener("pointerdown", down, true);
         renderer.domElement.removeEventListener("pointerup", up, true);
