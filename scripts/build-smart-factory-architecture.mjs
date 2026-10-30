@@ -1,5 +1,6 @@
 import { mkdir, writeFile } from "node:fs/promises";
-import { execFileSync } from "node:child_process";
+import { cleanImages } from "./clean-images.mjs";
+import currentImages from "./current-images.json" with { type: "json" };
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { chromium } from "@playwright/test";
@@ -230,23 +231,8 @@ try {
     return null;
   }, svg);
   if (issue) throw new Error(issue);
-  await page.screenshot({
-    path: "client/public/images/smart_factory_arch.png",
-    omitBackground: true,
-  });
 } finally {
   await browser.close();
 }
-execFileSync(
-  "cwebp",
-  [
-    "-lossless",
-    "-m",
-    "6",
-    "client/public/images/smart_factory_arch.png",
-    "-o",
-    "client/public/images/smart_factory_arch.webp",
-  ],
-  { stdio: "ignore" }
-);
-console.log("Built crisp SVG and 2× lossless PNG/WebP architecture images.");
+await cleanImages("client/public/images", currentImages);
+console.log("Built crisp SVG architecture image and removed retired images.");
