@@ -214,7 +214,7 @@ export default function SmartFactoryIoTDetail() {
               industrial control stays on the factory network.
             </p>
             <ArchitectureDiagram
-              path="images/smart_factory_arch.webp"
+              path="images/smart_factory_arch.svg"
               alt="Smart Factory architecture with Vercel, Oracle API and worker roles, edge acquisition, managed data and BaSyx"
               width={1672}
               height={941}
