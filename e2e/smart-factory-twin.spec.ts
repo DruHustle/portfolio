@@ -38,9 +38,59 @@ test("whole factory starts automatically and supports selection, movement and zo
     .withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"])
     .analyze();
   expect(accessibility.violations).toEqual([]);
+  const viewportWidth = await page
+    .getByTestId("twin-viewport")
+    .evaluate(element => element.clientWidth);
+  const availableWidth = await page
+    .getByTestId("twin-viewport")
+    .evaluate(element => element.parentElement!.clientWidth);
+  expect(viewportWidth).toBe(availableWidth);
+  await expect(canvas).toHaveAttribute("data-floor-framing", "fill");
+  const frame = JSON.parse((await canvas.getAttribute("data-frame-bounds"))!);
+  expect(frame.left).toBeLessThanOrEqual(0.01);
+  expect(frame.top).toBeLessThanOrEqual(0.01);
+  expect(frame.right).toBeGreaterThanOrEqual(0.99);
+  expect(frame.bottom).toBeGreaterThanOrEqual(0.99);
+  const areas = JSON.parse((await canvas.getAttribute("data-factory-areas"))!);
+  expect(areas.map((area: { kind: string }) => area.kind)).toEqual(
+    expect.arrayContaining(["inbound", "storage", "production", "outbound"])
+  );
   await canvas.screenshot({
     path: `${folder}/${info.project.name}-factory.png`,
   });
+  await page
+    .getByRole("button", { name: "Fit factory view", exact: true })
+    .click();
+  await expect(canvas).toHaveAttribute("data-floor-framing", "fit");
+  const fitted = JSON.parse((await canvas.getAttribute("data-frame-bounds"))!);
+  expect(fitted.left).toBeGreaterThanOrEqual(0);
+  expect(fitted.top).toBeGreaterThanOrEqual(0);
+  expect(fitted.right).toBeLessThanOrEqual(1);
+  expect(fitted.bottom).toBeLessThanOrEqual(1);
+  if (info.project.name === "desktop-1440") {
+    const initial = (await canvas.getAttribute("data-camera-view"))!;
+    const box = (await canvas.boundingBox())!;
+    await page.mouse.move(box.x + box.width * 0.4, box.y + box.height * 0.5);
+    await page.mouse.move(box.x + box.width * 0.5, box.y + box.height * 0.44, {
+      steps: 4,
+    });
+    await expect
+      .poll(() => canvas.getAttribute("data-camera-view"))
+      .not.toBe(initial);
+    const paused = JSON.parse((await canvas.getAttribute("data-camera-view"))!)
+      .position as number[];
+    await page.waitForTimeout(150);
+    const idle = JSON.parse((await canvas.getAttribute("data-camera-view"))!)
+      .position as number[];
+    expect(
+      Math.hypot(...idle.map((value, index) => value - paused[index]))
+    ).toBeLessThan(0.0001);
+    await page.mouse.move(0, 0);
+    await page
+      .getByRole("button", { name: "Fit factory view", exact: true })
+      .click();
+  }
+
   await page.getByLabel("Select equipment").selectOption("equipment:robot-01");
   await expect(
     page.getByText(/^Assembly pick and place robot · Assembly/)
@@ -75,6 +125,15 @@ test("whole factory starts automatically and supports selection, movement and zo
     await expect
       .poll(() => page.evaluate(() => !!document.fullscreenElement))
       .toBe(true);
+    await expect(canvas).toHaveAttribute("data-floor-framing", "fill");
+    const fullscreenFrame = JSON.parse(
+      (await canvas.getAttribute("data-frame-bounds"))!
+    );
+    expect(fullscreenFrame.left).toBeLessThanOrEqual(0.01);
+    expect(fullscreenFrame.right).toBeGreaterThanOrEqual(0.99);
+    await canvas.screenshot({
+      path: `${folder}/desktop-fullscreen-factory.png`,
+    });
     await page
       .getByRole("button", { name: "Exit fullscreen", exact: true })
       .click();

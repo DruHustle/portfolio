@@ -4,9 +4,15 @@ Original Smart Factory workshop geometry, authored showcase layout, equipment
 models and native renderer helpers; repository MIT license.
 
 Authoritative source: https://github.com/DruHustle/smart-factory-frontend
+Updated scene source: 8c570a8f42050067d6013dfa8dbb39060c265cc4
+(feat/hover-floor-rotation-20261030): loading/warehouse/exit areas, unpressed
+mouse rotation, and visible-surface equipment picking.
+The initial camera fills the responsive viewer; Fit restores the complete floor.
 - client/src/components/workspace/FactoryFloorScene.tsx
 - client/src/components/workspace/FactoryEnvironment.ts
 - client/src/components/workspace/factory-graphics.ts
+- client/src/components/workspace/factory-spaces.ts
+- client/src/components/workspace/floor-picking.ts
 - shared/factory-floor.ts
 - scripts/showcase/factory-floor.ts (40 authored items across four zones)
 - fixtures/equipment/factory/{conveyor,robot-arm,control-cabinet,valve,storage-tank}/model.glb
