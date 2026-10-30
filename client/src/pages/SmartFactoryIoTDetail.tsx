@@ -14,6 +14,7 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import { ArchitectureDiagram } from "@/components/ArchitectureDiagram";
+import { ProjectHighlights } from "@/components/ProjectHighlights";
 import { PageNavigation } from "@/components/PageNavigation";
 import { SmartFactoryNetwork } from "@/components/SmartFactoryNetwork";
 import { SmartFactoryTwin } from "@/components/SmartFactoryTwin";
@@ -48,20 +49,17 @@ export default function SmartFactoryIoTDetail() {
         <section className="relative overflow-hidden border-b border-slate-800 bg-gradient-to-br from-slate-900 via-orange-950 to-slate-900 py-16 lg:py-24">
           <div className="relative mx-auto grid max-w-7xl gap-12 px-4 sm:px-6 lg:grid-cols-3 lg:items-center lg:px-8">
             <div className="lg:col-span-2">
-              <p className="mb-6 inline-flex items-center gap-2 rounded-full border border-orange-500/20 bg-orange-500/10 px-3 py-1 text-xs font-bold uppercase tracking-wider text-orange-400">
+              <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-orange-500/20 bg-orange-500/10 px-3 py-1 text-xs font-bold uppercase tracking-wider text-orange-400">
                 <LayoutGrid aria-hidden="true" className="size-3" />
                 Connected factory workspace
-              </p>
-              <h1 className="mb-5 text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl lg:text-6xl">
+              </div>
+              <h1 className="mb-6 text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl lg:text-6xl">
                 {project.title}
               </h1>
-              <p className="max-w-2xl text-xl font-medium leading-relaxed text-slate-200 sm:text-2xl">
+              <p className="mb-8 max-w-2xl text-xl font-medium leading-relaxed text-slate-300">
                 {project.subtitle}
               </p>
-              <p className="mt-5 max-w-2xl text-base leading-relaxed text-slate-300">
-                {project.description}
-              </p>
-              <div className="mt-8 flex flex-wrap gap-4">
+              <div className="flex flex-wrap gap-4">
                 <a
                   href={demoUrl("smart-factory-iot")}
                   target="_blank"
@@ -83,39 +81,16 @@ export default function SmartFactoryIoTDetail() {
                 </Link>
               </div>
             </div>
-            <div className="grid gap-4">
-              {project.stats.map((highlight, index) => {
-                const Icon = highlightIcons[index];
-                return (
-                  <div
-                    key={highlight.label}
-                    className="rounded-2xl border border-slate-600/60 bg-slate-800/60 p-6 backdrop-blur-sm"
-                  >
-                    <div className="flex items-center gap-4">
-                      <Icon
-                        aria-hidden="true"
-                        className="size-7 shrink-0 text-orange-400"
-                      />
-                      <div>
-                        <p className="text-xs font-bold uppercase tracking-widest text-slate-400">
-                          {highlight.label}
-                        </p>
-                        <p className="mt-1 text-2xl font-bold">
-                          {highlight.value}
-                        </p>
-                      </div>
-                    </div>
-                    <p className="mt-4 text-sm leading-relaxed text-slate-300">
-                      {highlight.description}
-                    </p>
-                  </div>
-                );
-              })}
-            </div>
+            <ProjectHighlights
+              highlights={project.stats}
+              icons={highlightIcons}
+              accent="orange"
+              largeValue
+            />
           </div>
         </section>
 
-        <div className="mx-auto max-w-7xl space-y-20 px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
+        <div className="mx-auto max-w-7xl space-y-14 px-4 py-12 sm:px-6 lg:space-y-16 lg:px-8 lg:py-16">
           <section aria-labelledby="digital-twins" className="space-y-8">
             <div className="max-w-3xl space-y-6">
               <div>
@@ -136,56 +111,48 @@ export default function SmartFactoryIoTDetail() {
                 evidence.
               </p>
             </div>
-            <div className="grid gap-8 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.4fr)] lg:items-start">
-              <div className="order-2 space-y-6 lg:order-1 lg:py-5">
-                <div className="space-y-5">
-                  <div>
-                    <h3 className="font-bold text-orange-200">
-                      Design the factory layout
-                    </h3>
-                    <p className="mt-2 text-sm leading-relaxed text-slate-300">
-                      Place and rotate equipment in named zones, grab items to
-                      rearrange them, pan the floor, enter fullscreen and save
-                      layouts. A selectable floor plan provides an accessible
-                      alternative.
-                    </p>
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-orange-200">
-                      Inspect the equipment
-                    </h3>
-                    <p className="mt-2 text-sm leading-relaxed text-slate-300">
-                      Import GLB models with explicit component mappings. Select
-                      parts, explode assemblies, reveal housings, inspect
-                      cross-sections and restore saved viewpoints.
-                    </p>
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-orange-200">
-                      Keep the evidence attached
-                    </h3>
-                    <p className="mt-2 text-sm leading-relaxed text-slate-300">
-                      Connect components to their declared telemetry sources,
-                      annotations, documents and supported security findings.
-                      Preserve those identities when a reviewed model revision
-                      changes.
-                    </p>
-                  </div>
-                </div>
-                <a
-                  href={smartFactoryGuides.layouts}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex min-h-11 items-center gap-2 font-semibold text-orange-300 underline underline-offset-4 hover:text-orange-200"
-                >
-                  Factory layout guide{" "}
-                  <ArrowRight aria-hidden="true" className="size-4" />
-                </a>
+            <SmartFactoryTwin />
+            <div className="grid gap-6 sm:grid-cols-3">
+              <div>
+                <h3 className="font-bold text-orange-200">
+                  Design the factory layout
+                </h3>
+                <p className="mt-2 text-sm leading-relaxed text-slate-300">
+                  Place and rotate equipment in named zones, rearrange items,
+                  pan the floor and save layouts. A selectable floor plan
+                  provides an accessible alternative.
+                </p>
               </div>
-              <div className="order-1 min-w-0 lg:order-2">
-                <SmartFactoryTwin />
+              <div>
+                <h3 className="font-bold text-orange-200">
+                  Inspect the equipment
+                </h3>
+                <p className="mt-2 text-sm leading-relaxed text-slate-300">
+                  Import GLB models with explicit component mappings. Select
+                  parts, explode assemblies, reveal housings, inspect
+                  cross-sections and restore saved viewpoints.
+                </p>
+              </div>
+              <div>
+                <h3 className="font-bold text-orange-200">
+                  Keep the evidence attached
+                </h3>
+                <p className="mt-2 text-sm leading-relaxed text-slate-300">
+                  Connect components to declared telemetry, annotations,
+                  documents and supported security findings. Preserve those
+                  identities through reviewed model revisions.
+                </p>
               </div>
             </div>
+            <a
+              href={smartFactoryGuides.layouts}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex min-h-11 items-center gap-2 font-semibold text-orange-300 underline underline-offset-4 hover:text-orange-200"
+            >
+              Factory layout guide{" "}
+              <ArrowRight aria-hidden="true" className="size-4" />
+            </a>
           </section>
 
           <SmartFactoryNetwork />
@@ -247,10 +214,10 @@ export default function SmartFactoryIoTDetail() {
               industrial control stays on the factory network.
             </p>
             <ArchitectureDiagram
-              path="docs/smartfactoryiot/architecture-1.svg"
+              path="images/smart_factory_arch.webp"
               alt="Smart Factory architecture with Vercel, Oracle API and worker roles, edge acquisition, managed data and BaSyx"
-              width={1200}
-              height={800}
+              width={1672}
+              height={941}
             />
           </section>
 

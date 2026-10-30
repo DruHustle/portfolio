@@ -467,9 +467,9 @@ export default function Home() {
               },
               {
                 title: "IMSOP",
-                sub: "Supply Chain Operations & Telemetry Platform",
-                desc: "Full-stack operations platform for shipment and order workflows, telemetry, analytics, mapping, role-based access, and extensible .NET microservices.",
-                tech: ["React 19", "Node.js", ".NET 8", "REST/GraphQL", "MySQL", "Docker"],
+                sub: "Supply Chain Visibility, Exceptions & Purchasing",
+                desc: "Shipment tracking, durable exception review, purchase orders and partial warehouse receiving, with scoped analytics, maps and record-grounded assistance.",
+                tech: ["React", "Node.js", ".NET 8", "YARP", "PostgreSQL", "Docker"],
                 link: "/projects/imsop",
                 color: "from-cyan-500 to-teal-500" 
               },

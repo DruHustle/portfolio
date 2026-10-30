@@ -23,7 +23,7 @@ const projects = [
   {
     id: "imsop",
     title: "IMSOP",
-    description: "Intelligent Multi-Cloud Supply Chain & Operations Platform",
+    description: "Supply Chain Visibility, Exceptions & Purchasing",
   },
   {
     id: "sap-btp-ai-hub",
