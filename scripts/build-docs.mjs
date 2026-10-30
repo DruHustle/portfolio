@@ -19,8 +19,8 @@ const projects = [
   { directory: "imsop", slug: "imsop", title: "IMSOP" },
   {
     directory: "smartfactoryiot",
-    slug: "smart-factory-iot",
-    title: "Smart Factory IoT",
+    slug: "smart-factory",
+    title: "Smart Factory",
   },
 ];
 const escape = value =>

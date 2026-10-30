@@ -115,6 +115,7 @@
   "pnpm": {
     "overrides": {
       "express>body-parser": "1.20.9",
+      "qs@<6.16.1": "6.16.1",
       "tailwindcss>nanoid": "3.3.18",
       "lodash@<4.18.0": "4.18.1",
       "lodash-es@<4.18.0": "4.18.1"

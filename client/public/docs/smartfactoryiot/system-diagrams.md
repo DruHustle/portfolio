@@ -1,4 +1,4 @@
-# Smart Factory IoT System Diagrams
+# Smart Factory System Diagrams
 
 These visual flows show application, factory edge, service identity, and persistence boundaries. They complement the detailed architecture and API references.
 

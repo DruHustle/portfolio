@@ -32,7 +32,7 @@ const projects = [
   },
   {
     id: "smart-factory-iot",
-    title: "Smart Factory IoT",
+    title: "Smart Factory",
     description: "Real-Time Industrial Monitoring & Control Platform",
   },
 ];

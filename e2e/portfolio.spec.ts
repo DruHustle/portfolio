@@ -6,13 +6,13 @@ import path from "node:path";
 const routes = [
   ["home", "/", "Senior Industrial"],
   ["imsop", "/projects/imsop", "IMSOP"],
-  ["smart-factory", "/projects/smart-factory-iot", "Smart Factory IoT"],
+  ["smart-factory", "/projects/smart-factory", "Smart Factory"],
   ["learning", "/projects/sap-btp-ai-hub", "Learning Hub"],
   ["imsop-docs", "/projects/imsop/documentation", "IMSOP Documentation"],
   [
     "factory-docs",
-    "/projects/smart-factory-iot/documentation",
-    "Smart Factory IoT Documentation",
+    "/projects/smart-factory/documentation",
+    "Smart Factory Documentation",
   ],
   ["analytics", "/analytics", "Analytics"],
   ["not-found", "/missing-page", "404"],
@@ -260,16 +260,44 @@ test("navigation works when browser storage is restricted", async ({
   });
   await page.goto("#/");
   await page
-    .getByRole("link", { name: "View Smart Factory IoT project details" })
+    .getByRole("link", { name: "View Smart Factory project details" })
     .click();
-  await expect(page).toHaveTitle("Smart Factory IoT | Andrew Gotora");
+  await expect(page).toHaveURL(/\/#\/projects\/smart-factory$/);
+  await expect(page).toHaveTitle("Smart Factory | Andrew Gotora");
   await page.getByRole("link", { name: "Back to Projects" }).click();
   await expect(page.locator("#projects")).toBeFocused();
 });
 
+for (const [suffix, heading] of [
+  ["", "Smart Factory"],
+  ["/documentation", "Smart Factory Documentation"],
+]) {
+  test(`legacy Smart Factory ${suffix || "project"} route redirects and preserves Back navigation`, async ({
+    page,
+  }) => {
+    await page.goto("#/");
+    await expect(page.getByRole("heading", { level: 1 })).toContainText(
+      "Senior Industrial"
+    );
+    await page.goto(`#/projects/smart-factory-iot${suffix}`);
+    await expect(page).toHaveURL(
+      new RegExp(`/#/projects/smart-factory${suffix}$`)
+    );
+    await expect(
+      page.getByRole("heading", { level: 1, name: heading, exact: true })
+    ).toBeVisible();
+    await expect(page).toHaveTitle(`${heading} | Andrew Gotora`);
+    await page.goBack();
+    await expect(page).toHaveURL(/\/#\/$/);
+    await expect(page.getByRole("heading", { level: 1 })).toContainText(
+      "Senior Industrial"
+    );
+  });
+}
+
 for (const [slug, directory] of [
   ["imsop", "imsop"],
-  ["smart-factory-iot", "smartfactoryiot"],
+  ["smart-factory", "smartfactoryiot"],
 ]) {
   test(`${slug}: visual guides render and return to documentation`, async ({
     page,

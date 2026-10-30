@@ -39,13 +39,7 @@ function assertLocalAssetsExist(container: HTMLElement) {
     if (!url.startsWith("/")) continue;
     expect(url).not.toContain("//");
     expect(
-      existsSync(
-        resolve(
-          import.meta.dirname,
-          "../../public",
-          url.slice(1)
-        )
-      )
+      existsSync(resolve(import.meta.dirname, "../../public", url.slice(1)))
     ).toBe(true);
   }
 }
@@ -88,13 +82,10 @@ describe("Rendered portfolio routes", () => {
 
   it.each([
     ["/projects/imsop", "IMSOP"],
-    ["/projects/smart-factory-iot", "Smart Factory IoT"],
+    ["/projects/smart-factory", "Smart Factory"],
     ["/projects/sap-btp-ai-hub", "Learning Hub"],
     ["/projects/imsop/documentation", "IMSOP Documentation"],
-    [
-      "/projects/smart-factory-iot/documentation",
-      "Smart Factory IoT Documentation",
-    ],
+    ["/projects/smart-factory/documentation", "Smart Factory Documentation"],
     ["/analytics", "Analytics"],
   ])(
     "renders directly opened %s with working local assets and navigation",
@@ -110,6 +101,34 @@ describe("Rendered portfolio routes", () => {
       expect(container.querySelector("a a")).toBeNull();
       assertLocalAssetsExist(container);
       expect(document.title).toContain(heading);
+    }
+  );
+
+  it.each([
+    ["", "Smart Factory"],
+    ["/documentation", "Smart Factory Documentation"],
+  ])(
+    "redirects the legacy Smart Factory %s route without adding history",
+    async (suffix, heading) => {
+      await openRoute(`/projects/smart-factory-iot${suffix}`);
+      const historyLength = window.history.length;
+      render(<App />);
+      await screen.findByRole("heading", { level: 1, name: heading });
+      await waitFor(() => {
+        expect(window.location.hash).toBe(`#/projects/smart-factory${suffix}`);
+        expect(document.title).toBe(`${heading} | Andrew Gotora`);
+      });
+      expect(window.history.length).toBe(historyLength);
+      expect(
+        screen.getByRole("link", {
+          name: suffix ? "Back to Project" : "Documentation",
+        })
+      ).toHaveAttribute(
+        "href",
+        suffix
+          ? "#/projects/smart-factory"
+          : "#/projects/smart-factory/documentation"
+      );
     }
   );
 

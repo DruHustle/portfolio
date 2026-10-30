@@ -1,4 +1,4 @@
-# Smart Factory IoT Architecture
+# Smart Factory Architecture
 
 ## Repository responsibilities
 

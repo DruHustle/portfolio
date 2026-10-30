@@ -3,8 +3,8 @@ import { ProjectDocumentation } from "@/components/ProjectDocumentation";
 export default function SmartFactoryIoTDocumentation() {
   return (
     <ProjectDocumentation
-      project="Smart Factory IoT"
-      slug="smart-factory-iot"
+      project="Smart Factory"
+      slug="smart-factory"
       directory="smartfactoryiot"
       accent="orange"
       description="Current hosting, security boundaries, API workflows, and data models for the industrial asset and telemetry platform."

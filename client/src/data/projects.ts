@@ -31,7 +31,7 @@ export interface Project {
 export const projects: Project[] = [
   {
     id: "smart-factory-iot",
-    title: "Smart Factory IoT",
+    title: "Smart Factory",
     subtitle: "Industrial IoT Asset, Telemetry & Edge Platform",
     description:
       "Production-oriented platform with a Vercel React/Node control plane, five private .NET services, durable MQTT ingestion, PostgreSQL/Redis, secure edge gateways, and a BaSyx AAS runtime.",
@@ -48,7 +48,7 @@ export const projects: Project[] = [
       { label: "Redis", color: "cyan" },
       { label: "MQTT", color: "cyan" },
     ],
-    link: "/projects/smart-factory-iot",
+    link: "/projects/smart-factory",
     gradient: {
       from: "from-cyan-500",
       to: "to-blue-600",

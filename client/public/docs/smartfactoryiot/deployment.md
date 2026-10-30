@@ -1,4 +1,4 @@
-# Smart Factory IoT Deployment Guide
+# Smart Factory Deployment Guide
 
 The React frontend runs on Vercel. The current backend runs on Oracle as separate API and singleton worker containers from one reviewed ARM64 image, alongside the separately managed BaSyx stack and Caddy ingress. PostgreSQL, Redis, and MQTT retain their managed providers. The previous Render services are suspended.
 

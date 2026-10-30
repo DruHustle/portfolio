@@ -393,7 +393,7 @@ footer {
 </table></div>
 <h2 id="integration-and-data-consistency">Integration and data consistency</h2>
 <p>Provider webhooks are timestamped and signed over the exact raw request bytes. A unique <code>(provider, event_id)</code> key suppresses replayed events. Event insertion and the shipment upsert execute in one PostgreSQL transaction. The event's tracking number associates it with a shipment; it is not a declared database foreign key.</p>
-<p>The Node telemetry API records a device ID, metric name, numeric value, and server timestamp. It is a REST ingestion path. MQTT intake, AAS asset models, edge commissioning, and industrial actuation are Smart Factory IoT capabilities and are not inferred for IMSOP.</p>
+<p>The Node telemetry API records a device ID, metric name, numeric value, and server timestamp. It is a REST ingestion path. MQTT intake, AAS asset models, edge commissioning, and industrial actuation are Smart Factory capabilities and are not inferred for IMSOP.</p>
 <h2 id="availability-and-operating-boundaries">Availability and operating boundaries</h2>
 <p><code>GET /health</code> reports process liveness and <code>GET /ready</code> checks database readiness. Check both through the actual ingress after releases. A shared VM is one host failure domain; container separation does not establish high availability. No availability percentage, latency target, or backup retention is asserted here without deployment evidence.</p>
 <p>PostgreSQL credentials, JWT signing keys, email credentials, and logistics signing secrets stay in protected backend configuration. Browser builds contain only public routing configuration and a restricted Maps browser key when mapping is enabled.</p>

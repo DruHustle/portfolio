@@ -17,6 +17,7 @@ describe("Project lookups", () => {
     });
     expect(await caller.getProject({ id: "smart-factory-iot" })).toMatchObject({
       id: "smart-factory-iot",
+      title: "Smart Factory",
     });
     expect((await caller.projects()).projects).toHaveLength(3);
     expect(await caller.auth.me()).toBeNull();

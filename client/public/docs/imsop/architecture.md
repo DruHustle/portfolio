@@ -59,7 +59,7 @@ Demo identities use a separate frontend mock-auth adapter and browser storage. A
 
 Provider webhooks are timestamped and signed over the exact raw request bytes. A unique `(provider, event_id)` key suppresses replayed events. Event insertion and the shipment upsert execute in one PostgreSQL transaction. The event's tracking number associates it with a shipment; it is not a declared database foreign key.
 
-The Node telemetry API records a device ID, metric name, numeric value, and server timestamp. It is a REST ingestion path. MQTT intake, AAS asset models, edge commissioning, and industrial actuation are Smart Factory IoT capabilities and are not inferred for IMSOP.
+The Node telemetry API records a device ID, metric name, numeric value, and server timestamp. It is a REST ingestion path. MQTT intake, AAS asset models, edge commissioning, and industrial actuation are Smart Factory capabilities and are not inferred for IMSOP.
 
 ## Availability and operating boundaries
 
