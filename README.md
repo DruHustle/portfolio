@@ -101,7 +101,9 @@ Developed by **Andrew Gotora**
 
 The project page and project service share capability data in `client/src/data/smartFactory.ts`. Product descriptions are based on the current [Smart Factory engineering guides](https://github.com/DruHustle/smart-factory-frontend/tree/main/docs), including factory layouts, component inspection, FX/TSN diagnostics, OT security and the editable demo. FX/TSN monitoring is described separately from commissioned local control and hardware timing.
 
-The interactive preview loads Three.js and the 6.4 MB original pump/motor GLB only after the visitor selects **Explore the 3D model**. It renders on demand, disposes its resources on navigation, and retains a static image and guide when WebGL or model loading is unavailable. Model provenance and the source hash are recorded in `client/public/models/smart-factory/README.txt`; authored component mappings and explosion transforms live in `client/src/data/smartFactoryModel.ts`. Browser checks cover actual view changes, selection, reset, failed-download recovery and unsupported WebGL.
+The whole-factory preview starts automatically when the project page opens. It adapts the current Smart Factory floor renderer, workshop environment and authored showcase layout, including robots, conveyors, tanks, pumps, cabinets, sensors and edge gateways across four zones. Visitors can pan, rotate, zoom, select equipment, move items, filter zones, switch to the keyboard-accessible floor plan and enter fullscreen. The preview uses bundled public reference models and illustrative data; its layout changes stay in memory and do not affect the application.
+
+Native factory rendering helpers live in `client/src/components/smart-factory/`, with authored inventory/layout data in `client/src/data/smartFactoryFloor.ts`. Baked HDR studio lighting and material batching follow the current product renderer. Model provenance and hashes are recorded in `client/public/models/smart-factory/README.txt`. Browser checks cover automatic startup, actual view/position changes, zones, fullscreen, failed-reference recovery and the no-WebGL floor plan.
 
 ### Project page layout and IMSOP
 

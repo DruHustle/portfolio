@@ -1,492 +1,1045 @@
 import { useEffect, useRef, useState } from "react";
-import * as T from "three";
-import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
-import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
-import { twinParts } from "@/data/smartFactoryModel";
-import { assetUrl } from "@/lib/urls";
+import { FloorPlan } from "./smart-factory/FactoryFloorPlan";
+import {
+  constrainFloorPosition,
+  type FloorSelect,
+  type FloorMove,
+} from "./smart-factory/floor-arrangement";
+import * as THREE from "three";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import {
+  createWorkshop,
+  createEquipmentProxy,
+} from "./smart-factory/FactoryEnvironment";
+import { loadSmartFactoryStudio } from "./SmartFactoryStudio";
+import {
+  optimizeFactoryReference,
+  instantiateFactoryReference,
+  createSurfaceGrain,
+  createContactShadow,
+  factoryModelSize,
+} from "./smart-factory/factory-graphics";
+import {
+  floorModelUrl,
+  type FloorLink,
+  type layoutFactory,
+} from "@/data/smartFactoryFloor";
 
-interface SceneApi {
-  select: (name: string) => void;
-  explode: (enabled: boolean) => void;
-  ghost: (enabled: boolean) => void;
-  reset: () => void;
-  rotate: (direction: number) => void;
+type Layout = ReturnType<typeof layoutFactory>;
+const indicatorColor = (item: Layout["placements"][number]["item"]) =>
+  item.status === "error"
+    ? 0xef6461
+    : item.status === "maintenance" || item.status === "stale"
+      ? 0xdba64a
+      : item.mode === "simulated"
+        ? 0x28a6c4
+        : item.status === "live"
+          ? 0x32b881
+          : item.status === "offline"
+            ? 0xef6461
+            : 0x8191a3;
+function disposeObject(root: THREE.Object3D) {
+  const geometries = new Set<THREE.BufferGeometry>(),
+    materials = new Set<THREE.Material>(),
+    textures = new Set<THREE.Texture>();
+  root.traverse(object => {
+    if (
+      object instanceof THREE.Mesh ||
+      object instanceof THREE.Line ||
+      object instanceof THREE.Sprite
+    ) {
+      if ("geometry" in object && !object.userData.sharedReferenceGeometry)
+        geometries.add(object.geometry as THREE.BufferGeometry);
+      for (const material of Array.isArray(object.material)
+        ? object.material
+        : [object.material]) {
+        materials.add(material);
+        for (const value of Object.values(material))
+          if (value instanceof THREE.Texture) textures.add(value);
+      }
+    }
+    if (object instanceof THREE.DirectionalLight) object.shadow.dispose();
+  });
+  textures.forEach(t => t.dispose());
+  materials.forEach(m => m.dispose());
+  geometries.forEach(g => g.dispose());
+}
+const models = new Map<string, Promise<THREE.Group>>();
+function referenceModel(slug: string) {
+  if (!models.has(slug)) {
+    const url = floorModelUrl(slug);
+    if (!url) return Promise.reject(Error("Unknown reference"));
+    const pending = fetch(url, {
+      credentials: "same-origin",
+      cache: "no-store",
+    })
+      .then(r => {
+        if (!r.ok) throw Error("Reference model unavailable");
+        return r.arrayBuffer();
+      })
+      .then(bytes => new GLTFLoader().parseAsync(bytes, ""))
+      .then(gltf => optimizeFactoryReference(gltf.scene))
+      .catch(error => {
+        models.delete(slug);
+        throw error;
+      });
+    models.set(slug, pending);
+  }
+  return models.get(slug)!;
+}
+function label(text: string, color: string, size = 3.4) {
+  const canvas = document.createElement("canvas");
+  canvas.width = 512;
+  canvas.height = 72;
+  const ctx = canvas.getContext("2d")!;
+  ctx.fillStyle = "rgba(248,250,252,.94)";
+  ctx.beginPath();
+  ctx.roundRect(0, 0, 512, 72, 12);
+  ctx.fill();
+  ctx.font = "500 24px sans-serif";
+  ctx.fillStyle = color;
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillText(text.length > 32 ? text.slice(0, 29) + "…" : text, 256, 36, 490);
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.colorSpace = THREE.SRGBColorSpace;
+  const sprite = new THREE.Sprite(
+    new THREE.SpriteMaterial({
+      map: texture,
+      depthTest: false,
+      transparent: true,
+    })
+  );
+  sprite.scale.set(size, (size * 72) / 512, 1);
+  return sprite;
 }
 
-/** The portfolio preview uses the product's original model and authored poses. */
-export default function SmartFactoryTwinScene({
+export default function FactoryFloorScene({
+  layout,
+  links,
+  selected,
+  onSelect,
+  dark,
+  reset,
+  zone,
+  onMove,
   onRetry,
 }: {
+  layout: Layout;
+  links: FloorLink[];
+  selected: string | null;
+  onSelect: FloorSelect;
+  dark: boolean;
+  reset: number;
+  zone: string;
+  onMove: FloorMove;
   onRetry: () => void;
 }) {
-  const viewport = useRef<HTMLDivElement>(null);
-  const api = useRef<SceneApi | null>(null);
-  const [status, setStatus] = useState("Loading the detailed equipment model…");
-  const [failed, setFailed] = useState(false);
-  const [selected, setSelected] = useState("Assembly");
-  const [exploded, setExploded] = useState(false);
-  const [ghosted, setGhosted] = useState(false);
-
+  const sceneInputs = useRef({ layout, links });
+  sceneInputs.current = { layout, links };
+  const host = useRef<HTMLDivElement>(null),
+    choose = useRef(onSelect),
+    selection = useRef(selected),
+    move = useRef(onMove);
+  const runtime = useRef<{
+    focus: (ref: string | null) => void;
+    reset: () => void;
+    statuses: (items: Layout["placements"]) => void;
+    positions: (items: Layout["placements"]) => void;
+    zones: (zones: Layout["zones"]) => void;
+  } | null>(null);
+  const [failed, setFailed] = useState(false),
+    [ready, setReady] = useState(false),
+    [loaded, setLoaded] = useState(0),
+    [failedReferences, setFailedReferences] = useState(0);
+  choose.current = onSelect;
+  selection.current = selected;
+  move.current = onMove;
+  const key =
+    layout.placements.map(p => `${p.item.ref}:${p.model}`).join("|") +
+    links.map(l => `${l.from}:${l.to}`).join("|") +
+    `${layout.width}:${layout.depth}:` +
+    JSON.stringify(layout.zones.map(({ count: _count, ...zone }) => zone));
   useEffect(() => {
-    const host = viewport.current!;
-    const canvas = document.createElement("canvas");
-    canvas.setAttribute(
-      "aria-label",
-      "Interactive pump and motor: drag to orbit and pinch or scroll to zoom"
-    );
-    canvas.setAttribute("role", "img");
-    canvas.style.display = "block";
-    canvas.style.width = "100%";
-    canvas.style.height = "100%";
-    const controller = new AbortController();
-    let disposed = false;
-    let frame = 0;
-    let renderer: T.WebGLRenderer | undefined;
-    let controls: OrbitControls | undefined;
-    let observer: ResizeObserver | undefined;
-    let environment: T.WebGLRenderTarget | undefined;
-    const scene = new T.Scene();
-    scene.background = new T.Color("#0e1827");
-
-    const disposeObject = (root: T.Object3D) =>
-      root.traverse(node => {
-        if (node instanceof T.Mesh || node instanceof T.LineSegments) {
-          node.geometry.dispose();
-          const materials = Array.isArray(node.material)
-            ? node.material
-            : [node.material];
-          materials.forEach(material => material.dispose());
+    if (failed) return;
+    // Structural keys rebuild the scene; positions and selection update it in place.
+    const { layout, links } = sceneInputs.current;
+    let cleanup: (() => void) | undefined;
+    let secondFrame = 0;
+    // Present the summary and accessible floor before initializing WebGL.
+    const firstFrame = requestAnimationFrame(() => {
+      secondFrame = requestAnimationFrame(() => {
+        cleanup = mountScene();
+      });
+    });
+    function mountScene() {
+      const element = host.current;
+      if (!element) return;
+      setFailed(false);
+      setReady(false);
+      setLoaded(0);
+      setFailedReferences(0);
+      let renderer: THREE.WebGLRenderer;
+      try {
+        const canvas = document.createElement("canvas");
+        const context = canvas.getContext("webgl2", {
+          antialias: true,
+          alpha: false,
+        });
+        if (!context) {
+          setFailed(true);
+          return;
         }
-      });
-    const dispose = () => {
-      if (disposed) return;
-      disposed = true;
-      controller.abort();
-      cancelAnimationFrame(frame);
-      observer?.disconnect();
-      controls?.dispose();
-      disposeObject(scene);
-      environment?.dispose();
-      renderer?.dispose();
-      renderer?.forceContextLoss();
-      canvas.remove();
-      document.removeEventListener("visibilitychange", draw);
-      api.current = null;
-    };
-    function draw() {
-      if (disposed || frame || document.hidden) return;
-      frame = requestAnimationFrame(() => {
-        frame = 0;
-        if (!disposed) renderer?.render(scene, camera);
-      });
-    }
-    const fail = () => {
-      dispose();
-      setFailed(true);
-      setStatus(
-        "The interactive preview is unavailable in this browser. The model image and feature guide are still available."
-      );
-    };
-    const camera = new T.PerspectiveCamera(38, 1, 0.01, 100);
-    try {
-      const context = canvas.getContext("webgl2", {
-        antialias: true,
-        alpha: false,
-      });
-      if (!context) {
-        fail();
-        return dispose;
+        renderer = new THREE.WebGLRenderer({
+          canvas,
+          context,
+          antialias: true,
+          alpha: false,
+          powerPreference: "high-performance",
+        });
+      } catch {
+        setFailed(true);
+        return;
       }
-      renderer = new T.WebGLRenderer({ canvas, context, antialias: true });
+      let cancelForResize = () => {};
+      let disposed = false,
+        dirty = true,
+        frame = 0;
+      const scene = new THREE.Scene();
+      scene.background = new THREE.Color(dark ? "#182532" : "#dce3e6");
+      const gl = renderer.getContext(),
+        debug = gl.getExtension("WEBGL_debug_renderer_info");
+      const software = debug
+        ? /swiftshader|llvmpipe|software/i.test(
+            String(gl.getParameter(debug.UNMASKED_RENDERER_WEBGL))
+          )
+        : false;
       renderer.setPixelRatio(
         Math.min(
-          window.devicePixelRatio || 1,
-          host.clientWidth < 600 ? 1.25 : 1.5
+          devicePixelRatio || 1,
+          software ? 1 : innerWidth < 768 ? 1.5 : 2
         )
       );
-      renderer.toneMapping = T.ACESFilmicToneMapping;
-      renderer.toneMappingExposure = 1.05;
-      renderer.shadowMap.enabled = true;
-      renderer.shadowMap.type = T.PCFSoftShadowMap;
-      host.append(canvas);
-      controls = new OrbitControls(camera, canvas);
-      controls.enableDamping = false;
-      controls.minDistance = 0.3;
-      controls.maxDistance = 15;
-      controls.maxPolarAngle = Math.PI * 0.49;
-      controls.addEventListener("change", draw);
-
-      const room = new RoomEnvironment();
-      const generator = new T.PMREMGenerator(renderer);
-      environment = generator.fromScene(room, 0.04);
-      scene.environment = environment.texture;
-      scene.environmentIntensity = 0.65;
-      room.dispose();
-      generator.dispose();
-      scene.add(new T.HemisphereLight(0xffffff, 0x63748b, 1.4));
-      const key = new T.DirectionalLight(0xffffff, 2.3);
-      key.position.set(3, 5, 4);
-      key.castShadow = true;
-      key.shadow.mapSize.set(1024, 1024);
-      key.shadow.camera.left = key.shadow.camera.bottom = -3;
-      key.shadow.camera.right = key.shadow.camera.top = 3;
-      key.shadow.normalBias = 0.02;
-      scene.add(key);
-      observer = new ResizeObserver(() => {
-        camera.aspect = host.clientWidth / host.clientHeight;
-        camera.updateProjectionMatrix();
-        renderer?.setSize(host.clientWidth, host.clientHeight, false);
-        draw();
-      });
-      observer.observe(host);
-      document.addEventListener("visibilitychange", draw);
-      canvas.addEventListener("webglcontextlost", event => {
-        event.preventDefault();
-        if (!disposed) fail();
-      });
-
-      void fetch(assetUrl("models/smart-factory/pump-motor.glb"), {
-        signal: controller.signal,
-      })
-        .then(response => {
-          if (!response.ok) throw new Error("Model unavailable");
-          return response.arrayBuffer();
-        })
-        .then(bytes => new GLTFLoader().parseAsync(bytes, ""))
-        .then(gltf => {
+      renderer.outputColorSpace = THREE.SRGBColorSpace;
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = dark ? 0.95 : 1.05;
+      const controller = new AbortController();
+      let studio: THREE.Texture | undefined;
+      void loadSmartFactoryStudio(controller.signal)
+        .then(texture => {
           if (disposed) {
-            disposeObject(gltf.scene);
+            texture.dispose();
             return;
           }
-          const model = gltf.scene;
-          scene.add(model);
-          const nodes = new Map(
-            twinParts.map(part => [
-              part.name,
-              model.getObjectByName(part.nodeName)!,
-            ])
-          );
-          const bases = new Map<T.Object3D, T.Matrix4>();
-          const materials = new Map<
-            T.Mesh,
-            {
-              material: T.MeshStandardMaterial;
-              emissive: T.Color;
-              intensity: number;
-              opacity: number;
-              transparent: boolean;
-            }
-          >();
-          model.traverse(node => {
-            node.updateMatrix();
-            bases.set(node, node.matrix.clone());
-            if (
-              node instanceof T.Mesh &&
-              node.material instanceof T.MeshStandardMaterial
-            ) {
-              const original = node.material;
-              const material = original.clone();
-              node.material = material;
-              node.castShadow = node.receiveShadow = true;
-              materials.set(node, {
-                material,
-                emissive: material.emissive.clone(),
-                intensity: material.emissiveIntensity,
-                opacity: material.opacity,
-                transparent: material.transparent,
-              });
-            }
-          });
-          const floor = new T.Mesh(
-            new T.PlaneGeometry(20, 20),
-            new T.ShadowMaterial({ opacity: 0.18 })
-          );
-          floor.rotation.x = -Math.PI / 2;
-          floor.position.y = new T.Box3().setFromObject(model).min.y - 0.015;
-          floor.receiveShadow = true;
-          scene.add(floor);
-          const fit = (target: T.Object3D) => {
-            const bounds = new T.Box3().setFromObject(target, true);
-            const center = bounds.getCenter(new T.Vector3());
-            const direction = new T.Vector3(1.4, 0.85, 2).normalize();
-            camera.position.copy(center).add(direction);
-            camera.lookAt(center);
-            const inverse = camera.quaternion.clone().invert();
-            const tan = Math.tan(T.MathUtils.degToRad(camera.fov / 2));
-            let distance = 0.3;
-            // Fit every bounding-box corner in perspective, including narrow screens.
-            for (const x of [bounds.min.x, bounds.max.x]) {
-              for (const y of [bounds.min.y, bounds.max.y]) {
-                for (const z of [bounds.min.z, bounds.max.z]) {
-                  const point = new T.Vector3(x, y, z)
-                    .sub(center)
-                    .applyQuaternion(inverse);
-                  distance = Math.max(
-                    distance,
-                    point.z +
-                      Math.max(
-                        Math.abs(point.x) / (tan * camera.aspect),
-                        Math.abs(point.y) / tan
-                      )
-                  );
-                }
-              }
-            }
-            controls!.target.copy(center);
-            camera.position
-              .copy(center)
-              .add(direction.multiplyScalar(distance * 1.12));
-            controls!.update();
-            draw();
-          };
-          const select = (name: string) => {
-            const selectedNode = nodes.get(name);
-            for (const [mesh, base] of materials) {
-              let node: T.Object3D | null = mesh;
-              let highlighted = false;
-              while (node) {
-                if (node === selectedNode && name !== "Assembly")
-                  highlighted = true;
-                node = node.parent;
-              }
-              base.material.emissive.copy(
-                highlighted ? new T.Color(0xf97316) : base.emissive
-              );
-              base.material.emissiveIntensity = highlighted
-                ? 0.14
-                : base.intensity;
-            }
-            setSelected(name);
-            if (selectedNode) fit(selectedNode);
-            draw();
-          };
-          const reset = () => {
-            for (const [node, base] of bases)
-              base.decompose(node.position, node.quaternion, node.scale);
-            for (const [, base] of materials) {
-              base.material.opacity = base.opacity;
-              base.material.transparent = base.transparent;
-              base.material.depthWrite = true;
-              base.material.needsUpdate = true;
-            }
-            setExploded(false);
-            setGhosted(false);
-            select("Assembly");
-          };
-          api.current = {
-            select,
-            reset,
-            explode: enabled => {
-              for (const part of twinParts) {
-                const node = nodes.get(part.name);
-                const pose = part.explode;
-                if (!node || !pose) continue;
-                const amount = enabled ? 1 : 0;
-                const pivot = new T.Vector3().fromArray(pose.pivot);
-                const rotation = new T.Quaternion().setFromEuler(
-                  new T.Euler(
-                    pose.rotation[0] * amount,
-                    pose.rotation[1] * amount,
-                    pose.rotation[2] * amount
-                  )
-                );
-                new T.Matrix4()
-                  .makeTranslation(
-                    pivot
-                      .clone()
-                      .add(
-                        new T.Vector3()
-                          .fromArray(pose.translation)
-                          .multiplyScalar(amount)
-                      )
-                  )
-                  .multiply(
-                    new T.Matrix4().makeRotationFromQuaternion(rotation)
-                  )
-                  .multiply(new T.Matrix4().makeTranslation(pivot.negate()))
-                  .multiply(bases.get(node)!)
-                  .decompose(node.position, node.quaternion, node.scale);
-              }
-              setExploded(enabled);
-              select("Assembly");
-            },
-            ghost: enabled => {
-              for (const part of twinParts.filter(
-                part => part.role === "housing" || part.role === "cover"
-              )) {
-                nodes.get(part.name)?.traverse(node => {
-                  const base = materials.get(node as T.Mesh);
-                  if (!base) return;
-                  base.material.transparent = enabled || base.transparent;
-                  base.material.opacity = enabled
-                    ? Math.min(base.opacity, 0.16)
-                    : base.opacity;
-                  base.material.depthWrite = !enabled;
-                  base.material.needsUpdate = true;
-                });
-              }
-              setGhosted(enabled);
-              draw();
-            },
-            rotate: direction => {
-              const offset = camera.position.clone().sub(controls!.target);
-              offset.applyAxisAngle(
-                new T.Vector3(0, 1, 0),
-                (direction * Math.PI) / 8
-              );
-              camera.position.copy(controls!.target).add(offset);
-              controls!.update();
-              draw();
-            },
-          };
-          const pointer = new T.Vector2();
-          const raycaster = new T.Raycaster();
-          let down: { x: number; y: number } | null = null;
-          canvas.addEventListener("pointerdown", event => {
-            down = { x: event.clientX, y: event.clientY };
-          });
-          canvas.addEventListener("pointerup", event => {
-            if (
-              !down ||
-              Math.hypot(event.clientX - down.x, event.clientY - down.y) > 5
-            ) {
-              down = null;
-              return;
-            }
-            down = null;
-            const rect = canvas.getBoundingClientRect();
-            pointer.set(
-              ((event.clientX - rect.left) / rect.width) * 2 - 1,
-              (-(event.clientY - rect.top) / rect.height) * 2 + 1
-            );
-            raycaster.setFromCamera(pointer, camera);
-            const hit = raycaster.intersectObject(model, true)[0];
-            let node: T.Object3D | null = hit?.object ?? null;
-            while (node) {
-              const part = twinParts.find(
-                part => nodes.get(part.name) === node
-              );
-              if (part) {
-                select(part.name);
-                break;
-              }
-              node = node.parent;
-            }
-          });
-          camera.aspect = host.clientWidth / host.clientHeight;
-          camera.updateProjectionMatrix();
-          renderer!.setSize(host.clientWidth, host.clientHeight, false);
-          reset();
-          setStatus("");
+          studio = texture;
+          scene.environment = texture;
+          scene.environmentIntensity = 0.85;
+          renderer.domElement.dataset.graphicsEnvironment = "baked-hdr-studio";
+          dirty = true;
         })
         .catch(() => {
-          if (!disposed) fail();
+          if (disposed) return;
+          renderer.domElement.dataset.graphicsEnvironment =
+            "direct-light-fallback";
         });
-    } catch {
-      fail();
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+      renderer.shadowMap.autoUpdate = false;
+      renderer.shadowMap.needsUpdate = true;
+      renderer.domElement.setAttribute(
+        "aria-label",
+        "Interactive 3D factory floor"
+      );
+      renderer.domElement.setAttribute("role", "img");
+      renderer.domElement.tabIndex = 0;
+      renderer.domElement.setAttribute(
+        "aria-description",
+        "Press and hold equipment to grab it; drag empty floor to pan. Release to drop. Right-drag or Shift-drag rotates; scroll or pinch zooms. Hold Space to pan over equipment. Arrow keys move selected equipment; Escape cancels an item grab or clears selection."
+      );
+      renderer.domElement.dataset.floorNodeCount = String(
+        layout.placements.length
+      );
+      element.appendChild(renderer.domElement);
+      const camera = new THREE.OrthographicCamera(
+        -20,
+        20,
+        15,
+        -15,
+        0.1,
+        Math.max(500, Math.max(layout.width, layout.depth) * 8)
+      );
+      const controls = new OrbitControls(camera, renderer.domElement);
+      controls.enableDamping = false;
+      renderer.domElement.style.cursor = "grab";
+      controls.mouseButtons.LEFT = THREE.MOUSE.PAN;
+      controls.mouseButtons.RIGHT = THREE.MOUSE.ROTATE;
+      controls.touches.ONE = THREE.TOUCH.PAN;
+      controls.maxPolarAngle = Math.PI * 0.48;
+      controls.minZoom = 0.4;
+      controls.maxZoom = 10;
+      controls.screenSpacePanning = true;
+      scene.add(new THREE.HemisphereLight(0xdceaff, 0x4b535b, 0.75));
+      const span = Math.max(layout.width, layout.depth, 20);
+      const sun = new THREE.DirectionalLight(0xfff1de, 3.1);
+      sun.position.set(span * 0.45, span * 0.9, span * 0.55);
+      sun.castShadow = true;
+      const shadowSize = software ? 1024 : innerWidth >= 1400 ? 4096 : 2048;
+      sun.shadow.mapSize.set(shadowSize, shadowSize);
+      sun.shadow.normalBias = 0.015;
+      sun.shadow.bias = -0.00008;
+      sun.shadow.radius = 3;
+      sun.shadow.camera.left = sun.shadow.camera.bottom = -span * 0.8;
+      sun.shadow.camera.right = sun.shadow.camera.top = span * 0.8;
+      sun.shadow.camera.near = 1;
+      sun.shadow.camera.far = span * 4;
+      scene.add(sun);
+      const fill = new THREE.DirectionalLight(0xc5d9f4, 0.65);
+      fill.position.set(-span * 0.5, span * 0.5, -span * 0.4);
+      scene.add(fill);
+      const viewerMaterials = new Map<THREE.Material, THREE.Material>();
+      const viewerTextures = new Map<THREE.Texture, THREE.Texture>();
+      const metalGrain = createSurfaceGrain("metal");
+      metalGrain.repeat.set(24, 24);
+      const finishMaterial = (material: THREE.Material) => {
+        if (!(material instanceof THREE.MeshStandardMaterial)) return;
+        if (/enamel|paint|powder|ceramic blue/i.test(material.name)) {
+          material.metalness = 0.06;
+          material.roughness = Math.max(material.roughness, 0.32);
+        }
+        if (/rubber|elastomer|polymer/i.test(material.name)) {
+          material.metalness = 0.01;
+          material.roughness = Math.max(material.roughness, 0.65);
+        }
+        if (
+          /steel|copper|brass|lamination/i.test(material.name) &&
+          !material.roughnessMap
+        )
+          material.roughnessMap = metalGrain;
+        if (/glass/i.test(material.name)) {
+          material.transparent = true;
+          material.opacity = Math.min(material.opacity, 0.4);
+          material.depthWrite = false;
+        }
+        material.envMapIntensity = 0.9;
+      };
+      const contactMaterial = createContactShadow();
+      const contactGeometry = new THREE.PlaneGeometry(1, 1);
+      renderer.domElement.dataset.graphicsQuality = software
+        ? "efficient-pbr"
+        : "high-pbr";
+      renderer.domElement.dataset.shadowResolution = String(shadowSize);
+      scene.add(createWorkshop(layout, dark));
+      const objects = new Map<string, THREE.Group>(),
+        hits: THREE.Object3D[] = [],
+        grabTargets: THREE.Object3D[] = [],
+        indicators = new Map<string, THREE.Mesh>(),
+        markers = new Map<
+          string,
+          THREE.Mesh<THREE.CylinderGeometry, THREE.MeshBasicMaterial>
+        >();
+      const labels = new Map<string, THREE.Sprite>();
+      const retired: THREE.Object3D[] = [];
+      const zoneLabels = new Map<
+        number,
+        { sprite: THREE.Sprite; count: number }
+      >();
+      layout.zones.forEach((area, index) => {
+        const name = label(
+          `${area.name} · ${area.count}`,
+          "#284d64",
+          Math.min(area.width - 1, 6)
+        );
+        name.position.set(area.x + area.width / 2, 1.45, area.z + 0.6);
+        scene.add(name);
+        zoneLabels.set(index, { sprite: name, count: area.count });
+      });
+      for (const p of layout.placements) {
+        const group = new THREE.Group();
+        group.position.set(p.x, 0, p.z);
+        group.rotation.y = THREE.MathUtils.degToRad(p.rotation ?? 0);
+        group.userData.ref = p.item.ref;
+        // Keep small equipment easy to grab without masking a neighboring visible model.
+        const footprint = p.item.kind === "device" ? 1.2 : 2.8;
+        const grabTarget = new THREE.Mesh(
+          new THREE.BoxGeometry(footprint, 3.2, footprint),
+          new THREE.MeshBasicMaterial({
+            transparent: true,
+            opacity: 0,
+            depthWrite: false,
+            colorWrite: false,
+          })
+        );
+        grabTarget.visible = false;
+        grabTarget.position.y = 1.6;
+        grabTarget.userData.grabTarget = true;
+        group.add(grabTarget);
+        grabTargets.push(grabTarget);
+        const contact = new THREE.Mesh(contactGeometry, contactMaterial);
+        contact.rotation.x = -Math.PI / 2;
+        contact.position.y = 0.018;
+        const footprintSize =
+          p.item.kind === "device"
+            ? 0.9
+            : (factoryModelSize[p.model ?? ""] ?? 2.7) * 1.05;
+        contact.scale.set(footprintSize, footprintSize * 0.8, 1);
+        contact.userData.nonSelectable = true;
+        group.add(contact);
+        const body = createEquipmentProxy(p.model, p.item.itemType);
+        group.add(body);
+        const name = label(p.item.name, "#203c4b");
+        name.position.set(0, 3.05, 0);
+        name.visible = p.item.ref === selection.current;
+        labels.set(p.item.ref, name);
+        group.add(name);
+        const marker = new THREE.Mesh(
+          new THREE.CylinderGeometry(0.13, 0.13, 0.1, 16),
+          new THREE.MeshBasicMaterial({
+            color: indicatorColor(p.item),
+          })
+        );
+        marker.position.set(-0.64, 2.55, 0);
+        const rim = new THREE.Mesh(
+          new THREE.TorusGeometry(0.16, 0.035, 8, 16),
+          new THREE.MeshBasicMaterial({ color: 0xf7fafc })
+        );
+        rim.rotation.x = Math.PI / 2;
+        marker.add(rim);
+        group.add(marker);
+        markers.set(p.item.ref, marker);
+        const halo = new THREE.Mesh(
+          new THREE.RingGeometry(1.25, 1.38, 48),
+          new THREE.MeshBasicMaterial({
+            color: 0x36b6dd,
+            side: THREE.DoubleSide,
+            transparent: true,
+            opacity: 0.9,
+          })
+        );
+        halo.rotation.x = -Math.PI / 2;
+        halo.position.y = 0.025;
+        halo.visible = false;
+        group.add(halo);
+        indicators.set(p.item.ref, halo);
+        scene.add(group);
+        objects.set(p.item.ref, group);
+        hits.push(group);
+        if (p.model && (p.model !== "raspberry-pi-4b" || p.item.equipmentId))
+          void referenceModel(p.model)
+            .then(model => {
+              if (disposed) return;
+              const copy = instantiateFactoryReference(
+                  model,
+                  viewerMaterials,
+                  viewerTextures,
+                  finishMaterial
+                ),
+                box = new THREE.Box3().setFromObject(copy),
+                size = box.getSize(new THREE.Vector3()),
+                center = box.getCenter(new THREE.Vector3());
+              const scale =
+                (factoryModelSize[p.model!] ?? 2.7) /
+                Math.max(size.x, size.y, size.z, 0.001);
+              copy.position.sub(center);
+              const normalized = new THREE.Group();
+              normalized.add(copy);
+              normalized.scale.setScalar(scale);
+              normalized.position.y = (size.y * scale) / 2 + 0.025;
+              const height = size.y * scale;
+              group.userData.modelHeight = height;
+              name.position.y = height + 0.8;
+              marker.position.set(
+                -Math.min((size.x * scale) / 2, 0.64),
+                height + 0.32,
+                0
+              );
+              grabTarget.scale.set(
+                Math.max(footprint, size.x * scale) / footprint,
+                Math.max(1, height + 0.5) / 3.2,
+                Math.max(footprint, size.z * scale) / footprint
+              );
+              grabTarget.position.y = Math.max(1, height + 0.5) / 2;
+              normalized.traverse(o => {
+                if (o instanceof THREE.Mesh) {
+                  o.castShadow = true;
+                  o.receiveShadow = true;
+                }
+              });
+              group.remove(body);
+              retired.push(body);
+              group.add(normalized);
+              setLoaded(n => n + 1);
+              renderer.shadowMap.needsUpdate = true;
+              renderer.domElement.dataset.referenceMaterialCount = String(
+                viewerMaterials.size
+              );
+              dirty = true;
+            })
+            .catch(() => {
+              // The labelled proxy remains available when a reference cannot load.
+              if (!disposed) setFailedReferences(value => value + 1);
+            });
+      }
+      const connectionLines: Array<{ link: FloorLink; line: THREE.Line }> = [];
+      for (const link of links) {
+        const from = objects.get(link.from),
+          to = objects.get(link.to);
+        if (!from || !to) continue;
+        const points = [
+          new THREE.Vector3(from.position.x, 0.07, from.position.z),
+          new THREE.Vector3(to.position.x, 0.07, to.position.z),
+        ];
+        const line = new THREE.Line(
+          new THREE.BufferGeometry().setFromPoints(points),
+          new THREE.LineDashedMaterial({
+            color: link.kind === "fx" ? 0xaa70e9 : 0x2d99a2,
+            dashSize: 0.25,
+            gapSize: 0.15,
+            transparent: true,
+            opacity: 0.24,
+          })
+        );
+        line.computeLineDistances();
+        scene.add(line);
+        connectionLines.push({ link, line });
+      }
+      const updateConnections = () => {
+        renderer.shadowMap.needsUpdate = true;
+        for (const { link, line } of connectionLines) {
+          const from = objects.get(link.from),
+            to = objects.get(link.to);
+          if (!from || !to) continue;
+          const positions = line.geometry.getAttribute("position");
+          positions.setXYZ(0, from.position.x, 0.07, from.position.z);
+          positions.setXYZ(1, to.position.x, 0.07, to.position.z);
+          positions.needsUpdate = true;
+          line.geometry.computeBoundingSphere();
+          line.computeLineDistances();
+        }
+        dirty = true;
+      };
+      const size = () => {
+        cancelForResize();
+        const width = element.clientWidth,
+          height = element.clientHeight,
+          aspect = width / Math.max(height, 1);
+        camera.updateMatrixWorld(true);
+        let halfWidth = 0,
+          halfHeight = 0;
+        // Fit the projected bounds, including the outermost equipment labels.
+        // A width/depth heuristic clips corners after an isometric rotation.
+        for (const x of [-layout.width / 2 - 2, layout.width / 2 + 2])
+          for (const y of [-0.5, 5])
+            for (const z of [-layout.depth / 2 - 2, layout.depth / 2 + 2]) {
+              const point = new THREE.Vector3(x, y, z).applyMatrix4(
+                camera.matrixWorldInverse
+              );
+              halfWidth = Math.max(halfWidth, Math.abs(point.x));
+              halfHeight = Math.max(halfHeight, Math.abs(point.y));
+            }
+        const extent =
+          Math.max(halfWidth / Math.max(aspect, 0.1), halfHeight, 9) * 1.06;
+        camera.left = -extent * aspect;
+        camera.right = extent * aspect;
+        camera.top = extent;
+        camera.bottom = -extent;
+        camera.updateProjectionMatrix();
+        renderer.setSize(width, height);
+        dirty = true;
+      };
+      const fit = () => {
+        // Clear remaining orbit/pan inertia before establishing the fitted view.
+        const damping = controls.enableDamping;
+        controls.enableDamping = false;
+        controls.update();
+        camera.position.set(
+          layout.width * 0.8,
+          Math.max(layout.width, layout.depth) * 0.82,
+          layout.depth * 0.95
+        );
+        camera.zoom = 1;
+        controls.target.set(0, 0, 0);
+        camera.updateProjectionMatrix();
+        controls.update();
+        controls.enableDamping = damping;
+        size();
+        dirty = true;
+      };
+      runtime.current = {
+        reset: fit,
+        zones: zones => {
+          for (const [index, area] of zones.entries()) {
+            const prior = zoneLabels.get(index);
+            if (!prior || prior.count === area.count) continue;
+            const next = label(
+              `${area.name} · ${area.count}`,
+              "#284d64",
+              Math.min(area.width - 1, 6)
+            );
+            next.position.copy(prior.sprite.position);
+            scene.remove(prior.sprite);
+            disposeObject(prior.sprite);
+            scene.add(next);
+            zoneLabels.set(index, { sprite: next, count: area.count });
+            dirty = true;
+          }
+        },
+        positions: placements => {
+          for (const p of placements) {
+            const object = objects.get(p.item.ref);
+            if (object) {
+              object.position.set(p.x, 0, p.z);
+              object.rotation.y = THREE.MathUtils.degToRad(p.rotation ?? 0);
+            }
+          }
+          updateConnections();
+        },
+        statuses: placements => {
+          placements.forEach(p =>
+            markers
+              .get(p.item.ref)
+              ?.material.color.setHex(indicatorColor(p.item))
+          );
+          dirty = true;
+        },
+        focus: ref => {
+          for (const [id, halo] of indicators) halo.visible = id === ref;
+          for (const [id, itemLabel] of labels) itemLabel.visible = id === ref;
+          dirty = true;
+        },
+      };
+      runtime.current.focus(selection.current);
+      const observer = new ResizeObserver(size);
+      observer.observe(element);
+      fit();
+      const change = () => {
+        dirty = true;
+        renderer.domElement.dataset.cameraView = JSON.stringify({
+          position: camera.position.toArray(),
+          target: controls.target.toArray(),
+          zoom: camera.zoom,
+        });
+      };
+      controls.addEventListener("change", change);
+      change();
+      const ray = new THREE.Raycaster(),
+        point = new THREE.Vector2();
+      const pointers = new Set<number>();
+      let panModifier = false;
+      let start:
+        | { x: number; y: number; pointerId: number; select: boolean }
+        | undefined;
+      let dragging:
+        | {
+            ref: string;
+            point: THREE.Vector3;
+            original: THREE.Vector3;
+            pointerId: number;
+            moved: boolean;
+          }
+        | undefined;
+      const floorPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
+      const hand = () => {
+        renderer.domElement.style.cursor = pointers.size ? "grabbing" : "grab";
+        renderer.domElement.dataset.grabState = dragging
+          ? "item"
+          : pointers.size
+            ? "floor"
+            : "idle";
+      };
+      renderer.domElement.dataset.interaction = "grab";
+      hand();
+      const setRay = (e: PointerEvent) => {
+        const rect = renderer.domElement.getBoundingClientRect();
+        point.set(
+          ((e.clientX - rect.left) / rect.width) * 2 - 1,
+          -((e.clientY - rect.top) / rect.height) * 2 + 1
+        );
+        ray.setFromCamera(point, camera);
+      };
+      const picked = () => {
+        const visible = (object: THREE.Object3D) => {
+          for (
+            let node: THREE.Object3D | null = object;
+            node;
+            node = node.parent
+          )
+            if (!node.visible) return false;
+          return true;
+        };
+        const body = ray
+          .intersectObjects(hits, true)
+          .find(
+            hit =>
+              !hit.object.userData.grabTarget &&
+              !hit.object.userData.nonSelectable &&
+              visible(hit.object)
+          );
+        let node: THREE.Object3D | null =
+          body?.object ??
+          ray.intersectObjects(grabTargets, false)[0]?.object ??
+          null;
+        while (node && !node.userData.ref) node = node.parent;
+        return node?.userData.ref as string | undefined;
+      };
+      const unlockView = () => {
+        controls.enablePan = controls.enableRotate = controls.enableZoom = true;
+      };
+      const cancel = (releaseCapture = true) => {
+        start = undefined;
+        if (dragging) {
+          const ended = dragging;
+          dragging = undefined;
+          objects.get(ended.ref)?.position.copy(ended.original);
+          updateConnections();
+          if (
+            releaseCapture &&
+            renderer.domElement.hasPointerCapture(ended.pointerId)
+          )
+            renderer.domElement.releasePointerCapture(ended.pointerId);
+        }
+        unlockView();
+        runtime.current?.focus(selection.current);
+        hand();
+      };
+      const down = (e: PointerEvent) => {
+        if (e.button !== 0 && e.button !== 1 && e.button !== 2) return;
+        pointers.add(e.pointerId);
+        if (!e.isPrimary || pointers.size > 1) {
+          // OrbitControls has tracked the first touch, so two fingers can take over for pinch/pan.
+          cancel(false);
+          hand();
+          return;
+        }
+        renderer.domElement.focus({ preventScroll: true });
+        const select =
+          e.button === 0 &&
+          !e.shiftKey &&
+          !e.ctrlKey &&
+          !e.metaKey &&
+          !panModifier;
+        start = { x: e.clientX, y: e.clientY, pointerId: e.pointerId, select };
+        if (select) {
+          setRay(e);
+          const ref = picked(),
+            ground = ray.ray.intersectPlane(floorPlane, new THREE.Vector3());
+          const object = ref && objects.get(ref);
+          if (ref && object && ground) {
+            dragging = {
+              ref,
+              point: ground.clone(),
+              original: object.position.clone(),
+              pointerId: e.pointerId,
+              moved: false,
+            };
+            // Allow OrbitControls to track pointer lifetimes while suppressing camera motion.
+            controls.enablePan =
+              controls.enableRotate =
+              controls.enableZoom =
+                false;
+            runtime.current?.focus(ref);
+          }
+        }
+        hand();
+      };
+      const pointerMove = (e: PointerEvent) => {
+        if (dragging && dragging.pointerId === e.pointerId) {
+          if (
+            !start ||
+            (!dragging.moved &&
+              Math.hypot(e.clientX - start.x, e.clientY - start.y) <= 6)
+          )
+            return;
+          setRay(e);
+          const ground = ray.ray.intersectPlane(
+            floorPlane,
+            new THREE.Vector3()
+          );
+          if (!ground) return;
+          dragging.moved = true;
+          const next = constrainFloorPosition(
+            layout,
+            dragging.original.x + ground.x - dragging.point.x,
+            dragging.original.z + ground.z - dragging.point.z
+          );
+          objects.get(dragging.ref)?.position.set(next.x, 0, next.z);
+          updateConnections();
+          e.preventDefault();
+        } else if (!pointers.size) {
+          setRay(e);
+          const ref = panModifier ? undefined : picked();
+          renderer.domElement.dataset.grabTarget = ref ?? "floor";
+          renderer.domElement.title = ref
+            ? `Grab ${layout.placements.find(p => p.item.ref === ref)?.item.name ?? "equipment"}`
+            : "Grab to move the floor";
+        }
+      };
+      const up = (e: PointerEvent) => {
+        pointers.delete(e.pointerId);
+        const began = start;
+        start = undefined;
+        if (dragging && dragging.pointerId === e.pointerId) {
+          const ended = dragging;
+          dragging = undefined;
+          unlockView();
+          const position = objects.get(ended.ref)?.position;
+          if (
+            ended.moved &&
+            position &&
+            position.distanceTo(ended.original) > 0.001
+          )
+            move.current(ended.ref, position.x, position.z);
+          choose.current(ended.ref, !ended.moved);
+        } else if (
+          began?.select &&
+          began.pointerId === e.pointerId &&
+          Math.hypot(e.clientX - began.x, e.clientY - began.y) <= 6
+        ) {
+          setRay(e);
+          const ref = picked();
+          if (ref) choose.current(ref);
+        }
+        hand();
+      };
+      const focusEquipment = (e: MouseEvent) => {
+        setRay(e as PointerEvent);
+        const ref = picked(),
+          object = ref && objects.get(ref);
+        if (!object) return;
+        e.preventDefault();
+        const target = object.position.clone();
+        target.y += (object.userData.modelHeight ?? 2.7) * 0.45;
+        camera.position.add(target.clone().sub(controls.target));
+        controls.target.copy(target);
+        camera.zoom = Math.min(
+          10,
+          Math.max(
+            1,
+            (camera.top - camera.bottom) /
+              Math.max(4, (object.userData.modelHeight ?? 2.7) * 1.8)
+          )
+        );
+        camera.updateProjectionMatrix();
+        controls.update();
+        dirty = true;
+      };
+      const pointerCancel = (e: PointerEvent) => {
+        pointers.delete(e.pointerId);
+        cancel();
+      };
+      const blur = () => {
+        pointers.clear();
+        panModifier = false;
+        cancel();
+        controls.disconnect();
+        controls.connect(renderer.domElement);
+        controls.cursorStyle = "grab";
+      };
+      cancelForResize = () => {
+        if (pointers.size || dragging) blur();
+      };
+      const spaceDown = (e: KeyboardEvent) => {
+        const target = e.target;
+        if (
+          e.code === "Space" &&
+          renderer.domElement.matches(":hover") &&
+          !(
+            target instanceof HTMLElement &&
+            (target.isContentEditable ||
+              ["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName))
+          )
+        ) {
+          e.preventDefault();
+          panModifier = true;
+        }
+      };
+      const keyUp = (e: KeyboardEvent) => {
+        if (e.code === "Space") panModifier = false;
+      };
+      const keyDown = (e: KeyboardEvent) => {
+        if (e.code === "Space") {
+          e.preventDefault();
+          panModifier = true;
+          return;
+        }
+        if (e.key === "Escape") {
+          e.preventDefault();
+          if (dragging) cancel();
+          else choose.current("");
+          return;
+        }
+        if (
+          !["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(
+            e.key
+          ) ||
+          dragging
+        )
+          return;
+        e.preventDefault();
+        const direction = new THREE.Vector3();
+        camera.getWorldDirection(direction);
+        direction.y = 0;
+        direction.normalize();
+        const right = new THREE.Vector3().crossVectors(
+          direction,
+          new THREE.Vector3(0, 1, 0)
+        );
+        const offset = (
+          e.key === "ArrowLeft"
+            ? right.multiplyScalar(-1)
+            : e.key === "ArrowRight"
+              ? right
+              : e.key === "ArrowUp"
+                ? direction
+                : direction.multiplyScalar(-1)
+        ).multiplyScalar(e.shiftKey ? 2 : 0.5);
+        const object = selection.current && objects.get(selection.current);
+        if (object) {
+          const next = constrainFloorPosition(
+            layout,
+            object.position.x + offset.x,
+            object.position.z + offset.z
+          );
+          object.position.set(next.x, 0, next.z);
+          updateConnections();
+          move.current(selection.current!, next.x, next.z);
+        } else {
+          camera.position.add(offset);
+          controls.target.add(offset);
+          controls.update();
+        }
+      };
+      renderer.domElement.addEventListener("dblclick", focusEquipment);
+      renderer.domElement.addEventListener("pointercancel", pointerCancel);
+      renderer.domElement.addEventListener("lostpointercapture", pointerCancel);
+      renderer.domElement.addEventListener("pointermove", pointerMove);
+      renderer.domElement.addEventListener("keydown", keyDown);
+      renderer.domElement.addEventListener("pointerdown", down, true);
+      renderer.domElement.addEventListener("pointerup", up, true);
+      window.addEventListener("keydown", spaceDown);
+      window.addEventListener("keyup", keyUp);
+      window.addEventListener("blur", blur);
+      const lost = (event: Event) => {
+        event.preventDefault();
+        cancelAnimationFrame(frame);
+        setFailed(true);
+        cleanup?.();
+      };
+      renderer.domElement.addEventListener("webglcontextlost", lost);
+      const tick = () => {
+        if (disposed) return;
+        frame = requestAnimationFrame(tick);
+        if (document.hidden) return;
+        controls.update();
+        if (dirty) {
+          renderer.render(scene, camera);
+          dirty = false;
+          setReady(true);
+        }
+      };
+      tick();
+      return () => {
+        if (disposed) return;
+        disposed = true;
+        controller.abort();
+        cancel();
+        cancelAnimationFrame(frame);
+        observer.disconnect();
+        controls.dispose();
+        runtime.current = null;
+        renderer.domElement.removeEventListener("dblclick", focusEquipment);
+        renderer.domElement.removeEventListener("pointercancel", pointerCancel);
+        renderer.domElement.removeEventListener(
+          "lostpointercapture",
+          pointerCancel
+        );
+        window.removeEventListener("keydown", spaceDown);
+        window.removeEventListener("keyup", keyUp);
+        window.removeEventListener("blur", blur);
+        renderer.domElement.removeEventListener("pointermove", pointerMove);
+        renderer.domElement.removeEventListener("keydown", keyDown);
+        renderer.domElement.removeEventListener("pointerdown", down, true);
+        renderer.domElement.removeEventListener("pointerup", up, true);
+        renderer.domElement.removeEventListener("webglcontextlost", lost);
+        // Disposing GPU resources preserves the cached CPU references for reuse.
+        retired.forEach(disposeObject);
+        disposeObject(scene);
+        studio?.dispose();
+        metalGrain.dispose();
+        contactMaterial.map?.dispose();
+        contactMaterial.dispose();
+        contactGeometry.dispose();
+        renderer.dispose();
+        renderer.domElement.remove();
+      };
     }
-    return dispose;
-  }, []);
-
-  const button =
-    "min-h-11 rounded-lg border border-slate-600 px-3 py-2 text-sm font-semibold text-slate-100 transition-colors hover:border-orange-400 hover:bg-slate-700 disabled:opacity-50";
+    return () => {
+      cancelAnimationFrame(firstFrame);
+      cancelAnimationFrame(secondFrame);
+      cleanup?.();
+    };
+  }, [key, dark, failed]);
+  useEffect(() => {
+    runtime.current?.focus(selected);
+  }, [selected, key, dark]);
+  useEffect(() => {
+    runtime.current?.statuses(layout.placements);
+    runtime.current?.positions(layout.placements);
+    runtime.current?.zones(layout.zones);
+  }, [layout, key, dark]);
+  useEffect(() => {
+    runtime.current?.reset();
+  }, [reset, zone]);
   return (
-    <div>
-      <div
-        className="relative h-[340px] sm:h-[460px] lg:h-[520px] bg-[#0e1827]"
-        ref={viewport}
-        data-testid="twin-viewport"
-        aria-busy={!!status && !failed}
-      >
-        {failed && (
-          <img
-            src={assetUrl("models/smart-factory/pump-motor-preview.webp")}
-            alt="Smart Factory pump and motor reference model"
-            width={752}
-            height={520}
-            className="absolute inset-0 h-full w-full object-contain opacity-20"
+    <div
+      className="relative h-full w-full"
+      data-testid="factory-scene"
+      data-models-ready={loaded}
+    >
+      <div ref={host} className={`h-full w-full ${failed ? "hidden" : ""}`} />
+      {failed ? (
+        <>
+          <FloorPlan
+            layout={layout}
+            links={links}
+            selected={selected}
+            onSelect={onSelect}
+            onMove={onMove}
+            reset={reset}
           />
-        )}
-        {status && (
-          <div className="absolute inset-0 z-10 grid place-items-center p-8 text-center text-slate-200">
-            <div>
-              <p role={failed ? "alert" : "status"}>{status}</p>
-              {failed && (
-                <button className={`${button} mt-4`} onClick={onRetry}>
-                  Retry 3D preview
-                </button>
-              )}
-            </div>
-          </div>
-        )}
-      </div>
-      <div className="border-t border-slate-700 bg-slate-900 p-4 sm:p-5">
-        <div className="flex flex-wrap gap-2">
           <button
-            className={button}
-            disabled={!!status}
-            aria-pressed={exploded}
-            onClick={() => api.current?.explode(!exploded)}
+            onClick={onRetry}
+            className="absolute bottom-3 right-3 min-h-11 rounded-lg border border-slate-600 bg-slate-950/95 px-3 py-2 text-sm font-semibold text-slate-100"
           >
-            Exploded view
+            Retry 3D view
           </button>
-          <button
-            className={button}
-            disabled={!!status}
-            aria-pressed={ghosted}
-            onClick={() => api.current?.ghost(!ghosted)}
-          >
-            Reveal internals
-          </button>
-          <button
-            className={button}
-            disabled={!!status}
-            onClick={() => api.current?.reset()}
-          >
-            Reset view
-          </button>
-          <button
-            className={button}
-            disabled={!!status}
-            onClick={() => api.current?.rotate(-1)}
-          >
-            Rotate left
-          </button>
-          <button
-            className={button}
-            disabled={!!status}
-            onClick={() => api.current?.rotate(1)}
-          >
-            Rotate right
-          </button>
-        </div>
-        <div className="mt-4 grid gap-3 sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] sm:items-end">
-          <label className="grid gap-2 text-sm font-semibold text-slate-300">
-            Inspect a component
-            <select
-              value={selected}
-              disabled={!!status}
-              onChange={event => api.current?.select(event.target.value)}
-              className="min-h-11 w-full min-w-0 rounded-lg border border-slate-600 bg-slate-800 px-3 py-2 text-white"
-            >
-              {twinParts.map(part => (
-                <option key={part.name} value={part.name}>
-                  {part.name}
-                </option>
-              ))}
-            </select>
-          </label>
           <p
-            className="text-sm leading-relaxed text-slate-400"
-            aria-live="polite"
+            role="status"
+            className="pointer-events-none absolute left-3 right-3 top-3 w-fit rounded-md border border-slate-600 bg-slate-950/85 px-2 py-1 text-xs text-slate-200"
           >
-            {selected === "Assembly"
-              ? "Drag to orbit · scroll or pinch to zoom · select a part to inspect."
-              : `${selected} · ${twinParts.find(part => part.name === selected)?.material}. Select the whole Assembly or Reset view to return.`}
+            3D unavailable on this device · Showing floor plan
           </p>
-        </div>
-      </div>
+        </>
+      ) : (
+        <>
+          {failedReferences > 0 && (
+            <button
+              onClick={onRetry}
+              className="absolute bottom-3 right-3 min-h-11 rounded-lg border border-slate-600 bg-slate-950/95 px-3 py-2 text-sm font-semibold text-slate-100"
+            >
+              Retry detailed models
+            </button>
+          )}
+          <span
+            className="pointer-events-none absolute left-3 top-3 rounded-md border border-slate-600 bg-slate-950/85 px-2 py-1 text-xs text-slate-200"
+            role="status"
+          >
+            {ready
+              ? `${layout.placements.length} items · ${layout.zones.length} zones`
+              : "Preparing factory floor…"}
+          </span>
+        </>
+      )}
     </div>
   );
 }
