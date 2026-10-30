@@ -46,7 +46,7 @@ describe('ProjectService', () => {
     const project = ProjectService.getProjectById('smart-factory-iot');
     expect(project).toBeDefined();
     expect(project?.title).toBe('Smart Factory');
-    expect(project?.subtitle).toContain('IoT');
+    expect(project?.subtitle).toContain('digital twins');
   });
 
   it('should return null for unknown project', () => {

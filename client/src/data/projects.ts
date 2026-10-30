@@ -32,12 +32,15 @@ export const projects: Project[] = [
   {
     id: "smart-factory-iot",
     title: "Smart Factory",
-    subtitle: "Industrial IoT Asset, Telemetry & Edge Platform",
+    subtitle: "Digital Twins, Industrial Networks & Operations",
     description:
-      "Production-oriented platform with a Vercel React/Node control plane, five private .NET services, durable MQTT ingestion, PostgreSQL/Redis, secure edge gateways, and a BaSyx AAS runtime.",
+      "Interactive 3D factory layouts and equipment inspection, OPC UA FX/TSN diagnostics, AAS lifecycle, source-aware telemetry, OT security and operational investigations.",
     tags: [
       { label: "React (Vite)", color: "cyan" },
-      { label: ".NET 8", color: "cyan" },
+      { label: ".NET 10", color: "cyan" },
+      { label: "Three.js", color: "cyan" },
+      { label: "OPC UA FX", color: "cyan" },
+      { label: "TSN", color: "cyan" },
       { label: "Node.js", color: "cyan" },
       { label: "PostgreSQL", color: "cyan" },
       { label: "CloudAMQP", color: "cyan" },
