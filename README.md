@@ -107,7 +107,7 @@ Native factory rendering helpers live in `client/src/components/smart-factory/`,
 
 ### Project page layout and IMSOP
 
-Both project heroes use `ProjectHighlights` to retain their original compact card heights and hero spacing. Smart Factory uses the navy architecture image in `client/public/images/smart_factory_arch.webp`; its Oracle hosting labels were updated with the prompt recorded in `design/smart-factory-oracle-architecture-prompt.txt`. The full-width 3D preview and balanced feature grids avoid empty columns.
+Both project heroes use `ProjectHighlights` to retain their original compact card heights and hero spacing. Smart Factory uses the scalable navy architecture image in `client/public/images/smart_factory_arch.svg`, with real text and consistent vector icons. Edit `scripts/build-smart-factory-architecture.mjs` and run `pnpm architecture:build` to refresh the SVG and 2× lossless PNG/WebP exports. The generator requires Playwright Chromium and `cwebp`. The full-width 3D preview and balanced feature grids avoid empty columns.
 
 IMSOP's page, project service and overview cards describe shipment visibility, durable exception review, signed event intake, purchasing and partial warehouse receiving. Shared detail data is in `client/src/data/imsop.ts`, reviewed against the [current IMSOP capability guide](https://github.com/DruHustle/imsop-app-backend/blob/main/docs/CURRENT_PLATFORM.md). Optional providers and integrations remain explicitly configured capabilities.
 

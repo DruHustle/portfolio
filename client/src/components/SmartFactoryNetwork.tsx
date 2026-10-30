@@ -12,12 +12,11 @@ export function SmartFactoryNetwork() {
           id="industrial-networking"
           className="text-3xl font-bold sm:text-4xl"
         >
-          OPC UA FX & TSN, made visible
+          OPC UA FX & TSN diagnostics
         </h2>
         <p className="mt-5 text-lg leading-relaxed text-slate-300">
-          Understand which controllers exchange data, how their clocks are
-          synchronized, and what the available timing evidence says about
-          delivery.
+          Inspect reported controller connections, clock synchronization,
+          latency, jitter and packet loss from read-only collector snapshots.
         </p>
       </div>
       <div className="grid gap-6 md:grid-cols-2">
