@@ -1,9 +1,9 @@
 {
   "version": 2,
   "framework": "vite",
-  "installCommand": "pnpm install --frozen-lockfile",
-  "buildCommand": "pnpm build",
-  "outputDirectory": "dist",
+  "installCommand": "cd portfolio-frontend && npx --yes pnpm@10.34.7 install --frozen-lockfile",
+  "buildCommand": "cd portfolio-frontend && npx --no-install pnpm build",
+  "outputDirectory": "portfolio-frontend/dist",
   "redirects": [
     {
       "source": "/portfolio/",

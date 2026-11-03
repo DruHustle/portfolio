@@ -14,14 +14,13 @@ Onesa AI provides a Next.js/FastAPI workspace for Chat, Knowledge, Agents, and T
 
 ```text
 portfolio/
-├── client/                 # Frontend React application (Vite + TS + Tailwind)
-│   ├── public/             # Static assets (images, resume)
-│   └── src/                # Application source code
-│       ├── data/           # Project and skill data definitions
-│       ├── pages/          # Main pages and project detail views
-│       └── components/     # Reusable UI components
-├── server/                 # Optional backend for advanced features
-└── .github/workflows/      # Pull-request and main-branch quality checks
+├── .github/workflows/      # Pull-request and main-branch quality checks
+├── portfolio-frontend/
+│   ├── client/             # React application (Vite + TS + Tailwind)
+│   │   ├── public/         # Static assets (images, resume)
+│   │   └── src/            # Pages, components, and project data
+│   └── server/             # Optional backend for advanced features
+└── vercel.json             # Deployment configuration
 ```
 
 ## 🛠️ Getting Started
@@ -33,11 +32,14 @@ portfolio/
 ### Installation
 ```bash
 corepack enable
+cd portfolio-frontend
 pnpm install --frozen-lockfile
 pnpm dev
 ```
 
 Open the root URL printed by Vite (normally `http://localhost:3000/`). If that port is busy, Vite selects the next available port.
+
+Run the remaining commands in this README from `portfolio-frontend/`. Paths such as `client/`, `scripts/`, and `artifacts/` below are relative to that directory.
 
 ### Local verification
 
@@ -65,7 +67,7 @@ For repeatable local performance measurements, serve the current production buil
 `pnpm start` optionally serves the build and the existing tRPC router from Express on port 3000. Set `PORT` to choose another port, and `ALLOWED_ORIGIN` for an allowed cross-origin frontend. The portfolio itself is static and needs no API or login. The optional `auth.me` and `auth.logout` procedures remain anonymous placeholders, not an authentication system.
 
 ## 🌐 Deployment
-The portfolio is hosted on **Vercel** at **https://andrewgotora.com/**, using hash-based routing and root-relative assets. The connected Vercel project publishes `main` with a frozen pnpm install, `pnpm build`, and `dist` as the output directory. `vercel.json` defines these settings and redirects legacy `/portfolio/` URLs to the equivalent root paths.
+The portfolio is hosted on **Vercel** at **https://andrewgotora.com/**, using hash-based routing and root-relative assets. With the Vercel project root set to the repository root, `vercel.json` installs and builds `portfolio-frontend` and publishes `portfolio-frontend/dist`. It also redirects legacy `/portfolio/` URLs to the equivalent root paths.
 
 Create a branch and open a pull request against `main`. The required **Verify portfolio** check must pass before merging; `main` is protected against direct pushes, including administrator bypass. Vercel provides pull-request previews and publishes the merged revision to production. GitHub Actions performs verification only; GitHub Pages publishing and the old manual publication scripts have been retired.
 
