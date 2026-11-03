@@ -38,13 +38,31 @@ jobs:
         with:
           node-version: 22
           cache: pnpm
-          cache-dependency-path: portfolio-frontend/pnpm-lock.yaml
+          cache-dependency-path: |
+            portfolio-frontend/pnpm-lock.yaml
+            portfolio-backend/pnpm-lock.yaml
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
       - name: Audit dependencies
         run: pnpm audit --audit-level=moderate
+
+      - name: Install backend
+        working-directory: portfolio-backend
+        run: pnpm install --frozen-lockfile
+
+      - name: Audit backend
+        working-directory: portfolio-backend
+        run: pnpm audit --audit-level=moderate
+
+      - name: Verify backend
+        working-directory: portfolio-backend
+        run: |
+          pnpm lint
+          pnpm check
+          pnpm test
+          pnpm build
 
       - name: Lint
         run: pnpm lint

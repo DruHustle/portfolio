@@ -1,5 +1,5 @@
 {
-  "name": "portfolio",
+  "name": "portfolio-frontend",
   "homepage": "https://andrewgotora.com/",
   "version": "1.0.0",
   "type": "module",
@@ -12,7 +12,6 @@
     "images:check": "node scripts/clean-images.mjs --check",
     "preview": "vite preview --host",
     "check": "tsc --noEmit && tsc -p tsconfig.node.json && tsc -p tsconfig.e2e.json",
-    "start": "tsx server/index.ts",
     "lint": "eslint . --max-warnings=0",
     "test:e2e": "pnpm build && playwright test",
     "perf": "node scripts/measure-performance.mjs",
@@ -48,18 +47,12 @@
     "@radix-ui/react-toggle": "^1.2.1",
     "@radix-ui/react-toggle-group": "^1.2.1",
     "@radix-ui/react-tooltip": "^1.4.1",
-    "@tanstack/react-query": "^5.104.2",
-    "@trpc/client": "^11.19.0",
-    "@trpc/react-query": "^11.19.0",
-    "@trpc/server": "^11.19.0",
     "@vercel/analytics": "^1.6.1",
     "axios": "^1.20.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
-    "cors": "^2.8.6",
     "embla-carousel-react": "^8.6.0",
-    "express": "^4.22.3",
     "framer-motion": "^12.43.0",
     "input-otp": "^1.5.0",
     "lucide-react": "^0.453.0",
@@ -73,7 +66,6 @@
     "react-router-dom": "^7.18.4",
     "recharts": "^2.15.4",
     "sonner": "^2.0.8",
-    "superjson": "^2.2.6",
     "tailwind-merge": "^3.7.0",
     "tailwindcss-animate": "^1.0.7",
     "three": "0.186.1",
@@ -88,8 +80,6 @@
     "@tailwindcss/vite": "^4.3.3",
     "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/react": "^16.3.3",
-    "@types/cors": "^2.8.19",
-    "@types/express": "4.17.21",
     "@types/google.maps": "^3.66.6",
     "@types/node": "^24.19.2",
     "@types/react": "^19.3.0",
@@ -132,5 +122,6 @@
       "@eslint/eslintrc@3.3.7": "patches/@eslint__eslintrc@3.3.7.patch",
       "@eslint/config-array@0.21.2": "patches/@eslint__config-array@0.21.2.patch"
     }
-  }
+  },
+  "private": true
 }
