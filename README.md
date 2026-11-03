@@ -62,6 +62,8 @@ pnpm exec playwright show-report artifacts/browser/report
 
 Screenshots, accessibility results, traces for failures, and the HTML report are written to ignored `artifacts/browser/`. CI runs lint, type checks, unit tests, dependency audit, build, and browser tests on pull requests and pushes to `main`. Browser reports are retained for seven days.
 
+The dependency overrides keep `follow-redirects` and `minimatch` on patched versions. The patches in `portfolio-frontend/patches/` adapt ESLint dependencies to the current `minimatch` exports; review them when upgrading those dependencies.
+
 For repeatable local performance measurements, serve the current production build on port 4173 and run `pnpm perf`. Optionally set `PERF_BASELINE_URL` to a separately served original build for alternating before-and-after samples. The collector records three cold samples at 375 and 1440 pixels with 150 ms latency, 1.6 Mbps download, 750 Kbps upload, and 4× CPU throttling. Results are in `artifacts/browser/performance.json`. These are synthetic LCP, CLS, and scripted-navigation interaction measurements, not production field Core Web Vitals.
 
 `pnpm start` optionally serves the build and the existing tRPC router from Express on port 3000. Set `PORT` to choose another port, and `ALLOWED_ORIGIN` for an allowed cross-origin frontend. The portfolio itself is static and needs no API or login. The optional `auth.me` and `auth.logout` procedures remain anonymous placeholders, not an authentication system.
