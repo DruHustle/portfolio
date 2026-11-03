@@ -14,94 +14,76 @@ Onesa AI provides a Next.js/FastAPI workspace for Chat, Knowledge, Agents, and T
 
 ```text
 portfolio/
-├── frontend/               # Independent React application
-│   ├── src/                # Pages, components, local data, and UI unit tests
-│   ├── public/             # Images, résumé, and published engineering guides
-│   ├── e2e/                # Playwright browser tests
-│   ├── scripts/            # Documentation, favicon, and performance tools
-│   ├── design/             # Editable artwork and design sources
-│   ├── package.json        # Frontend dependencies and commands
-│   ├── pnpm-lock.yaml      # Frontend dependency lockfile
-│   ├── tsconfig.json       # Self-contained frontend TypeScript settings
-│   └── eslint.config.mjs   # Frontend lint rules
-├── backend/                # Independent Express/tRPC API
-│   ├── src/                # HTTP server, API routers, and tRPC setup
-│   ├── tests/              # API contract tests in a Node environment
-│   ├── package.json        # Backend dependencies and commands
-│   ├── pnpm-lock.yaml      # Backend dependency lockfile
-│   ├── tsconfig.json       # Self-contained backend TypeScript settings
-│   └── eslint.config.mjs   # Backend lint rules
-├── .github/workflows/      # Runs each application's checks independently
-└── vercel.json             # Builds and publishes the frontend
+├── .github/workflows/      # Pull-request and main-branch quality checks
+├── portfolio-frontend/
+│   └── client/             # React application (Vite + TS + Tailwind)
+│       ├── public/         # Static assets (images, resume)
+│       └── src/            # Pages, components, and project data
+├── portfolio-backend/     # Independently installable optional Express/tRPC API
+│   ├── src/                # API source; no frontend imports or static serving
+│   └── tests/              # API contract tests
+└── vercel.json             # Frontend deployment configuration
 ```
-
-The two applications have no imports, local package links, workspace dependencies, or configuration dependencies on each other. Each folder can be copied elsewhere and installed, checked, tested, built, and run on its own. There is no root package or shared-code folder. The frontend uses local content; the backend serves only its API.
-
-See [frontend/README.md](frontend/README.md) and [backend/README.md](backend/README.md) for each application's commands.
 
 ## 🛠️ Getting Started
 
-Use Node.js 22 or newer and pnpm 10.34.7, pinned in each application's `package.json`.
+### Prerequisites
+- Node.js (v22+)
+- Corepack and PNPM (the repository pins pnpm 10.34.7)
 
-### Frontend
-
+### Installation
 ```bash
-cd frontend
 corepack enable
+cd portfolio-frontend
 pnpm install --frozen-lockfile
 pnpm dev
 ```
 
-Open the root URL printed by Vite, normally `http://localhost:3000/`. If that port is busy, Vite selects the next available port. The frontend works without the backend.
+Open the root URL printed by Vite (normally `http://localhost:3000/`). If that port is busy, Vite selects the next available port.
 
-Run frontend verification from `frontend/`:
+Run the remaining commands in this README from `portfolio-frontend/`. Paths such as `client/`, `scripts/`, and `artifacts/` below are relative to that directory.
+
+### Local verification
 
 ```bash
-pnpm lint
-pnpm check
-pnpm test
+pnpm lint                    # TypeScript, React hooks, and JSX accessibility rules
+pnpm check                   # Strict application and Vite configuration type checks
+pnpm test                    # Rendered routes, navigation, recovery, exports, and local publication fixtures
 pnpm audit --audit-level=moderate
 pnpm build
 pnpm preview --host 127.0.0.1 --port 4173
-pnpm exec playwright install chromium
-pnpm test:e2e
+```
+
+The browser suite covers all routes at 375, 768, and 1440 pixels, with overflow checks, real image loading, console and network failures, WCAG A/AA scans, keyboard and mobile-menu behavior, project/documentation navigation, downloads, full-size diagrams, and fault recovery.
+
+```bash
+pnpm exec playwright install chromium   # Once per browser version
+pnpm test:e2e                           # Build and run isolated Chromium checks
 pnpm exec playwright show-report artifacts/browser/report
 ```
 
-The browser suite covers all routes at 375, 768, and 1440 pixels, with overflow checks, real image loading, console and network failures, WCAG A/AA scans, keyboard and mobile-menu behavior, documentation navigation, downloads, diagrams, and fault recovery. Reports are written to `frontend/artifacts/browser/`.
+Screenshots, accessibility results, traces for failures, and the HTML report are written to ignored `artifacts/browser/`. CI runs lint, type checks, unit tests, dependency audit, build, and browser tests on pull requests and pushes to `main`. Browser reports are retained for seven days.
 
-For repeatable performance measurements, serve the production build on port 4173 and run `pnpm perf` from `frontend/`. Optionally set `PERF_BASELINE_URL` to a separately served original build. Results are written to `frontend/artifacts/browser/performance.json`; these are synthetic measurements rather than production field Core Web Vitals.
+The dependency overrides keep `follow-redirects` and `minimatch` on patched versions. The application-local patches in `portfolio-frontend/patches/` and `portfolio-backend/patches/` adapt their ESLint dependencies to the current `minimatch` exports; review them when upgrading those dependencies.
 
-### Backend
+For repeatable local performance measurements, serve the current production build on port 4173 and run `pnpm perf`. Optionally set `PERF_BASELINE_URL` to a separately served original build for alternating before-and-after samples. The collector records three cold samples at 375 and 1440 pixels with 150 ms latency, 1.6 Mbps download, 750 Kbps upload, and 4× CPU throttling. Results are in `artifacts/browser/performance.json`. These are synthetic LCP, CLS, and scripted-navigation interaction measurements, not production field Core Web Vitals.
 
-In a separate terminal:
+The portfolio itself is static and needs no API or login. Preview its build with `pnpm preview` from `portfolio-frontend/`.
 
-```bash
-cd backend
-pnpm install --frozen-lockfile
-pnpm lint
-pnpm check
-pnpm test
-pnpm audit --audit-level=moderate
-pnpm build
-PORT=3001 pnpm start
-```
+The optional API lives in [`portfolio-backend/`](portfolio-backend/README.md). From that folder, run `pnpm install --frozen-lockfile`, `pnpm check`, `pnpm test`, `pnpm build` and `pnpm start`. It exposes the existing tRPC routes at `/api/trpc`; it does not read or serve frontend files. Set `PORT` to choose its listening port and `ALLOWED_ORIGIN` for the permitted browser origin. The existing `auth.me` and `auth.logout` procedures remain anonymous placeholders, not an authentication system.
 
-The API listens at `http://localhost:3001/api/trpc` with this example port; its default port is 3000. `PORT` selects the port and `ALLOWED_ORIGIN` sets the permitted browser origin, defaulting to `http://localhost:3000`. For development with automatic restarts, use `PORT=3001 pnpm dev`.
-
-The backend does not read or serve frontend build files. Its existing `auth.me` and `auth.logout` procedures remain anonymous placeholders rather than an authentication system.
+Each application owns its dependencies, lockfile, compiler/lint configuration and tests. Either folder can be copied out and installed independently. There is no shared application package or cross-application source import. CI audits, checks, tests and builds both packages, then runs the existing frontend browser suite.
 
 ## 🌐 Deployment
+The portfolio is hosted on **Vercel** at **https://andrewgotora.com/**, using hash-based routing and root-relative assets. With the Vercel project root set to the repository root, `vercel.json` installs and builds `portfolio-frontend` and publishes `portfolio-frontend/dist`. It also redirects legacy `/portfolio/` URLs to the equivalent root paths.
 
-The portfolio is hosted on **Vercel** at **https://andrewgotora.com/**, using hash-based routing and root-relative assets. The connected Vercel project keeps the repository root as its project root. Root `vercel.json` installs and builds inside `frontend/`, using pinned pnpm 10.34.7, and publishes `frontend/dist/`. No backend installation or build is required for this deployment. Legacy `/portfolio/` URLs redirect to the equivalent root paths.
+Create a branch and open a pull request against `main`. The required **Verify portfolio** check must pass before merging; `main` is protected against direct pushes, including administrator bypass. Vercel provides pull-request previews and publishes the merged revision to production. GitHub Actions performs verification only; GitHub Pages publishing and the old manual publication scripts have been retired.
 
-Create a branch and open a pull request against `main`. The required **Verify portfolio** check verifies each application using its own install, audit, lint, type checks, tests, and build, then runs the frontend browser suite. Browser reports are retained for seven days. Vercel supplies pull-request previews and publishes the merged revision to production.
+The documentation generator derives absolute PDF links from `package.json`'s canonical `homepage`. Downloaded guides link to the production domain rather than a separate hosting service.
 
-The backend can be deployed separately by installing and building from `backend/` and starting `dist/index.js` with Node. It has no dependency on frontend source or assets.
+The favicon is a font-independent AG monogram in the portfolio's navy and cyan palette. Its editable vector source is `design/favicon-source.svg`. Run `pnpm icons:build` with Playwright Chromium installed to export the SVG, multi-size ICO, browser PNG, and Apple touch icon into `client/public/`.
 
-The documentation generator uses the canonical `homepage` in `frontend/package.json`. Downloaded guides link to the production domain. The editable favicon source is `frontend/design/favicon-source.svg`; run `pnpm icons:build` from `frontend/` with Playwright Chromium installed to export icons into `frontend/public/`.
-
-Frontend environment files live in `frontend/`. Private credentials must never be placed in `VITE_*` variables because Vite exposes them to browsers.
+Vite selects `NODE_ENV` automatically. The checked-in environment files contain example API settings; no credentials are needed to run the static portfolio. Never put private credentials in `VITE_*` variables because Vite exposes them to browsers.
 
 ## ✨ Key Features
 - **Dynamic Project Details**: Deep-dive views for major projects like IMSOP and SAP BTP AI Hub.
@@ -109,7 +91,7 @@ Frontend environment files live in `frontend/`. Private credentials must never b
 - **Documentation Hub**: Integrated viewing and downloading of project documentation.
 - **Analytics Status**: The public analytics route explains configuration; visitor reports require the owner's Vercel dashboard. The tracking script is included once on Vercel builds, or when `VITE_ENABLE_ANALYTICS=true` is explicitly set. Local builds leave it disabled by default. Enabling the Vercel integration and verifying collection remain deployment-side steps; this page does not claim live collection or display mock metrics.
 - **Accessible Navigation**: Skip link, visible keyboard focus, section focus management, reduced-motion support, and consistently available return navigation.
-- **Deferred Assets**: Project routes load on demand; compact avatars and dimensioned, lazy-loaded architecture images reduce the initial transfer. Original full-resolution images remain available.
+- **Deferred Assets**: Project routes load on demand; compact avatars and dimensioned, lazy-loaded architecture images reduce the initial transfer. Full-size links open the current diagrams.
 - **Modern Tech Stack**: Built with React, TypeScript, Tailwind CSS, and Wouter.
 
 ## 🛠️ Technology Stack
@@ -125,15 +107,36 @@ Frontend environment files live in `frontend/`. Private credentials must never b
 Developed by **Andrew Gotora**
 **Last Updated**: October 2026
 
+### Smart Factory feature page
+
+The project page and project service share capability data in `client/src/data/smartFactory.ts`. Product descriptions are based on the current [Smart Factory engineering guides](https://github.com/DruHustle/smart-factory-frontend/tree/main/docs), including factory layouts, component inspection, FX/TSN diagnostics, OT security and the editable demo. FX/TSN monitoring is described separately from commissioned local control and hardware timing.
+
+The whole-factory preview starts automatically when the project page opens. It adapts the current Smart Factory floor renderer, workshop environment and authored showcase layout, including robots, conveyors, tanks, pumps, cabinets, sensors and edge gateways across four zones. The updated workshop includes loading bays, warehouse storage, and exit areas. Moving the mouse rotates the view; dragging moves equipment or pans the floor. Visitors can zoom, select equipment, filter zones, switch to the keyboard-accessible floor plan and enter fullscreen. The initial camera fills a responsive viewer using the actual workshop geometry; **Fit** shows the complete factory. The preview uses bundled public reference models and illustrative data; its layout changes stay in memory and do not affect the application.
+
+Native factory rendering helpers live in `client/src/components/smart-factory/`, with authored inventory/layout data in `client/src/data/smartFactoryFloor.ts`. Baked HDR studio lighting and material batching follow the current product renderer. Model provenance and hashes are recorded in `client/public/models/smart-factory/README.txt`. Browser checks cover automatic startup, actual view/position changes, zones, fullscreen, failed-reference recovery and the no-WebGL floor plan.
+
+### Project page layout and IMSOP
+
+Both project heroes use `ProjectHighlights` to retain their original compact card heights and hero spacing. Smart Factory uses the scalable navy architecture image in `client/public/images/smart_factory_arch.svg`, with real text and consistent vector icons. Edit `scripts/build-smart-factory-architecture.mjs` and run `pnpm architecture:build` to refresh and validate the SVG. The generator requires Playwright Chromium. The full-width 3D preview and balanced feature grids avoid empty columns.
+
+### Image replacement and cleanup
+
+`scripts/current-images.json` lists the current files in the managed `client/public/images/` directory, including the profile photo used by social metadata. When replacing an image, update its references and this manifest in the same change. `pnpm images:clean` deletes files outside the manifest from that directory; `pnpm images:check` reports leftovers without deleting them. Cleanup validates the manifest and current files before deleting anything and refuses unexpected directories or symlinks. It never touches models, documentation diagrams, design sources or unrelated local files.
+
+Every `pnpm build` cleans the managed source images, then Vite empties `dist` before creating the new output. Vercel runs the same command, so retired images are absent from the current production deployment. Image responses require cache revalidation, so stable image URLs are refreshed after replacement. Historical immutable Vercel deployments and Git history are separate from the current live site and are not deleted by this build process.
+
+IMSOP's page, project service and overview cards describe shipment visibility, durable exception review, signed event intake, purchasing and partial warehouse receiving. Shared detail data is in `client/src/data/imsop.ts`, reviewed against the [current IMSOP capability guide](https://github.com/DruHustle/imsop-app-backend/blob/main/docs/CURRENT_PLATFORM.md). Optional providers and integrations remain explicitly configured capabilities.
+
 ### Engineering guide editions
 
-IMSOP and Smart Factory IoT share the same five-guide structure and page component. Markdown under `frontend/public/docs/{imsop,smartfactoryiot}/` is the authoring source. After editing a guide, regenerate its static HTML, rendered SVG diagrams, and PDF editions:
+IMSOP and Smart Factory share the same five-guide structure and page component. Smart Factory uses `/#/projects/smart-factory` and `/#/projects/smart-factory/documentation`; the corresponding `smart-factory-iot` routes redirect to these URLs and replace the old history entry. The `smart-factory-iot` project ID, repository links, and `smartfactoryiot` documentation directory remain compatible with existing integrations.
+
+Markdown under `client/public/docs/{imsop,smartfactoryiot}/` is the authoring source. After editing a guide, regenerate its static HTML, rendered SVG diagrams, and PDF editions:
 
 ```bash
 # Requires pandoc on PATH and Playwright Chromium installed locally.
-cd frontend
 pnpm install --frozen-lockfile
 pnpm docs:build
 ```
 
-The renderer also refreshes the résumé PDF from its HTML source and writes `frontend/public/docs/manifest.json` with source/output hashes. Generated HTML uses local SVG files and requires no JavaScript, external renderer, or model call. Commit the generated editions with their sources; `pnpm build` only packages these assets. Preview both project documentation routes and their visual guides after regeneration.
+The renderer also refreshes the résumé PDF from its HTML source and writes `client/public/docs/manifest.json` with source/output hashes. Generated HTML uses local SVG files and requires no JavaScript, external renderer, or model call. Commit the generated editions with their sources; `pnpm build` only packages these assets. Preview both project documentation routes and their visual guides after regeneration.

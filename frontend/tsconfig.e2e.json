@@ -1,7 +1,0 @@
-{
-  "extends": "./tsconfig.json",
-  "include": ["e2e/**/*.ts", "playwright.config.ts"],
-  "compilerOptions": {
-    "tsBuildInfoFile": "./node_modules/.cache/e2e.tsbuildinfo"
-  }
-}

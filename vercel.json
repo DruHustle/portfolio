@@ -1,9 +1,9 @@
 {
   "version": 2,
   "framework": "vite",
-  "installCommand": "cd frontend && npx --yes pnpm@10.34.7 install --frozen-lockfile",
-  "buildCommand": "cd frontend && npx --yes pnpm@10.34.7 build",
-  "outputDirectory": "frontend/dist",
+  "installCommand": "cd portfolio-frontend && npx --yes pnpm@10.34.7 install --frozen-lockfile",
+  "buildCommand": "cd portfolio-frontend && npx --no-install pnpm build",
+  "outputDirectory": "portfolio-frontend/dist",
   "redirects": [
     {
       "source": "/portfolio/",
@@ -28,6 +28,15 @@
     }
   ],
   "headers": [
+    {
+      "source": "/images/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    },
     {
       "source": "/(.*)",
       "headers": [

@@ -10,6 +10,9 @@ build/
 # Environment variables
 .env*
 !.env*.example
+!portfolio-frontend/.env.dev
+!portfolio-frontend/.env.production
+!portfolio-frontend/.env.test
 
 # IDE and editor files
 .vscode/
