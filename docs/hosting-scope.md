@@ -1,22 +1,26 @@
-# Hosting scope reviewed for the Onesa infrastructure migration
+# Portfolio hosting and legacy service retirement
 
-The current portfolio production application is the static Vite build served by
-Vercel at `https://andrewgotora.com/`. Its `vercel.json` publishes `dist` and has
-no backend API proxy. The browser uses bundled project/content data. The README
-already states that the optional Express/tRPC `server/` is not required by the
-portfolio, and that its auth procedures are anonymous placeholders.
+The production frontend is the static Vite application served by Vercel at
+`https://andrewgotora.com/`. The repository-root `vercel.json` builds
+`portfolio-frontend` and publishes `portfolio-frontend/dist`. It has no backend
+API proxy; the browser uses bundled project and content data.
 
-The requested separation leaves this frontend and domain on Vercel. There is no
-required portfolio production database or backend service to reproduce on Render
-from this repository. Creating either would add an unused service and cost.
+The independent Express/tRPC API lives in `portfolio-backend` and owns its
+dependencies, build and tests. The [Render Blueprint](../render.yaml) defines its
+approved target as one free Node web service in Frankfurt. It needs no database,
+persistent disk or secret credentials. The static frontend remains independent
+of this API. The API's existing authentication procedures are anonymous placeholders.
+See the [backend deployment guide](../portfolio-backend/README.md#render-deployment)
+for service settings and live health, revision and API verification.
 
-This source review cannot prove whether an old portfolio container is still
-running on an Oracle VM. Inventory live process/container ownership and incoming
-traffic before retiring any such service. If that inspection finds an actively
-used backend outside the current source contract, document its consumers and
-data, then qualify its Render replacement before stopping it. Do not infer that
-a similarly named container is safe to remove.
+## Legacy Oracle inventory
 
-No Oracle resources, Vercel settings, DNS, paid Render services or databases were
-changed by this review. No new deployment manifest is needed for the current
-static portfolio.
+Source configuration and a verified Render API do not establish whether an old
+portfolio process still runs on an Oracle VM or has other consumers. Authenticated
+host inventory remains necessary before retiring a legacy service. Check process
+and container ownership, ingress mappings and incoming traffic. If an existing
+consumer uses that backend, verify its behavior against the Render replacement
+before changing its route or stopping the old process. Preserve unrelated services
+and shared ingress.
+
+No retirement of legacy Oracle resources is established by this source review.

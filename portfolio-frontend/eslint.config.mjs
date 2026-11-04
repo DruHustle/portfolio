@@ -14,6 +14,24 @@ export default tseslint.config(
     files: ["**/*.{ts,tsx,js,mjs}"],
     languageOptions: { globals: { ...globals.browser, ...globals.node } },
     rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: [
+                "**/portfolio-backend/**",
+                "**/server/**",
+                "**/shared/**",
+                "@shared/*",
+                "@portfolio/backend",
+                "@portfolio/shared",
+              ],
+              message: "The frontend must be independent of sibling packages.",
+            },
+          ],
+        },
+      ],
       "@typescript-eslint/no-unused-vars": [
         "error",
         { argsIgnorePattern: "^_", caughtErrors: "none" },

@@ -1,0 +1,22 @@
+# Backend only. The independently hosted static portfolio stays on Vercel.
+# Verify the intended workspace and any existing service before applying.
+services:
+  - type: web
+    name: portfolio-backend
+    runtime: node
+    plan: free
+    region: frankfurt
+    branch: main
+    rootDir: portfolio-backend
+    buildCommand: corepack pnpm install --frozen-lockfile --prod=false && corepack pnpm build
+    startCommand: node dist/index.js
+    healthCheckPath: /api/health
+    maxShutdownDelaySeconds: 30
+    autoDeployTrigger: checksPass
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NODE_VERSION
+        value: "22"
+      - key: ALLOWED_ORIGIN
+        value: https://andrewgotora.com,https://www.andrewgotora.com
