@@ -1,30 +1,42 @@
-import express from "express";
 import { createServer } from "node:http";
-import cors from "cors";
-import { createExpressMiddleware } from "@trpc/server/adapters/express";
-import { appRouter } from "./routers/index";
+import { createApp } from "./app";
+import { readConfiguration } from "./config";
 
-const app = express();
-app.disable("x-powered-by");
-app.use(
-  cors({
-    origin: process.env.ALLOWED_ORIGIN || "http://localhost:3000",
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-  })
-);
-app.use("/api/trpc", createExpressMiddleware({ router: appRouter }));
-app.use("/api", (_request, response) => {
-  response.status(404).json({ error: "API route not found" });
-});
+try {
+  const configuration = readConfiguration();
+  let stopping = false;
+  const server = createServer(createApp(configuration, () => !stopping));
+  server.requestTimeout = 15_000;
+  server.headersTimeout = 10_000;
+  server.keepAliveTimeout = 5_000;
+  server.on("error", error => {
+    console.error("Failed to start portfolio backend:", error.message);
+    process.exitCode = 1;
+  });
+  server.listen(configuration.port, "0.0.0.0", () => {
+    console.log(`Portfolio backend listening on 0.0.0.0:${configuration.port}`);
+  });
 
-const server = createServer(app);
-const port = Number(process.env.PORT || 3000);
-server.on("error", error => {
-  console.error("Failed to start server:", error.message);
+  const shutdown = () => {
+    if (stopping) return;
+    stopping = true;
+    const deadline = setTimeout(() => {
+      server.closeAllConnections();
+      process.exitCode = 1;
+    }, 10_000);
+    deadline.unref();
+    server.close(error => {
+      clearTimeout(deadline);
+      if (error) process.exitCode = 1;
+    });
+    server.closeIdleConnections();
+  };
+  process.once("SIGTERM", shutdown);
+  process.once("SIGINT", shutdown);
+} catch (error) {
+  console.error(
+    "Invalid portfolio backend configuration:",
+    error instanceof Error ? error.message : "Unknown error"
+  );
   process.exitCode = 1;
-});
-server.listen(port, () =>
-  console.log(`Server running on http://localhost:${port}/`)
-);
+}

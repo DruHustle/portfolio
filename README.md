@@ -22,6 +22,7 @@ portfolio/
 ├── portfolio-backend/     # Independently installable optional Express/tRPC API
 │   ├── src/                # API source; no frontend imports or static serving
 │   └── tests/              # API contract tests
+├── render.yaml             # Optional backend deployment on Render (free Node service)
 └── vercel.json             # Frontend deployment configuration
 ```
 
@@ -70,7 +71,7 @@ For repeatable local performance measurements, serve the current production buil
 
 The portfolio itself is static and needs no API or login. Preview its build with `pnpm preview` from `portfolio-frontend/`.
 
-The optional API lives in [`portfolio-backend/`](portfolio-backend/README.md). From that folder, run `pnpm install --frozen-lockfile`, `pnpm check`, `pnpm test`, `pnpm build` and `pnpm start`. It exposes the existing tRPC routes at `/api/trpc`; it does not read or serve frontend files. Set `PORT` to choose its listening port and `ALLOWED_ORIGIN` for the permitted browser origin. The existing `auth.me` and `auth.logout` procedures remain anonymous placeholders, not an authentication system.
+The optional API lives in [`portfolio-backend/`](portfolio-backend/README.md). From that folder, run `pnpm install --frozen-lockfile --prod=false`, `pnpm check`, `pnpm test`, `pnpm build`, `pnpm test:deployment` and `pnpm start`. It exposes the existing tRPC routes at `/api/trpc`; it does not read or serve frontend files. Set `PORT` to choose its listening port and `ALLOWED_ORIGIN` for exact permitted browser origins. Production requires an explicit HTTPS origin allowlist. The existing `auth.me` and `auth.logout` procedures remain anonymous placeholders, not an authentication system.
 
 Each application owns its dependencies, lockfile, compiler/lint configuration and tests. Either folder can be copied out and installed independently. There is no shared application package or cross-application source import. CI audits, checks, tests and builds both packages, then runs the existing frontend browser suite.
 
@@ -78,6 +79,8 @@ Each application owns its dependencies, lockfile, compiler/lint configuration an
 The portfolio is hosted on **Vercel** at **https://andrewgotora.com/**, using hash-based routing and root-relative assets. With the Vercel project root set to the repository root, `vercel.json` installs and builds `portfolio-frontend` and publishes `portfolio-frontend/dist`. It also redirects legacy `/portfolio/` URLs to the equivalent root paths.
 
 Create a branch and open a pull request against `main`. The required **Verify portfolio** check must pass before merging; `main` is protected against direct pushes, including administrator bypass. Vercel provides pull-request previews and publishes the merged revision to production. GitHub Actions performs verification only; GitHub Pages publishing and the old manual publication scripts have been retired.
+
+The optional backend has a separate [Render Blueprint](render.yaml) for one **free Node web service in Frankfurt**, built from `portfolio-backend/`. It needs no database, disk, or secrets. Its [deployment guide](portfolio-backend/README.md#render-deployment) gives exact settings and verification steps. `/api/health` reports readiness and `/api/version` identifies the deployed Git commit. The static frontend remains on Vercel and does not depend on the API.
 
 The documentation generator derives absolute PDF links from `package.json`'s canonical `homepage`. Downloaded guides link to the production domain rather than a separate hosting service.
 

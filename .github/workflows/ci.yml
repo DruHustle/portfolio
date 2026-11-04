@@ -63,6 +63,7 @@ jobs:
           pnpm check
           pnpm test
           pnpm build
+          pnpm test:deployment
 
       - name: Lint
         run: pnpm lint
