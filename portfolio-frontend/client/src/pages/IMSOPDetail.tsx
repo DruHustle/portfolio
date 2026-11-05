@@ -55,7 +55,7 @@ export default function IMSOPDetail() {
                 </p>
                 <div className="flex flex-wrap gap-4">
                   <a
-                    href={demoUrl("imsop")}
+                    href={demoUrl("smart-logistics")}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 rounded-xl bg-cyan-300 px-6 py-3 font-bold text-slate-950 transition-colors hover:bg-cyan-200"
@@ -147,15 +147,16 @@ export default function IMSOPDetail() {
               System Architecture
             </h2>
             <p className="mx-auto mb-6 max-w-3xl text-center leading-relaxed text-slate-400">
-              Vercel delivery, Oracle Caddy ingress, a .NET YARP gateway, Node
-              operations and supply-chain services, signed logistics events and
-              managed PostgreSQL.
+              Vercel delivery, Oracle Caddy and the .NET YARP gateway connect
+              scoped Node/.NET services and PostgreSQL. Independent warehouse and
+              GPS edge adapters use a Python durable queue and signed HTTPS
+              ingestion; the physical edge is not yet commissioned.
             </p>
             <ArchitectureDiagram
-              path="docs/imsop/architecture-1.svg"
-              alt="Smart Logistics system architecture with Vercel, Oracle Caddy ingress, Node and .NET services, managed PostgreSQL, and signed logistics events"
-              width={974}
-              height={740}
+              path="images/smart_logistics_arch.svg"
+              alt="Smart Logistics architecture: React web, Oracle gateway, Node and .NET services, PostgreSQL, independent warehouse sensors and truck GPS edge"
+              width={1440}
+              height={920}
             />
           </section>
 

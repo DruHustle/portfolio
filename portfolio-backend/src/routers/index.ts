@@ -21,9 +21,14 @@ const authRouter = router({
 
 const projects = [
   {
-    id: "imsop",
+    id: "smart-logistics",
     title: "Smart Logistics",
     description: "Supply Chain Visibility, Exceptions & Purchasing",
+  },
+  {
+    id: "smart-farmer",
+    title: "Smart Farmer",
+    description: "Connected Agriculture, Livestock & Rural Commerce",
   },
   {
     id: "sap-btp-ai-hub",
@@ -31,7 +36,7 @@ const projects = [
     description: "Enterprise AI Education Platform",
   },
   {
-    id: "smart-factory-iot",
+    id: "smart-factory",
     title: "Smart Factory",
     description: "Interactive Digital Twins, Industrial Networks & Operations",
   },
@@ -51,7 +56,10 @@ export const appRouter = router({
   getProject: publicProcedure
     .input(z.object({ id: z.string() }))
     .query(({ input }: { input: { id: string } }) => {
-      return projects.find(project => project.id === input.id) ?? null;
+      const id =
+        input.id === "imsop" ? "smart-logistics" :
+        input.id === "smart-factory-iot" ? "smart-factory" : input.id;
+      return projects.find(project => project.id === id) ?? null;
     }),
 });
 

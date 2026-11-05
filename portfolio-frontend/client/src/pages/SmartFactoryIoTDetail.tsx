@@ -61,7 +61,7 @@ export default function SmartFactoryIoTDetail() {
               </p>
               <div className="flex flex-wrap gap-4">
                 <a
-                  href={demoUrl("smart-factory-iot")}
+                  href={demoUrl("smart-factory")}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex min-h-12 items-center gap-2 rounded-xl bg-orange-700 px-6 py-3 font-bold text-white transition-colors hover:bg-orange-800"
@@ -208,14 +208,15 @@ export default function SmartFactoryIoTDetail() {
               System architecture
             </h2>
             <p className="mx-auto mb-8 mt-4 max-w-3xl text-center leading-relaxed text-slate-300">
-              The Vercel interface connects to the Oracle ARM64 application API
-              and a separate singleton telemetry/notification worker. Managed
-              data services and the BaSyx asset runtime support the platform;
-              industrial control stays on the factory network.
+              The Vercel interface connects to Oracle-hosted API services and
+              a separate singleton telemetry/notification worker. Optional
+              Node-RED adapters and the Python gateway preserve source identity
+              and durable acquisition; BaSyx and managed data services support
+              asset identity. Safety-rated control remains on the factory LAN.
             </p>
             <ArchitectureDiagram
               path="images/smart_factory_arch.svg"
-              alt="Smart Factory architecture with Vercel, Oracle API and worker roles, edge acquisition, managed data and BaSyx"
+              alt="Smart Factory production architecture with Node-RED and Python edge acquisition, MQTT, Oracle API and singleton worker, Vercel, managed data and BaSyx"
               width={1672}
               height={941}
             />

@@ -17,6 +17,10 @@ interface ProjectDocumentationProps {
   description: string;
   guides: Guide[];
   accent: "cyan" | "orange";
+  currentArchitecture?: { path: string; alt: string; width: number; height: number };
+  currentStatus?: string;
+  currentSummary?: string[];
+  sourceGuides?: { title: string; description: string; url: string }[];
 }
 
 const operationalGuides: Guide[] = [
@@ -42,6 +46,10 @@ export function ProjectDocumentation({
   description,
   guides,
   accent,
+  currentArchitecture,
+  currentStatus,
+  currentSummary,
+  sourceGuides,
 }: ProjectDocumentationProps) {
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -146,20 +154,53 @@ export function ProjectDocumentation({
           </div>
         </header>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {guides.map(guide => card(guide))}
-          </div>
-          <section className="mt-12" aria-labelledby="operational-guides">
-            <h2 id="operational-guides" className="text-2xl font-bold mb-3">
-              Operational Guides
-            </h2>
-            <p className="text-slate-400 mb-6">
-              Explore deployment and system flows as visual guides.
-            </p>
-            <div className="grid md:grid-cols-2 gap-8">
-              {operationalGuides.map(guide => card(guide, true))}
-            </div>
-          </section>
+          {currentStatus && (
+            <section aria-labelledby="current-reference" className="mb-10 rounded-2xl border border-cyan-800/40 bg-slate-800/50 p-5 sm:p-8">
+              <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-cyan-300">
+                Reviewed 5 November 2026
+              </p>
+              <h2 id="current-reference" className="mb-4 text-2xl font-bold">Current project scope and release gates</h2>
+              <p className="leading-relaxed text-slate-200">{currentStatus}</p>
+              {currentSummary && (
+                <ul className="mt-5 list-disc space-y-2 pl-6 text-sm leading-relaxed text-slate-300">
+                  {currentSummary.map(item => <li key={item}>{item}</li>)}
+                </ul>
+              )}
+            </section>
+          )}
+          {sourceGuides && sourceGuides.length > 0 && (
+            <section aria-labelledby="canonical-guides" className="mb-10">
+              <h2 id="canonical-guides" className="mb-5 text-2xl font-bold">Canonical engineering guides</h2>
+              <div className="grid gap-4 sm:grid-cols-2">
+                {sourceGuides.map(guide => (
+                  <a key={guide.url} href={guide.url} target="_blank" rel="noopener noreferrer"
+                    className={`block rounded-xl border border-slate-700 bg-slate-800/40 p-5 hover:border-cyan-400 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-300`}>
+                    <h3 className="font-semibold text-white">{guide.title}</h3>
+                    <p className="mt-2 text-sm leading-relaxed text-slate-300">{guide.description}</p>
+                    <p className="mt-3 text-sm font-semibold text-cyan-300">Read source guide (new tab)</p>
+                  </a>
+                ))}
+              </div>
+            </section>
+          )}
+          {guides.length > 0 && (
+            <section aria-labelledby="historical-guides">
+              <h2 id="historical-guides" className="mb-3 text-2xl font-bold">Rendered reference guides</h2>
+              <p className="mb-6 text-sm text-slate-400">
+                These HTML and PDF snapshots may predate the latest source changes. Use the canonical guides above for operational decisions.
+              </p>
+              <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
+                {guides.map(guide => card(guide))}
+              </div>
+              <section className="mt-12" aria-labelledby="operational-guides">
+                <h3 id="operational-guides" className="mb-3 text-xl font-bold">Operational diagrams</h3>
+                <p className="mb-6 text-slate-400">Historical deployment and system-flow references.</p>
+                <div className="grid gap-8 md:grid-cols-2">
+                  {operationalGuides.map(guide => card(guide, true))}
+                </div>
+              </section>
+            </section>
+          )}
           <section
             className="mt-16 p-4 sm:p-8 rounded-2xl bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700/50"
             aria-labelledby="system-architecture"
@@ -176,10 +217,10 @@ export function ProjectDocumentation({
             </p>
             <div className="rounded-2xl overflow-hidden border border-slate-700/50 bg-slate-900 p-3 sm:p-6">
               <ArchitectureDiagram
-                path={`docs/${directory}/architecture-1.svg`}
-                alt={`${project} Architecture`}
-                width={1200}
-                height={800}
+                path={currentArchitecture?.path ?? `docs/${directory}/architecture-1.svg`}
+                alt={currentArchitecture?.alt ?? `${project} Architecture`}
+                width={currentArchitecture?.width ?? 1200}
+                height={currentArchitecture?.height ?? 800}
               />
             </div>
           </section>

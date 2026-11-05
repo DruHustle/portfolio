@@ -22,6 +22,7 @@ export const imsopProject = {
     "Signed logistics intake with deterministic replay and field provenance",
     "Workspace-scoped access, revocable sessions and separate Live/Demo data",
     "Record-grounded assistance and explicit optional-provider configuration",
+    "Warehouse sensor and fleet GPS ingestion through an independent, signed Node-RED/Python edge candidate",
   ],
   solution: {
     architecture: [
@@ -42,7 +43,7 @@ export const imsopProject = {
       },
       {
         title: "Application",
-        desc: "Node/Express API, shipment projection and review workflows",
+        desc: "Node/Express API, signed edge observations, shipment projection and reviews",
         icon: null,
       },
       {
@@ -88,6 +89,8 @@ export const imsopProject = {
           "PostgreSQL",
           "Signed HMAC events",
           "Event replay",
+          "Node-RED / Python edge",
+          "Fleet GPS / warehouse IoT",
           "Idempotent receiving",
           "Source currency",
         ],
@@ -178,6 +181,12 @@ export const imsopCapabilities = [
     title: "Signed logistics integrations",
     description:
       "Validate configured carrier, GPS and IoT events, reject conflicting duplicates and retain field provenance through replay. Integration views distinguish configuration from receipt and connectivity evidence.",
+    icon: "integration",
+  },
+  {
+    title: "Independent warehouse & fleet edge",
+    description:
+      "Warehouse sensors, RFID/scanners and truck GPS can enter through dedicated Node-RED adapters and a Python durable queue. Signed HTTPS observations retain source and receipt times; physical commissioning and position accuracy remain unverified.",
     icon: "integration",
   },
   {
