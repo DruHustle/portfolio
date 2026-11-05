@@ -78,11 +78,15 @@ Each application owns its dependencies, lockfile, compiler/lint configuration an
 ## 🌐 Deployment
 The portfolio is hosted on **Vercel** at **https://andrewgotora.com/**, using hash-based routing and root-relative assets. With the Vercel project root set to the repository root, `vercel.json` installs and builds `portfolio-frontend` and publishes `portfolio-frontend/dist`. It also redirects legacy `/portfolio/` URLs to the equivalent root paths.
 
-Create a branch and open a pull request against `main`. The required **Verify portfolio** check must pass before merging; `main` is protected against direct pushes, including administrator bypass. Vercel provides pull-request previews and publishes the merged revision to production. GitHub Actions performs verification only; GitHub Pages publishing and the old manual publication scripts have been retired.
+Create a branch and open a pull request against `main`. **Verify portfolio** must pass before merging. Configure and verify GitHub branch protection or repository rules to enforce this process, require that check, and prevent direct pushes and administrator bypass; the repository files do not establish that those settings are active. Vercel provides pull-request previews and publishes the merged revision to production. GitHub Actions performs verification only; GitHub Pages publishing and the old manual publication scripts have been retired.
 
 The optional backend has a separate [Render Blueprint](render.yaml) for one **free Node web service in Frankfurt**, built from `portfolio-backend/`. It needs no database, disk, or secrets. Its [deployment guide](portfolio-backend/README.md#render-deployment) gives exact settings and verification steps. `/api/health` reports readiness and `/api/version` identifies the deployed Git commit. The static frontend remains on Vercel and does not depend on the API.
 
 The documentation generator derives absolute PDF links from `package.json`'s canonical `homepage`. Downloaded guides link to the production domain rather than a separate hosting service.
+
+The [hosting scope review](docs/hosting-scope.md) describes the independent
+Vercel frontend and free Render API, including the live inventory required before
+retiring any legacy Oracle service.
 
 The favicon is a font-independent AG monogram in the portfolio's navy and cyan palette. Its editable vector source is `design/favicon-source.svg`. Run `pnpm icons:build` with Playwright Chromium installed to export the SVG, multi-size ICO, browser PNG, and Apple touch icon into `client/public/`.
 
