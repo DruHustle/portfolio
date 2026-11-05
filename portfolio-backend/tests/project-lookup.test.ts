@@ -12,6 +12,7 @@ describe("Project API", () => {
     const caller = appRouter.createCaller({});
     expect(await caller.getProject({ id: "imsop" })).toMatchObject({
       id: "imsop",
+      title: "Smart Logistics",
     });
     expect(await caller.getProject({ id: "smart-factory-iot" })).toMatchObject({
       id: "smart-factory-iot",

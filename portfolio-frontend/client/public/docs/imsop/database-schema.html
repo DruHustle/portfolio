@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="IMSOP Database Schema — visual engineering reference for IMSOP."><title>IMSOP Database Schema | Andrew Gotora</title><style>:root {
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Smart Logistics Database Schema — visual engineering reference for Smart Logistics."><title>Smart Logistics Database Schema | Andrew Gotora</title><style>:root {
   color-scheme: light;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
   color: #172d40;
@@ -285,8 +285,8 @@ footer {
     text-decoration: none;
   }
 }
-</style></head><body><a class="skip" href="#main-content">Skip to guide</a><header><p>IMSOP / Engineering Documentation</p><nav aria-label="Guide navigation"><a href="../../#/projects/imsop/documentation">Back to Documentation</a><a href="database-schema.pdf">PDF edition</a></nav></header><main id="main-content" tabindex="-1"><h1 id="imsop-database-schema">IMSOP Database Schema</h1><nav aria-label="Contents"><strong>In this guide</strong><ul><li><a href="#node-operational-model">Node operational model</a></li><li><a href="#net-supply-chain-model">.NET supply-chain model</a></li><li><a href="#migration-ownership">Migration ownership</a></li><li><a href="#transaction-and-replay-behavior">Transaction and replay behavior</a></li><li><a href="#query-and-retention-considerations">Query and retention considerations</a></li><li><a href="#related-guides-and-source">Related guides and source</a></li></ul></nav>
-<p>IMSOP uses PostgreSQL. The Node API owns lowercase operational tables through SQL migrations; the .NET Supply Chain service owns its separate EF Core model. This document describes source models, not a live database inspection or an executable schema dump.</p>
+</style></head><body><a class="skip" href="#main-content">Skip to guide</a><header><p>Smart Logistics / Engineering Documentation</p><nav aria-label="Guide navigation"><a href="../../#/projects/smart-logistics/documentation">Back to Documentation</a><a href="database-schema.pdf">PDF edition</a></nav></header><main id="main-content" tabindex="-1"><h1 id="smart-logistics-database-schema">Smart Logistics Database Schema</h1><nav aria-label="Contents"><strong>In this guide</strong><ul><li><a href="#node-operational-model">Node operational model</a></li><li><a href="#net-supply-chain-model">.NET supply-chain model</a></li><li><a href="#migration-ownership">Migration ownership</a></li><li><a href="#transaction-and-replay-behavior">Transaction and replay behavior</a></li><li><a href="#query-and-retention-considerations">Query and retention considerations</a></li><li><a href="#related-guides-and-source">Related guides and source</a></li></ul></nav>
+<p>Smart Logistics uses PostgreSQL. The Node API owns lowercase operational tables through SQL migrations; the .NET Supply Chain service owns its separate EF Core model. This document describes source models, not a live database inspection or an executable schema dump.</p>
 <h2 id="node-operational-model">Node operational model</h2>
 <figure><a href="database-schema-1.svg" target="_blank" rel="noopener noreferrer" aria-label="Open full-size Node operational model"><img src="database-schema-1.svg" alt="Node operational model"></a><figcaption>Node operational model · Open the diagram for a full-size view.</figcaption></figure>
 <p>The shipment/event connector represents application matching by tracking number. The Node schema does not declare that relationship as a foreign key. <code>orders.customer_id</code> is also not a declared user or organization foreign key; do not invent tenant or customer relationships from its name.</p>
@@ -349,8 +349,8 @@ footer {
 <li><a href="architecture.html">Architecture</a></li>
 <li><a href="api-flows.html">API flows</a></li>
 <li><a href="deployment.html">Deployment and recovery</a></li>
-<li><a href="https://github.com/DruHustle/imsop-app-backend/blob/main/server/src/models/schema.ts">Node schema source</a></li>
-<li><a href="https://github.com/DruHustle/imsop-app-backend/blob/main/docs/DATABASE.md">Backend database guide</a></li>
+<li><a href="https://github.com/DruHustle/smart-logistics/blob/main/smart-logistics-backend/server/src/models/schema.ts">Node schema source</a></li>
+<li><a href="https://github.com/DruHustle/smart-logistics/blob/main/smart-logistics-backend/docs/DATABASE.md">Backend database guide</a></li>
 </ul><p>Source review: 21 October 2026.</p></section>
 
 

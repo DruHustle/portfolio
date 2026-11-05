@@ -28,10 +28,10 @@ describe('useImagePath Hook', () => {
  * Validates project data structure and retrieval
  */
 describe('ProjectService', () => {
-  it('should retrieve IMSOP project data', () => {
+  it('should retrieve Smart Logistics project data', () => {
     const project = ProjectService.getProjectById('imsop');
     expect(project).toBeDefined();
-    expect(project?.title).toBe('IMSOP');
+    expect(project?.title).toBe('Smart Logistics');
     expect(project?.subtitle).toContain('Supply Chain');
   });
 

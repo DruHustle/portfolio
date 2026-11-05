@@ -16,7 +16,7 @@ const guides = [
   "system-diagrams",
 ];
 const projects = [
-  { directory: "imsop", slug: "imsop", title: "IMSOP" },
+  { directory: "imsop", slug: "smart-logistics", title: "Smart Logistics" },
   {
     directory: "smartfactoryiot",
     slug: "smart-factory",

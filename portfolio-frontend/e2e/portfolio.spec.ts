@@ -5,10 +5,10 @@ import path from "node:path";
 
 const routes = [
   ["home", "/", "Senior Industrial"],
-  ["imsop", "/projects/imsop", "IMSOP"],
+  ["imsop", "/projects/smart-logistics", "Smart Logistics"],
   ["smart-factory", "/projects/smart-factory", "Smart Factory"],
   ["learning", "/projects/sap-btp-ai-hub", "Learning Hub"],
-  ["imsop-docs", "/projects/imsop/documentation", "IMSOP Documentation"],
+  ["imsop-docs", "/projects/smart-logistics/documentation", "Smart Logistics Documentation"],
   [
     "factory-docs",
     "/projects/smart-factory/documentation",
@@ -164,32 +164,32 @@ test("project/documentation return journey and rendered guide PDF access", async
   page,
 }) => {
   await page.goto("#/");
-  await page.getByRole("link", { name: "View IMSOP project details" }).click();
-  await expect(page).toHaveTitle("IMSOP | Andrew Gotora");
+  await page.getByRole("link", { name: "View Smart Logistics project details" }).click();
+  await expect(page).toHaveTitle("Smart Logistics | Andrew Gotora");
   await expect(page.getByRole("link", { name: "Live Demo" })).toHaveAttribute(
     "href",
-    "https://imsop-app.vercel.app/"
+    "https://logistics.onesa.eu/"
   );
   const projectImage = page.getByRole("img", {
-    name: /IMSOP system architecture with Vercel/,
+    name: /Smart Logistics system architecture with Vercel/,
   });
   await expect(projectImage).toHaveAttribute(
     "src",
-    /images\/imsop_system_architecture_v3\.webp$/
+    /docs\/imsop\/architecture-1\.svg$/
   );
   const architecturePopup = page.waitForEvent("popup");
   await page
     .getByRole("link", {
-      name: /Open full-size IMSOP system architecture with Vercel/,
+      name: /Open full-size Smart Logistics system architecture with Vercel/,
     })
     .click();
   const architectureImage = await architecturePopup;
   await expect(architectureImage).toHaveURL(
-    /images\/imsop_system_architecture_v3\.webp$/
+    /docs\/imsop\/architecture-1\.svg$/
   );
   await architectureImage.close();
   await page.getByRole("link", { name: "Documentation", exact: true }).click();
-  await expect(page).toHaveTitle("IMSOP Documentation | Andrew Gotora");
+  await expect(page).toHaveTitle("Smart Logistics Documentation | Andrew Gotora");
   const opened = page.waitForEvent("popup");
   await page.getByRole("link", { name: "View", exact: true }).first().click();
   const guide = await opened;
@@ -204,7 +204,7 @@ test("project/documentation return journey and rendered guide PDF access", async
   await guide.close();
   const fullSize = page.waitForEvent("popup");
   await page
-    .getByRole("link", { name: /Open full-size IMSOP Architecture/ })
+    .getByRole("link", { name: /Open full-size Smart Logistics Architecture/ })
     .click();
   const diagram = await fullSize;
   await expect(diagram).toHaveURL(/docs\/imsop\/architecture-1\.svg$/);
@@ -232,7 +232,7 @@ test("works when external font services are unavailable", async ({ page }) => {
 test("recovers after a project chunk fails to load", async ({ page }) => {
   await page.route("**/assets/IMSOPDetail-*.js", route => route.abort());
   await page.goto("#/");
-  await page.getByRole("link", { name: "View IMSOP project details" }).click();
+  await page.getByRole("link", { name: "View Smart Logistics project details" }).click();
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(
     "This page couldn’t load"
   );
@@ -242,7 +242,7 @@ test("recovers after a project chunk fails to load", async ({ page }) => {
   await page.unroute("**/assets/IMSOPDetail-*.js");
   await page.getByRole("button", { name: "Reload page", exact: true }).click();
   await expect(
-    page.getByRole("heading", { level: 1, name: "IMSOP", exact: true })
+    page.getByRole("heading", { level: 1, name: "Smart Logistics", exact: true })
   ).toBeVisible();
 });
 
@@ -296,7 +296,7 @@ for (const [suffix, heading] of [
 }
 
 for (const [slug, directory] of [
-  ["imsop", "imsop"],
+  ["smart-logistics", "imsop"],
   ["smart-factory", "smartfactoryiot"],
 ]) {
   test(`${slug}: visual guides render and return to documentation`, async ({

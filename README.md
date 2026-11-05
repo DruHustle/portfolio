@@ -89,7 +89,7 @@ The favicon is a font-independent AG monogram in the portfolio's navy and cyan p
 Vite selects `NODE_ENV` automatically. The checked-in environment files contain example API settings; no credentials are needed to run the static portfolio. Never put private credentials in `VITE_*` variables because Vite exposes them to browsers.
 
 ## ✨ Key Features
-- **Dynamic Project Details**: Deep-dive views for major projects like IMSOP and SAP BTP AI Hub.
+- **Dynamic Project Details**: Deep-dive views for major projects like Smart Logistics and SAP BTP AI Hub.
 - **Responsive Design**: Optimized for all devices with a focus on high-efficiency layouts.
 - **Documentation Hub**: Integrated viewing and downloading of project documentation.
 - **Analytics Status**: The public analytics route explains configuration; visitor reports require the owner's Vercel dashboard. The tracking script is included once on Vercel builds, or when `VITE_ENABLE_ANALYTICS=true` is explicitly set. Local builds leave it disabled by default. Enabling the Vercel integration and verifying collection remain deployment-side steps; this page does not claim live collection or display mock metrics.
@@ -118,7 +118,9 @@ The whole-factory preview starts automatically when the project page opens. It a
 
 Native factory rendering helpers live in `client/src/components/smart-factory/`, with authored inventory/layout data in `client/src/data/smartFactoryFloor.ts`. Baked HDR studio lighting and material batching follow the current product renderer. Model provenance and hashes are recorded in `client/public/models/smart-factory/README.txt`. Browser checks cover automatic startup, actual view/position changes, zones, fullscreen, failed-reference recovery and the no-WebGL floor plan.
 
-### Project page layout and IMSOP
+### Project page layout and Smart Logistics
+
+Smart Logistics uses `/#/projects/smart-logistics` and `/#/projects/smart-logistics/documentation`. The former `imsop` routes redirect without adding history. Existing project IDs, protocol names and document asset paths remain compatible. Live demo links use `logistics.onesa.eu` and `factory.onesa.eu`.
 
 Both project heroes use `ProjectHighlights` to retain their original compact card heights and hero spacing. Smart Factory uses the scalable navy architecture image in `client/public/images/smart_factory_arch.svg`, with real text and consistent vector icons. Edit `scripts/build-smart-factory-architecture.mjs` and run `pnpm architecture:build` to refresh and validate the SVG. The generator requires Playwright Chromium. The full-width 3D preview and balanced feature grids avoid empty columns.
 
@@ -128,11 +130,11 @@ Both project heroes use `ProjectHighlights` to retain their original compact car
 
 Every `pnpm build` cleans the managed source images, then Vite empties `dist` before creating the new output. Vercel runs the same command, so retired images are absent from the current production deployment. Image responses require cache revalidation, so stable image URLs are refreshed after replacement. Historical immutable Vercel deployments and Git history are separate from the current live site and are not deleted by this build process.
 
-IMSOP's page, project service and overview cards describe shipment visibility, durable exception review, signed event intake, purchasing and partial warehouse receiving. Shared detail data is in `client/src/data/imsop.ts`, reviewed against the [current IMSOP capability guide](https://github.com/DruHustle/imsop-app-backend/blob/main/docs/CURRENT_PLATFORM.md). Optional providers and integrations remain explicitly configured capabilities.
+Smart Logistics' page, project service and overview cards describe shipment visibility, durable exception review, signed event intake, purchasing and partial warehouse receiving. Shared detail data is in `client/src/data/imsop.ts`, reviewed against the [public Smart Logistics documentation](https://andrewgotora.com/#/projects/smart-logistics/documentation). Optional providers and integrations remain explicitly configured capabilities.
 
 ### Engineering guide editions
 
-IMSOP and Smart Factory share the same five-guide structure and page component. Smart Factory uses `/#/projects/smart-factory` and `/#/projects/smart-factory/documentation`; the corresponding `smart-factory-iot` routes redirect to these URLs and replace the old history entry. The `smart-factory-iot` project ID, repository links, and `smartfactoryiot` documentation directory remain compatible with existing integrations.
+Smart Logistics and Smart Factory share the same five-guide structure and page component. Smart Factory uses `/#/projects/smart-factory` and `/#/projects/smart-factory/documentation`; the corresponding `smart-factory-iot` routes redirect to these URLs and replace the old history entry. The `smart-factory-iot` project ID, repository links, and `smartfactoryiot` documentation directory remain compatible with existing integrations.
 
 Markdown under `client/public/docs/{imsop,smartfactoryiot}/` is the authoring source. After editing a guide, regenerate its static HTML, rendered SVG diagrams, and PDF editions:
 

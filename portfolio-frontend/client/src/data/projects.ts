@@ -59,7 +59,7 @@ export const projects: Project[] = [
   },
   {
     id: "imsop",
-    title: "IMSOP",
+    title: "Smart Logistics",
     subtitle: "Supply Chain Visibility, Exceptions & Purchasing",
     description:
       "Shipment visibility, durable exception review, purchase orders and warehouse receiving, with scoped analytics, maps, signed logistics intake and record-grounded assistance.",
@@ -74,7 +74,7 @@ export const projects: Project[] = [
       { label: "Docker", color: "purple" },
       { label: "GitHub Actions", color: "purple" },
     ],
-    link: "/projects/imsop",
+    link: "/projects/smart-logistics",
     gradient: {
       from: "from-purple-500",
       to: "to-indigo-600",

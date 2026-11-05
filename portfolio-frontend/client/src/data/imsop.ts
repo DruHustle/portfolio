@@ -1,6 +1,6 @@
-/** Current product scope: imsop-app-backend/docs/CURRENT_PLATFORM.md. */
+/** Current product scope: smart-logistics/smart-logistics-backend/docs/CURRENT_PLATFORM.md. */
 export const imsopProject = {
-  title: "IMSOP",
+  title: "Smart Logistics",
   subtitle: "Supply Chain Visibility, Exceptions & Purchasing",
   description:
     "A supply-chain workspace connecting shipment visibility, durable exception review and warehouse receiving. Teams follow the same authorized records through tables, maps, analytics and reports, with clear source and observation times.",
@@ -14,7 +14,7 @@ export const imsopProject = {
     { label: "Purchasing & stock", value: "PO receiving", icon: null },
   ],
   problemStatement:
-    "Shipment events, review decisions and purchasing records need to stay connected as operations change. IMSOP preserves their source history and access scope so teams can investigate an exception, record a decision and follow an order into warehouse stock.",
+    "Shipment events, review decisions and purchasing records need to stay connected as operations change. Smart Logistics preserves their source history and access scope so teams can investigate an exception, record a decision and follow an order into warehouse stock.",
   requirements: [
     "Shared shipment selection across tables, maps, metrics and exports",
     "Durable exception assignment, notes, resolution and audit history",
@@ -188,5 +188,4 @@ export const imsopCapabilities = [
   },
 ];
 
-export const imsopGuide =
-  "https://github.com/DruHustle/imsop-app-backend/blob/main/docs/CURRENT_PLATFORM.md";
+export const imsopGuide = "#/projects/smart-logistics/documentation";

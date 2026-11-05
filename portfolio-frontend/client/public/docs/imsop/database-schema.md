@@ -1,6 +1,6 @@
-# IMSOP Database Schema
+# Smart Logistics Database Schema
 
-IMSOP uses PostgreSQL. The Node API owns lowercase operational tables through SQL migrations; the .NET Supply Chain service owns its separate EF Core model. This document describes source models, not a live database inspection or an executable schema dump.
+Smart Logistics uses PostgreSQL. The Node API owns lowercase operational tables through SQL migrations; the .NET Supply Chain service owns its separate EF Core model. This document describes source models, not a live database inspection or an executable schema dump.
 
 ## Node operational model
 
@@ -118,7 +118,7 @@ No fixed retention period or provider backup schedule is assumed. Define retenti
 - [Architecture](architecture.md)
 - [API flows](api-flows.md)
 - [Deployment and recovery](deployment.md)
-- [Node schema source](https://github.com/DruHustle/imsop-app-backend/blob/main/server/src/models/schema.ts)
-- [Backend database guide](https://github.com/DruHustle/imsop-app-backend/blob/main/docs/DATABASE.md)
+- [Node schema source](https://github.com/DruHustle/smart-logistics/blob/main/smart-logistics-backend/server/src/models/schema.ts)
+- [Backend database guide](https://github.com/DruHustle/smart-logistics/blob/main/smart-logistics-backend/docs/DATABASE.md)
 
 Source review: 21 October 2026.

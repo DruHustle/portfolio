@@ -52,28 +52,30 @@ describe("Rendered portfolio routes", () => {
     );
     expect(container.querySelector("a a")).toBeNull();
     fireEvent.click(
-      screen.getByRole("link", { name: "View IMSOP project details" })
+      screen.getByRole("link", { name: "View Smart Logistics project details" })
     );
-    await screen.findByRole("heading", { name: "IMSOP", level: 1 });
-    expect(document.title).toBe("IMSOP | Andrew Gotora");
+    await screen.findByRole("heading", { name: "Smart Logistics", level: 1 });
+    expect(document.title).toBe("Smart Logistics | Andrew Gotora");
     expect(screen.getByRole("link", { name: "Live Demo" })).toHaveAttribute(
       "href",
-      "https://imsop-app.vercel.app/"
+      "https://logistics.onesa.eu/"
     );
     await waitFor(() => expect(screen.getByRole("main")).toHaveFocus());
     fireEvent.click(screen.getByRole("link", { name: "Documentation" }));
     await screen.findByRole("heading", {
-      name: "IMSOP Documentation",
+      name: "Smart Logistics Documentation",
       level: 1,
     });
-    expect(document.title).toBe("IMSOP Documentation | Andrew Gotora");
+    expect(document.title).toBe(
+      "Smart Logistics Documentation | Andrew Gotora"
+    );
     assertLocalAssetsExist(container);
     expect(screen.getAllByRole("link", { name: /^View$/ })).toHaveLength(5);
     expect(screen.getAllByRole("link", { name: /^PDF$/ })).toHaveLength(5);
     expect(container.querySelector('a[href$=".md"]')).toBeNull();
     expect(container.querySelector("a a")).toBeNull();
     fireEvent.click(screen.getByRole("link", { name: "Back to Project" }));
-    await screen.findByRole("heading", { name: "IMSOP", level: 1 });
+    await screen.findByRole("heading", { name: "Smart Logistics", level: 1 });
     fireEvent.click(screen.getByRole("link", { name: "Back to Projects" }));
     await screen.findByRole("heading", { name: "Featured Projects" });
     await waitFor(() => expect(scrollIntoView).toHaveBeenCalled());
@@ -81,10 +83,13 @@ describe("Rendered portfolio routes", () => {
   });
 
   it.each([
-    ["/projects/imsop", "IMSOP"],
+    ["/projects/smart-logistics", "Smart Logistics"],
     ["/projects/smart-factory", "Smart Factory"],
     ["/projects/sap-btp-ai-hub", "Learning Hub"],
-    ["/projects/imsop/documentation", "IMSOP Documentation"],
+    [
+      "/projects/smart-logistics/documentation",
+      "Smart Logistics Documentation",
+    ],
     ["/projects/smart-factory/documentation", "Smart Factory Documentation"],
     ["/analytics", "Analytics"],
   ])(
@@ -129,6 +134,23 @@ describe("Rendered portfolio routes", () => {
           ? "#/projects/smart-factory"
           : "#/projects/smart-factory/documentation"
       );
+    }
+  );
+
+  it.each([
+    ["", "Smart Logistics"],
+    ["/documentation", "Smart Logistics Documentation"],
+  ])(
+    "preserves legacy Logistics %s links with a canonical redirect",
+    async (suffix, heading) => {
+      await openRoute(`/projects/imsop${suffix}`);
+      const historyLength = window.history.length;
+      render(<App />);
+      await screen.findByRole("heading", { level: 1, name: heading });
+      await waitFor(() =>
+        expect(window.location.hash).toBe(`#/projects/smart-logistics${suffix}`)
+      );
+      expect(window.history.length).toBe(historyLength);
     }
   );
 

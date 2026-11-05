@@ -22,7 +22,7 @@ const authRouter = router({
 const projects = [
   {
     id: "imsop",
-    title: "IMSOP",
+    title: "Smart Logistics",
     description: "Supply Chain Visibility, Exceptions & Purchasing",
   },
   {

@@ -1,4 +1,4 @@
-# IMSOP System Diagrams
+# Smart Logistics System Diagrams
 
 These rendered diagrams explain current runtime boundaries and source-backed request flows. Solid lines indicate implemented routing or data paths; the optional companion-service model is described explicitly rather than assumed active in every browser workflow.
 
@@ -92,6 +92,6 @@ Backend updates are manual and independent from frontend releases. Restore a com
 - [Database relationships](database-schema.md)
 - [API sequences and endpoint roles](api-flows.md)
 - [Visual deployment guide](deployment.md)
-- [Oracle source runbook](https://github.com/DruHustle/imsop-app-backend/blob/main/deploy/oracle/README.md)
+- [Oracle source runbook](https://github.com/DruHustle/smart-logistics/blob/main/smart-logistics-backend/deploy/oracle/README.md)
 
 Source review: 21 October 2026.

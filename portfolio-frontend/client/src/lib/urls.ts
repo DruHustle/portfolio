@@ -4,9 +4,9 @@ export function assetUrl(path: string): string {
 }
 
 const demos = {
-  imsop: "https://imsop-app.vercel.app/",
+  imsop: "https://logistics.onesa.eu/",
   "sap-btp-ai-hub": "https://tech-learning-hub-app.vercel.app/",
-  "smart-factory-iot": "https://smart-factory-iot-app.vercel.app/",
+  "smart-factory-iot": "https://factory.onesa.eu/",
 };
 
 /** Verified public demo destinations, independent of the portfolio's host. */

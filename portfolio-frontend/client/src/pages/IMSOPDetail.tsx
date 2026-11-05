@@ -64,7 +64,7 @@ export default function IMSOPDetail() {
                     Live Demo
                   </a>
                   <Link
-                    href="/projects/imsop/documentation"
+                    href="/projects/smart-logistics/documentation"
                     className="inline-flex items-center gap-2 rounded-xl border border-slate-700 bg-slate-800 px-6 py-3 font-bold text-white transition-colors hover:bg-slate-700"
                   >
                     <FileText
@@ -152,10 +152,10 @@ export default function IMSOPDetail() {
               managed PostgreSQL.
             </p>
             <ArchitectureDiagram
-              path="images/imsop_system_architecture_v3.webp"
-              alt="IMSOP system architecture with Vercel, Oracle Caddy ingress, Node and .NET services, managed PostgreSQL, and signed logistics events"
-              width={1672}
-              height={941}
+              path="docs/imsop/architecture-1.svg"
+              alt="Smart Logistics system architecture with Vercel, Oracle Caddy ingress, Node and .NET services, managed PostgreSQL, and signed logistics events"
+              width={974}
+              height={740}
             />
           </section>
 

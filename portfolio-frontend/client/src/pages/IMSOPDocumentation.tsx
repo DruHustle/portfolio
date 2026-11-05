@@ -3,8 +3,8 @@ import { ProjectDocumentation } from "@/components/ProjectDocumentation";
 export default function IMSOPDocumentation() {
   return (
     <ProjectDocumentation
-      project="IMSOP"
-      slug="imsop"
+      project="Smart Logistics"
+      slug="smart-logistics"
       directory="imsop"
       accent="cyan"
       description="Architecture, PostgreSQL data models, authenticated API workflows, and visual operations guides for the supply-chain and operations platform."

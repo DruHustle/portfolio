@@ -1,6 +1,6 @@
-# IMSOP System Architecture
+# Smart Logistics System Architecture
 
-IMSOP (Intelligent Multi-Cloud Supply Chain & Operations Platform) brings shipment visibility, orders, telemetry, mapping, and reports into a React workspace. This reference separates the browser-facing Node API from the companion .NET service model and describes the current Oracle deployment.
+Smart Logistics brings shipment visibility, orders, telemetry, mapping, and reports into a React workspace. This reference separates the browser-facing Node API from the companion .NET service model and describes the current Oracle deployment.
 
 ## Runtime and hosting
 
@@ -31,7 +31,7 @@ Vercel serves the static frontend and proxies `/api/*` to the Oracle API. GitHub
 
 | Boundary | Responsibility | Source |
 | --- | --- | --- |
-| Frontend | React/Vite UI, authentication adapters, API-origin resolution, mapping, charts, exports, and browser tests | `imsop-app-frontend` |
+| Frontend | React/Vite UI, authentication adapters, API-origin resolution, mapping, charts, exports, and browser tests | `smart-logistics-frontend` |
 | Node REST API | Real-account authentication, shipments, orders, telemetry, signed provider events, and reports | Backend `server/` |
 | .NET gateway | Unified ingress and routing for the service bundle | Backend `src/IMSOP.Gateway/` |
 | Supply Chain service | Protected purchase-order APIs and the EF Core supply-chain domain | Backend `src/IMSOP.SupplyChainService/` |
@@ -59,7 +59,7 @@ Demo identities use a separate frontend mock-auth adapter and browser storage. A
 
 Provider webhooks are timestamped and signed over the exact raw request bytes. A unique `(provider, event_id)` key suppresses replayed events. Event insertion and the shipment upsert execute in one PostgreSQL transaction. The event's tracking number associates it with a shipment; it is not a declared database foreign key.
 
-The Node telemetry API records a device ID, metric name, numeric value, and server timestamp. It is a REST ingestion path. MQTT intake, AAS asset models, edge commissioning, and industrial actuation are Smart Factory capabilities and are not inferred for IMSOP.
+The Node telemetry API records a device ID, metric name, numeric value, and server timestamp. It is a REST ingestion path. MQTT intake, AAS asset models, edge commissioning, and industrial actuation are Smart Factory capabilities and are not inferred for Smart Logistics.
 
 ## Availability and operating boundaries
 
@@ -78,7 +78,7 @@ PostgreSQL credentials, JWT signing keys, email credentials, and logistics signi
 
 Reviewed against backend source and current Oracle runbooks on 21 October 2026. Historical README sections still mention MySQL and Render; the current PostgreSQL models and Oracle runbook take precedence for this guide.
 
-- [Backend source](https://github.com/DruHustle/imsop-app-backend)
-- [Database guide](https://github.com/DruHustle/imsop-app-backend/blob/main/docs/DATABASE.md)
-- [Oracle deployment runbook](https://github.com/DruHustle/imsop-app-backend/blob/main/deploy/oracle/README.md)
-- [Frontend source](https://github.com/DruHustle/imsop-app-frontend)
+- [Backend source](https://github.com/DruHustle/smart-logistics/tree/main/smart-logistics-backend)
+- [Database guide](https://github.com/DruHustle/smart-logistics/blob/main/smart-logistics-backend/docs/DATABASE.md)
+- [Oracle deployment runbook](https://github.com/DruHustle/smart-logistics/blob/main/smart-logistics-backend/deploy/oracle/README.md)
+- [Frontend source](https://github.com/DruHustle/smart-logistics/tree/main/smart-logistics-frontend)

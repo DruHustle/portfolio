@@ -23,8 +23,9 @@ const AnalyticsPage = lazy(() => import("./pages/AnalyticsPage"));
 const titles: Record<string, string> = {
   "/": "Andrew Gotora | Senior Industrial Software & Digitalization Engineer",
   "/analytics": "Analytics | Andrew Gotora",
-  "/projects/imsop": "IMSOP | Andrew Gotora",
-  "/projects/imsop/documentation": "IMSOP Documentation | Andrew Gotora",
+  "/projects/smart-logistics": "Smart Logistics | Andrew Gotora",
+  "/projects/smart-logistics/documentation":
+    "Smart Logistics Documentation | Andrew Gotora",
   "/projects/sap-btp-ai-hub": "Learning Hub | Andrew Gotora",
   "/projects/smart-factory": "Smart Factory | Andrew Gotora",
   "/projects/smart-factory/documentation":
@@ -91,9 +92,18 @@ function AppRouter() {
             <Switch>
               <Route path="/" component={Home} />
               <Route path="/analytics" component={AnalyticsPage} />
-              <Route path="/projects/imsop" component={IMSOPDetail} />
+              <Route path="/projects/imsop">
+                <Redirect to="/projects/smart-logistics" replace />
+              </Route>
+              <Route path="/projects/imsop/documentation">
+                <Redirect
+                  to="/projects/smart-logistics/documentation"
+                  replace
+                />
+              </Route>
+              <Route path="/projects/smart-logistics" component={IMSOPDetail} />
               <Route
-                path="/projects/imsop/documentation"
+                path="/projects/smart-logistics/documentation"
                 component={IMSOPDocumentation}
               />
               <Route
