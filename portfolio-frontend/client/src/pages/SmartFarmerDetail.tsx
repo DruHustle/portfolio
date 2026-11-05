@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { Link } from "wouter";
 import {
   ArrowRight, BarChart3, BookOpen, Camera, CloudOff, Droplets,
-  ExternalLink, FileText, PawPrint, Tractor, Wheat,
+  ExternalLink, FileText, PawPrint, ShoppingBag, Tractor, Wheat,
 } from "lucide-react";
 import { ArchitectureDiagram } from "@/components/ArchitectureDiagram";
 import { PageNavigation } from "@/components/PageNavigation";
