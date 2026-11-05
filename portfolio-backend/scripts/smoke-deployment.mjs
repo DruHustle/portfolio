@@ -62,7 +62,11 @@ try {
     projects.headers.get("access-control-allow-origin"),
     "https://andrewgotora.com"
   );
-  assert.equal((await projects.json()).result.data.json.projects.length, 3);
+  const listed = (await projects.json()).result.data.json.projects;
+  assert.deepEqual(
+    listed.map(project => project.id),
+    ["smart-logistics", "smart-farmer", "sap-btp-ai-hub", "smart-factory"]
+  );
   child.kill("SIGTERM");
   const shutdown = await Promise.race([
     exited,
