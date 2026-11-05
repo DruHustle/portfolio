@@ -225,7 +225,7 @@ test("Smart Farmer source-only documentation journey and full-size diagram", asy
   await expect(page).toHaveTitle("Smart Farmer | Andrew Gotora");
   await expect(page.getByRole("link", { name: "Live Demo" })).toHaveCount(0);
   const diagram = page.getByRole("img", { name: /Smart Farmer software architecture/ });
-  await expect(diagram).toHaveAttribute("src", /images\\/smart_farmer_arch\\.svg$/);
+  await expect(diagram).toHaveAttribute("src", /images\/smart_farmer_arch\.svg$/);
   await page.getByRole("link", { name: "Documentation", exact: true }).click();
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Smart Farmer Documentation");
   await expect(page.getByRole("heading", { name: "Canonical engineering guides" })).toBeVisible();

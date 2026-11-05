@@ -112,7 +112,7 @@ Vite selects `NODE_ENV` automatically. The checked-in environment files contain 
 
 ## 👨‍💻 Author
 Developed by **Andrew Gotora**
-**Last Updated**: October 2026
+**Last Updated**: 5 November 2026
 
 ### Smart Factory feature page
 
@@ -126,7 +126,17 @@ Native factory rendering helpers live in `client/src/components/smart-factory/`,
 
 Smart Logistics uses `/#/projects/smart-logistics` and `/#/projects/smart-logistics/documentation`. The former `imsop` routes redirect without adding history. Existing project IDs, protocol names and document asset paths remain compatible. Live demo links use `logistics.onesa.eu` and `factory.onesa.eu`.
 
-Both project heroes use `ProjectHighlights` to retain their original compact card heights and hero spacing. Smart Factory uses the scalable navy architecture image in `client/public/images/smart_factory_arch.svg`, with real text and consistent vector icons. Edit `scripts/build-smart-factory-architecture.mjs` and run `pnpm architecture:build` to refresh and validate the SVG. The generator requires Playwright Chromium. The full-width 3D preview and balanced feature grids avoid empty columns.
+The three industrial project detail pages use `ProjectHighlights` to retain compact card heights and clear hero layouts. Smart Factory uses the scalable navy architecture image in `client/public/images/smart_factory_arch.svg`, with real text and consistent vector icons. Edit `scripts/build-smart-factory-architecture.mjs` and run `pnpm architecture:build` to refresh and validate the SVG. The generator requires Playwright Chromium. The full-width 3D preview and balanced feature grids avoid empty columns.
+
+### Smart Farmer and refreshed architecture references
+
+Smart Farmer is available at `/#/projects/smart-farmer` and `/#/projects/smart-farmer/documentation`, with an independent [DruHustle/smart-farmer](https://github.com/DruHustle/smart-farmer) source repository. Its portfolio pages cover irrigated crops, chickens/rabbits/fish, encrypted offline field records, sensors, pumps, pivots, private cameras, marketplace and machinery hire. The responsive web and native Android, iPhone and iPad clients are separate from the backend, with no shared runtime dependency.
+
+Smart Logistics now includes the standalone warehouse sensor and truck GPS **software candidate**: independent Node-RED adapters, a Python durable observation queue and workspace-bound signed HTTPS intake. Smart Factory's optional Node-RED edge input remains subordinate to the Python gateway and managed MQTT acquisition. The separate applications have no shared automation runtime, identity domain or persistence layer. These pages **do not** assert live edge commissioning, physical actuation, production cutover or payment-provider settlement.
+
+Editable vector files are in `portfolio-frontend/design/smart-factory-architecture.svg`, `smart-logistics-architecture.svg` and `smart-farmer-architecture.svg`. Their published copies live in `portfolio-frontend/client/public/images/`; all are listed in `portfolio-frontend/scripts/current-images.json` to survive build cleanup. Factory's architecture source generator is `scripts/build-smart-factory-architecture.mjs` (run `pnpm architecture:build` inside `portfolio-frontend/`). The Logistics and Farmer SVGs are directly editable and have identical public copies.
+
+[Read the three-platform architecture and release status](docs/portfolio-platforms.md) for source-of-truth links, provenance, known operational limits and verification gates.
 
 ### Image replacement and cleanup
 
@@ -138,7 +148,7 @@ Smart Logistics' page, project service and overview cards describe shipment visi
 
 ### Engineering guide editions
 
-Smart Logistics and Smart Factory share the same five-guide structure and page component. Smart Factory uses `/#/projects/smart-factory` and `/#/projects/smart-factory/documentation`; the corresponding `smart-factory-iot` routes redirect to these URLs and replace the old history entry. The `smart-factory-iot` project ID, repository links, and `smartfactoryiot` documentation directory remain compatible with existing integrations.
+Smart Logistics and Smart Factory retain five rendered historical HTML/PDF guides alongside current architecture SVGs and direct links to authoritative source documentation. Smart Farmer uses the same documentation page styling, but links to current source guides instead of presenting nonexistent generated PDFs. Smart Factory uses `/#/projects/smart-factory` and `/#/projects/smart-factory/documentation`; the corresponding `smart-factory-iot` routes redirect to these URLs and replace the old history entry. The legacy `smart-factory-iot` and `imsop` project IDs are still accepted as lookup aliases; the listing uses canonical `smart-factory` and `smart-logistics` IDs. Older `smartfactoryiot` and `imsop` documentation directories remain compatibility paths, not current product names.
 
 Markdown under `client/public/docs/{imsop,smartfactoryiot}/` is the authoring source. After editing a guide, regenerate its static HTML, rendered SVG diagrams, and PDF editions:
 

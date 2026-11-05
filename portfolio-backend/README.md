@@ -78,7 +78,7 @@ Wait for the Render deploy to become `live`, then request these URLs on its assi
 | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
 | `/api/health` (also `/healthz`) | HTTP 200, `status: "ok"`, `service: "portfolio-backend"`, and the deployed commit SHA. During shutdown, health reports HTTP 503. |
 | `/api/version`                  | `service: "portfolio-backend"` and the same commit SHA.                                                                          |
-| `/api/trpc/projects`            | Existing tRPC response with Smart Logistics, Learning Hub, and Smart Factory records.                                                      |
+| `/api/trpc/projects`            | Project records for Smart Logistics, Smart Farmer, Learning Hub and Smart Factory; legacy Logistics/Factory IDs resolve to canonical IDs.                                                      |
 | `/api/trpc/health`              | Existing tRPC response with an `ok` status and timestamp.                                                                        |
 | Unknown routes                  | JSON 404; no frontend HTML.                                                                                                      |
 
