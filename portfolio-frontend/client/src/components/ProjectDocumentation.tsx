@@ -38,7 +38,7 @@ const operationalGuides: Guide[] = [
   },
 ];
 
-/** Both projects share guide formats, navigation, and visual treatment. */
+/** All industrial projects share guide styling and current source references. */
 export function ProjectDocumentation({
   project,
   slug,
@@ -193,7 +193,7 @@ export function ProjectDocumentation({
                 {guides.map(guide => card(guide))}
               </div>
               <section className="mt-12" aria-labelledby="operational-guides">
-                <h3 id="operational-guides" className="mb-3 text-xl font-bold">Operational diagrams</h3>
+                <h2 id="operational-guides" className="mb-3 text-xl font-bold">Operational Guides</h2>
                 <p className="mb-6 text-slate-400">Historical deployment and system-flow references.</p>
                 <div className="grid gap-8 md:grid-cols-2">
                   {operationalGuides.map(guide => card(guide, true))}

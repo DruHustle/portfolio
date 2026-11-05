@@ -7,6 +7,7 @@ const routes = [
   ["home", "/", "Senior Industrial"],
   ["imsop", "/projects/smart-logistics", "Smart Logistics"],
   ["smart-factory", "/projects/smart-factory", "Smart Factory"],
+  ["smart-farmer", "/projects/smart-farmer", "Smart Farmer"],
   ["learning", "/projects/sap-btp-ai-hub", "Learning Hub"],
   ["imsop-docs", "/projects/smart-logistics/documentation", "Smart Logistics Documentation"],
   [
@@ -14,6 +15,7 @@ const routes = [
     "/projects/smart-factory/documentation",
     "Smart Factory Documentation",
   ],
+  ["farmer-docs", "/projects/smart-farmer/documentation", "Smart Farmer Documentation"],
   ["analytics", "/analytics", "Analytics"],
   ["not-found", "/missing-page", "404"],
 ] as const;
@@ -171,21 +173,21 @@ test("project/documentation return journey and rendered guide PDF access", async
     "https://logistics.onesa.eu/"
   );
   const projectImage = page.getByRole("img", {
-    name: /Smart Logistics system architecture with Vercel/,
+    name: /Smart Logistics architecture: React web/,
   });
   await expect(projectImage).toHaveAttribute(
     "src",
-    /docs\/imsop\/architecture-1\.svg$/
+    /images\/smart_logistics_arch\.svg$/
   );
   const architecturePopup = page.waitForEvent("popup");
   await page
     .getByRole("link", {
-      name: /Open full-size Smart Logistics system architecture with Vercel/,
+      name: /Open full-size Smart Logistics architecture: React web/,
     })
     .click();
   const architectureImage = await architecturePopup;
   await expect(architectureImage).toHaveURL(
-    /docs\/imsop\/architecture-1\.svg$/
+    /images\/smart_logistics_arch\.svg$/
   );
   await architectureImage.close();
   await page.getByRole("link", { name: "Documentation", exact: true }).click();
@@ -204,10 +206,10 @@ test("project/documentation return journey and rendered guide PDF access", async
   await guide.close();
   const fullSize = page.waitForEvent("popup");
   await page
-    .getByRole("link", { name: /Open full-size Smart Logistics Architecture/ })
+    .getByRole("link", { name: /Open full-size Smart Logistics architecture with Vercel/ })
     .click();
   const diagram = await fullSize;
-  await expect(diagram).toHaveURL(/docs\/imsop\/architecture-1\.svg$/);
+  await expect(diagram).toHaveURL(/images\/smart_logistics_arch\.svg$/);
   await diagram.close();
   await page.getByRole("link", { name: "Back to Project" }).click();
   await page.getByRole("link", { name: "Back to Projects" }).click();
@@ -215,6 +217,22 @@ test("project/documentation return journey and rendered guide PDF access", async
   const response = await page.request.get("resume/resume_download.pdf");
   expect(response.status()).toBe(200);
   expect((await response.body()).subarray(0, 4).toString()).toBe("%PDF");
+});
+
+test("Smart Farmer source-only documentation journey and full-size diagram", async ({ page }) => {
+  await page.goto("#/");
+  await page.getByRole("link", { name: "View Smart Farmer project details" }).click();
+  await expect(page).toHaveTitle("Smart Farmer | Andrew Gotora");
+  await expect(page.getByRole("link", { name: "Live Demo" })).toHaveCount(0);
+  const diagram = page.getByRole("img", { name: /Smart Farmer software architecture/ });
+  await expect(diagram).toHaveAttribute("src", /images\\/smart_farmer_arch\\.svg$/);
+  await page.getByRole("link", { name: "Documentation", exact: true }).click();
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Smart Farmer Documentation");
+  await expect(page.getByRole("heading", { name: "Canonical engineering guides" })).toBeVisible();
+  await expect(page.getByRole("link", { name: /Read source guide/ })).toHaveCount(4);
+  await expect(page.getByRole("link", { name: "PDF", exact: true })).toHaveCount(0);
+  await page.getByRole("link", { name: "Back to Project" }).click();
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Smart Farmer");
 });
 
 test("works when external font services are unavailable", async ({ page }) => {

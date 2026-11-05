@@ -85,12 +85,14 @@ describe("Rendered portfolio routes", () => {
   it.each([
     ["/projects/smart-logistics", "Smart Logistics"],
     ["/projects/smart-factory", "Smart Factory"],
+    ["/projects/smart-farmer", "Smart Farmer"],
     ["/projects/sap-btp-ai-hub", "Learning Hub"],
     [
       "/projects/smart-logistics/documentation",
       "Smart Logistics Documentation",
     ],
     ["/projects/smart-factory/documentation", "Smart Factory Documentation"],
+    ["/projects/smart-farmer/documentation", "Smart Farmer Documentation"],
     ["/analytics", "Analytics"],
   ])(
     "renders directly opened %s with working local assets and navigation",
@@ -108,6 +110,23 @@ describe("Rendered portfolio routes", () => {
       expect(document.title).toContain(heading);
     }
   );
+
+  it("navigates through Smart Farmer source guides without a fabricated live demo", async () => {
+    const { container } = render(<App />);
+    fireEvent.click(screen.getByRole("link", { name: "View Smart Farmer project details" }));
+    await screen.findByRole("heading", { level: 1, name: "Smart Farmer" });
+    expect(screen.queryByRole("link", { name: "Live Demo" })).toBeNull();
+    expect(screen.getByRole("link", { name: "Source repository" })).toHaveAttribute(
+      "href", "https://github.com/DruHustle/smart-farmer"
+    );
+    fireEvent.click(screen.getByRole("link", { name: "Documentation" }));
+    await screen.findByRole("heading", { level: 1, name: "Smart Farmer Documentation" });
+    expect(screen.getByRole("heading", { name: "Canonical engineering guides" })).toBeInTheDocument();
+    expect(container.querySelector('a[href$="/docs/smart-farmer/architecture.pdf"]')).toBeNull();
+    assertLocalAssetsExist(container);
+    fireEvent.click(screen.getByRole("link", { name: "Back to Project" }));
+    await screen.findByRole("heading", { level: 1, name: "Smart Farmer" });
+  });
 
   it.each([
     ["", "Smart Factory"],
