@@ -210,10 +210,10 @@ export const smartFactoryCapabilities = [
 
 export const smartFactoryGuides = {
   equipment:
-    "https://github.com/DruHustle/smart-factory-frontend/blob/main/docs/equipment-view.md",
+    "https://github.com/DruHustle/smart-factory/blob/main/smart-factory-frontend/docs/equipment-view.md",
   layouts:
-    "https://github.com/DruHustle/smart-factory-frontend/blob/main/docs/factory-layouts.md",
+    "https://github.com/DruHustle/smart-factory/blob/main/smart-factory-frontend/docs/factory-layouts.md",
   network:
-    "https://github.com/DruHustle/smart-factory-frontend/blob/main/docs/fx-tsn.md",
-  demo: "https://github.com/DruHustle/smart-factory-frontend/blob/main/docs/editable-demo.md",
+    "https://github.com/DruHustle/smart-factory/blob/main/smart-factory-frontend/docs/fx-tsn.md",
+  demo: "https://github.com/DruHustle/smart-factory/blob/main/smart-factory-frontend/docs/editable-demo.md",
 };
