@@ -1,4 +1,4 @@
-# IMSOP API Flows
+# Smart Logistics API Flows
 
 The React application uses the Node REST API for accounts, operations, telemetry, and reports. The .NET Supply Chain API exposes a separate protected purchase-order path. Paths below are relative to the configured API origin; use the Vercel same-origin proxy in the hosted UI.
 
@@ -120,8 +120,8 @@ Treat `401` as a missing or invalid session, `403` as an authorization denial, a
 
 ## Source references
 
-- [Backend API reference](https://github.com/DruHustle/imsop-app-backend/blob/main/docs/API.md)
-- [Route source](https://github.com/DruHustle/imsop-app-backend/tree/main/server/src/routes)
+- [Backend API reference](https://github.com/DruHustle/smart-logistics/blob/main/smart-logistics-backend/docs/API.md)
+- [Route source](https://github.com/DruHustle/smart-logistics/tree/main/smart-logistics-backend/server/src/routes)
 - [Architecture](architecture.md) and [database model](database-schema.md)
 
 Source review: 21 October 2026. Examples use synthetic records.

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="IMSOP Deployment Guide — visual engineering reference for IMSOP."><title>IMSOP Deployment Guide | Andrew Gotora</title><style>:root {
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Smart Logistics Deployment Guide — visual engineering reference for Smart Logistics."><title>Smart Logistics Deployment Guide | Andrew Gotora</title><style>:root {
   color-scheme: light;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
   color: #172d40;
@@ -285,8 +285,8 @@ footer {
     text-decoration: none;
   }
 }
-</style></head><body><a class="skip" href="#main-content">Skip to guide</a><header><p>IMSOP / Engineering Documentation</p><nav aria-label="Guide navigation"><a href="../../#/projects/imsop/documentation">Back to Documentation</a><a href="deployment.pdf">PDF edition</a></nav></header><main id="main-content" tabindex="-1"><h1 id="imsop-deployment-guide">IMSOP Deployment Guide</h1><nav aria-label="Contents"><strong>In this guide</strong><ul><li><a href="#deployment-map">Deployment map</a></li><li><a href="#local-setup">Local setup</a></li><li><a href="#configuration-boundaries">Configuration boundaries</a></li><li><a href="#release-sequence">Release sequence</a></li><li><a href="#verification">Verification</a></li><li><a href="#rollback-and-recovery">Rollback and recovery</a></li><li><a href="#references">References</a></li></ul></nav>
-<p>The current deployment serves the React frontend from Vercel and runs the Node API and .NET services in a single reviewed ARM64 image on Oracle. PostgreSQL remains a managed external service. This visual guide summarizes the source runbook; commands run in the IMSOP repositories, not in the portfolio.</p>
+</style></head><body><a class="skip" href="#main-content">Skip to guide</a><header><p>Smart Logistics / Engineering Documentation</p><nav aria-label="Guide navigation"><a href="../../#/projects/smart-logistics/documentation">Back to Documentation</a><a href="deployment.pdf">PDF edition</a></nav></header><main id="main-content" tabindex="-1"><h1 id="smart-logistics-deployment-guide">Smart Logistics Deployment Guide</h1><nav aria-label="Contents"><strong>In this guide</strong><ul><li><a href="#deployment-map">Deployment map</a></li><li><a href="#local-setup">Local setup</a></li><li><a href="#configuration-boundaries">Configuration boundaries</a></li><li><a href="#release-sequence">Release sequence</a></li><li><a href="#verification">Verification</a></li><li><a href="#rollback-and-recovery">Rollback and recovery</a></li><li><a href="#references">References</a></li></ul></nav>
+<p>The current deployment serves the React frontend from Vercel and runs the Node API and .NET services in a single reviewed ARM64 image on Oracle. PostgreSQL remains a managed external service. This visual guide summarizes the source runbook; commands run in the Smart Logistics repository, not in the portfolio.</p>
 <h2 id="deployment-map">Deployment map</h2>
 <figure><a href="deployment-1.svg" target="_blank" rel="noopener noreferrer" aria-label="Open full-size Deployment map"><img src="deployment-1.svg" alt="Deployment map"></a><figcaption>Deployment map · Open the diagram for a full-size view.</figcaption></figure>
 <p>Only HTTPS ingress is public. The Compose runtime keeps internal service ports private; the diagnostic bind is loopback-only. The former Render service is suspended and is not the current release target.</p>
@@ -376,8 +376,8 @@ footer {
 <p>Retain the previous tested image, manifest, ingress configuration, and protected runtime settings. Restore the prior image tag through the documented Compose update and verify readiness before restoring traffic. Database changes require a separately reviewed compatibility or restore plan; rolling back an image does not reverse migrations.</p>
 <p>A shared Oracle VM is a single host failure domain. Define the actual recovery point and recovery time objectives, verify provider backup options, and rehearse a restore in an isolated environment. Emergency return to Render is a separate explicit operation in the source runbook, not the default image rollback.</p>
 <section class="references"><h2 id="references">References</h2><ul>
-<li><a href="https://github.com/DruHustle/imsop-app-backend/blob/main/deploy/oracle/README.md">Oracle deployment and rollback runbook</a></li>
-<li><a href="https://github.com/DruHustle/imsop-app-backend/blob/main/docs/DEPLOYMENT.md">Backend deployment reference</a></li>
+<li><a href="https://github.com/DruHustle/smart-logistics/blob/main/smart-logistics-backend/deploy/oracle/README.md">Oracle deployment and rollback runbook</a></li>
+<li><a href="https://github.com/DruHustle/smart-logistics/blob/main/smart-logistics-backend/docs/DEPLOYMENT.md">Backend deployment reference</a></li>
 <li><a href="system-diagrams.html">System diagrams</a>, <a href="architecture.html">architecture</a>, and <a href="database-schema.html">database schema</a></li>
 </ul><p>Source review: 21 October 2026. This documentation update does not deploy an application.</p></section>
 

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="IMSOP System Architecture — visual engineering reference for IMSOP."><title>IMSOP System Architecture | Andrew Gotora</title><style>:root {
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Smart Logistics System Architecture — visual engineering reference for Smart Logistics."><title>Smart Logistics System Architecture | Andrew Gotora</title><style>:root {
   color-scheme: light;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
   color: #172d40;
@@ -285,8 +285,8 @@ footer {
     text-decoration: none;
   }
 }
-</style></head><body><a class="skip" href="#main-content">Skip to guide</a><header><p>IMSOP / Engineering Documentation</p><nav aria-label="Guide navigation"><a href="../../#/projects/imsop/documentation">Back to Documentation</a><a href="architecture.pdf">PDF edition</a></nav></header><main id="main-content" tabindex="-1"><h1 id="imsop-system-architecture">IMSOP System Architecture</h1><nav aria-label="Contents"><strong>In this guide</strong><ul><li><a href="#runtime-and-hosting">Runtime and hosting</a></li><li><a href="#repository-and-service-ownership">Repository and service ownership</a></li><li><a href="#identity-and-authorization">Identity and authorization</a></li><li><a href="#integration-and-data-consistency">Integration and data consistency</a></li><li><a href="#availability-and-operating-boundaries">Availability and operating boundaries</a></li><li><a href="#read-next">Read next</a></li><li><a href="#source-references">Source references</a></li></ul></nav>
-<p>IMSOP (Intelligent Multi-Cloud Supply Chain &amp; Operations Platform) brings shipment visibility, orders, telemetry, mapping, and reports into a React workspace. This reference separates the browser-facing Node API from the companion .NET service model and describes the current Oracle deployment.</p>
+</style></head><body><a class="skip" href="#main-content">Skip to guide</a><header><p>Smart Logistics / Engineering Documentation</p><nav aria-label="Guide navigation"><a href="../../#/projects/smart-logistics/documentation">Back to Documentation</a><a href="architecture.pdf">PDF edition</a></nav></header><main id="main-content" tabindex="-1"><h1 id="smart-logistics-system-architecture">Smart Logistics System Architecture</h1><nav aria-label="Contents"><strong>In this guide</strong><ul><li><a href="#runtime-and-hosting">Runtime and hosting</a></li><li><a href="#repository-and-service-ownership">Repository and service ownership</a></li><li><a href="#identity-and-authorization">Identity and authorization</a></li><li><a href="#integration-and-data-consistency">Integration and data consistency</a></li><li><a href="#availability-and-operating-boundaries">Availability and operating boundaries</a></li><li><a href="#read-next">Read next</a></li><li><a href="#source-references">Source references</a></li></ul></nav>
+<p>Smart Logistics brings shipment visibility, orders, telemetry, mapping, and reports into a React workspace. This reference separates the browser-facing Node API from the companion .NET service model and describes the current Oracle deployment.</p>
 <h2 id="runtime-and-hosting">Runtime and hosting</h2>
 <figure><a href="architecture-1.svg" target="_blank" rel="noopener noreferrer" aria-label="Open full-size Runtime and hosting"><img src="architecture-1.svg" alt="Runtime and hosting"></a><figcaption>Runtime and hosting · Open the diagram for a full-size view.</figcaption></figure>
 <p>Vercel serves the static frontend and proxies <code>/api/*</code> to the Oracle API. GitHub Pages uses an explicitly configured HTTPS backend origin. One ARM64 backend image contains the gateway, Node API, Operations service, and Supply Chain service. Internal service ports stay private behind Caddy. The backend and frontend release independently.</p>
@@ -303,7 +303,7 @@ footer {
 <tr>
 <td>Frontend</td>
 <td>React/Vite UI, authentication adapters, API-origin resolution, mapping, charts, exports, and browser tests</td>
-<td><code>imsop-app-frontend</code></td>
+<td><code>smart-logistics-frontend</code></td>
 </tr>
 <tr>
 <td>Node REST API</td>
@@ -393,7 +393,7 @@ footer {
 </table></div>
 <h2 id="integration-and-data-consistency">Integration and data consistency</h2>
 <p>Provider webhooks are timestamped and signed over the exact raw request bytes. A unique <code>(provider, event_id)</code> key suppresses replayed events. Event insertion and the shipment upsert execute in one PostgreSQL transaction. The event's tracking number associates it with a shipment; it is not a declared database foreign key.</p>
-<p>The Node telemetry API records a device ID, metric name, numeric value, and server timestamp. It is a REST ingestion path. MQTT intake, AAS asset models, edge commissioning, and industrial actuation are Smart Factory capabilities and are not inferred for IMSOP.</p>
+<p>The Node telemetry API records a device ID, metric name, numeric value, and server timestamp. It is a REST ingestion path. MQTT intake, AAS asset models, edge commissioning, and industrial actuation are Smart Factory capabilities and are not inferred for Smart Logistics.</p>
 <h2 id="availability-and-operating-boundaries">Availability and operating boundaries</h2>
 <p><code>GET /health</code> reports process liveness and <code>GET /ready</code> checks database readiness. Check both through the actual ingress after releases. A shared VM is one host failure domain; container separation does not establish high availability. No availability percentage, latency target, or backup retention is asserted here without deployment evidence.</p>
 <p>PostgreSQL credentials, JWT signing keys, email credentials, and logistics signing secrets stay in protected backend configuration. Browser builds contain only public routing configuration and a restricted Maps browser key when mapping is enabled.</p>
@@ -405,10 +405,10 @@ footer {
 </ul></section>
 
 <section class="references"><h2 id="source-references">Source references</h2><p>Reviewed against backend source and current Oracle runbooks on 21 October 2026. Historical README sections still mention MySQL and Render; the current PostgreSQL models and Oracle runbook take precedence for this guide.</p><ul>
-<li><a href="https://github.com/DruHustle/imsop-app-backend">Backend source</a></li>
-<li><a href="https://github.com/DruHustle/imsop-app-backend/blob/main/docs/DATABASE.md">Database guide</a></li>
-<li><a href="https://github.com/DruHustle/imsop-app-backend/blob/main/deploy/oracle/README.md">Oracle deployment runbook</a></li>
-<li><a href="https://github.com/DruHustle/imsop-app-frontend">Frontend source</a></li>
+<li><a href="https://github.com/DruHustle/smart-logistics/tree/main/smart-logistics-backend">Backend source</a></li>
+<li><a href="https://github.com/DruHustle/smart-logistics/blob/main/smart-logistics-backend/docs/DATABASE.md">Database guide</a></li>
+<li><a href="https://github.com/DruHustle/smart-logistics/blob/main/smart-logistics-backend/deploy/oracle/README.md">Oracle deployment runbook</a></li>
+<li><a href="https://github.com/DruHustle/smart-logistics/tree/main/smart-logistics-frontend">Frontend source</a></li>
 </ul></section>
 
 

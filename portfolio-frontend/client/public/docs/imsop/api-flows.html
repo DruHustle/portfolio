@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="IMSOP API Flows — visual engineering reference for IMSOP."><title>IMSOP API Flows | Andrew Gotora</title><style>:root {
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Smart Logistics API Flows — visual engineering reference for Smart Logistics."><title>Smart Logistics API Flows | Andrew Gotora</title><style>:root {
   color-scheme: light;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
   color: #172d40;
@@ -285,7 +285,7 @@ footer {
     text-decoration: none;
   }
 }
-</style></head><body><a class="skip" href="#main-content">Skip to guide</a><header><p>IMSOP / Engineering Documentation</p><nav aria-label="Guide navigation"><a href="../../#/projects/imsop/documentation">Back to Documentation</a><a href="api-flows.pdf">PDF edition</a></nav></header><main id="main-content" tabindex="-1"><h1 id="imsop-api-flows">IMSOP API Flows</h1><nav aria-label="Contents"><strong>In this guide</strong><ul><li><a href="#session-lifecycle">Session lifecycle</a></li><li><a href="#authentication-endpoints">Authentication endpoints</a></li><li><a href="#operations-telemetry-and-reports">Operations, telemetry, and reports</a></li><li><a href="#signed-logistics-provider-flow">Signed logistics provider flow</a></li><li><a href="#errors-and-operational-checks">Errors and operational checks</a></li><li><a href="#source-references">Source references</a></li></ul></nav>
+</style></head><body><a class="skip" href="#main-content">Skip to guide</a><header><p>Smart Logistics / Engineering Documentation</p><nav aria-label="Guide navigation"><a href="../../#/projects/smart-logistics/documentation">Back to Documentation</a><a href="api-flows.pdf">PDF edition</a></nav></header><main id="main-content" tabindex="-1"><h1 id="smart-logistics-api-flows">Smart Logistics API Flows</h1><nav aria-label="Contents"><strong>In this guide</strong><ul><li><a href="#session-lifecycle">Session lifecycle</a></li><li><a href="#authentication-endpoints">Authentication endpoints</a></li><li><a href="#operations-telemetry-and-reports">Operations, telemetry, and reports</a></li><li><a href="#signed-logistics-provider-flow">Signed logistics provider flow</a></li><li><a href="#errors-and-operational-checks">Errors and operational checks</a></li><li><a href="#source-references">Source references</a></li></ul></nav>
 <p>The React application uses the Node REST API for accounts, operations, telemetry, and reports. The .NET Supply Chain API exposes a separate protected purchase-order path. Paths below are relative to the configured API origin; use the Vercel same-origin proxy in the hosted UI.</p>
 <h2 id="session-lifecycle">Session lifecycle</h2>
 <figure><a href="api-flows-1.svg" target="_blank" rel="noopener noreferrer" aria-label="Open full-size Session lifecycle"><img src="api-flows-1.svg" alt="Session lifecycle"></a><figcaption>Session lifecycle · Open the diagram for a full-size view.</figcaption></figure>
@@ -420,8 +420,8 @@ footer {
 <p>Treat <code>401</code> as a missing or invalid session, <code>403</code> as an authorization denial, and validation errors as requests to correct rather than retry unchanged. A duplicate provider event is an accepted <code>202</code> response. On transient delivery failures, preserve the event ID when retrying. Report upstream failures clearly rather than substituting fabricated records.</p>
 <p><code>GET /health</code> reports liveness; <code>GET /ready</code> tests database readiness. Neither alone verifies provider delivery, email, mapping, all permissions, or the end-to-end frontend proxy. Release checks should cover both permitted and denied roles, operations reads, exports, and logout.</p>
 <section class="references"><h2 id="source-references">Source references</h2><ul>
-<li><a href="https://github.com/DruHustle/imsop-app-backend/blob/main/docs/API.md">Backend API reference</a></li>
-<li><a href="https://github.com/DruHustle/imsop-app-backend/tree/main/server/src/routes">Route source</a></li>
+<li><a href="https://github.com/DruHustle/smart-logistics/blob/main/smart-logistics-backend/docs/API.md">Backend API reference</a></li>
+<li><a href="https://github.com/DruHustle/smart-logistics/tree/main/smart-logistics-backend/server/src/routes">Route source</a></li>
 <li><a href="architecture.html">Architecture</a> and <a href="database-schema.html">database model</a></li>
 </ul><p>Source review: 21 October 2026. Examples use synthetic records.</p></section>
 

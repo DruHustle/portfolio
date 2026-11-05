@@ -1,6 +1,6 @@
-# IMSOP Deployment Guide
+# Smart Logistics Deployment Guide
 
-The current deployment serves the React frontend from Vercel and runs the Node API and .NET services in a single reviewed ARM64 image on Oracle. PostgreSQL remains a managed external service. This visual guide summarizes the source runbook; commands run in the IMSOP repositories, not in the portfolio.
+The current deployment serves the React frontend from Vercel and runs the Node API and .NET services in a single reviewed ARM64 image on Oracle. PostgreSQL remains a managed external service. This visual guide summarizes the source runbook; commands run in the Smart Logistics repository, not in the portfolio.
 
 ## Deployment map
 
@@ -99,8 +99,8 @@ A shared Oracle VM is a single host failure domain. Define the actual recovery p
 
 ## References
 
-- [Oracle deployment and rollback runbook](https://github.com/DruHustle/imsop-app-backend/blob/main/deploy/oracle/README.md)
-- [Backend deployment reference](https://github.com/DruHustle/imsop-app-backend/blob/main/docs/DEPLOYMENT.md)
+- [Oracle deployment and rollback runbook](https://github.com/DruHustle/smart-logistics/blob/main/smart-logistics-backend/deploy/oracle/README.md)
+- [Backend deployment reference](https://github.com/DruHustle/smart-logistics/blob/main/smart-logistics-backend/docs/DEPLOYMENT.md)
 - [System diagrams](system-diagrams.md), [architecture](architecture.md), and [database schema](database-schema.md)
 
 Source review: 21 October 2026. This documentation update does not deploy an application.

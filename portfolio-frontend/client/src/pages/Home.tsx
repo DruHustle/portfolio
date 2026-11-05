@@ -466,11 +466,11 @@ export default function Home() {
                 color:"from-orange-500 to-red-500"
               },
               {
-                title: "IMSOP",
+                title: "Smart Logistics",
                 sub: "Supply Chain Visibility, Exceptions & Purchasing",
                 desc: "Shipment tracking, durable exception review, purchase orders and partial warehouse receiving, with scoped analytics, maps and record-grounded assistance.",
                 tech: ["React", "Node.js", ".NET 8", "YARP", "PostgreSQL", "Docker"],
-                link: "/projects/imsop",
+                link: "/projects/smart-logistics",
                 color: "from-cyan-500 to-teal-500" 
               },
               {

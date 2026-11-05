@@ -2,33 +2,33 @@
   "generator": "scripts/build-docs.mjs",
   "documents": {
     "imsop/architecture": {
-      "sourceSha256": "47a4dd7238f9b1fb8af0907cb058fa271ae1f043a1e46a97502b668d876da985",
-      "htmlSha256": "a11d57c496379f2ecded142b21c1f7219dc557ee9725e9fd3869b9b656a23b2e",
-      "pdfSha256": "d5fa67dfe99627f9d6aa60313efe6ee47b88f5a84f4b3365526127018e94ec7d",
+      "sourceSha256": "1cc82611148b95d03b39d060223a2e6672d7b66084b0dd6b2702e097bbea2fb2",
+      "htmlSha256": "e3ef4ed21345d62dc9aceede7ba98de7a0089cd9152f0679b28cd588e0517d84",
+      "pdfSha256": "165066cec805beb2a07418a3f996cf1c1a32f2649b72fbf856e58ad5a7c575c9",
       "diagrams": 1
     },
     "imsop/database-schema": {
-      "sourceSha256": "b59c46121122125f55a38d020c35c2682afd131e4e063805d7c09499ae916dc5",
-      "htmlSha256": "478c78357ac75539157cc6608ae62d436e2044e8a742cfd4f7e50e99ab5d6b24",
-      "pdfSha256": "7c2e83c48bf6681cb167da383584fe8c283e127aec88c12b11888f2e4ab36863",
+      "sourceSha256": "10a5dda243728a3d6c799f04e22df7f8127c03760c01830fbbacb47c8bc86d18",
+      "htmlSha256": "f1138758f25af0b8d16e82e46922c18dd57aa6a2fa3a47e1e205a0e4fd1ff913",
+      "pdfSha256": "ed73a0fd10d038d128ef53ed14dc8409f836941b4ebb312953fb0c4738fd52bc",
       "diagrams": 3
     },
     "imsop/api-flows": {
-      "sourceSha256": "adc9aa100634b4c4405480f7818eeb119ad771a34b7c6dc78af156f1d6effc0c",
-      "htmlSha256": "65a5837ce2f14759b14ae93e98005985dbbe249d99fcabe326258cac66c820e5",
-      "pdfSha256": "4ec557a5bfd20ebd3e55d5a08c59566896dae556454c4fd76f693b8b33689397",
+      "sourceSha256": "4dd2059ec4b07c6d62d999839bc8fd50f964a5ef50b29239d153bddcd825e0ad",
+      "htmlSha256": "5f4c453ca8a0f7648abb77c798d901ff072694aa5b2a67e0632035920c1db4fb",
+      "pdfSha256": "7510fdc2f2242f9ab6ad7bf13eaf35ad290260d37dd3d33cfc5379728b66d8cf",
       "diagrams": 3
     },
     "imsop/deployment": {
-      "sourceSha256": "53916e9d4e4a1ffda2c926f0826cf52a1fe45f01a80514da459f49588bff0239",
-      "htmlSha256": "333c0ba85f17bd25d21e5f2092ddff0f2bdd332c0599f33bbac1c437fe39e137",
-      "pdfSha256": "b5bfe88c7a689fd8cdf8c5ec9fd96e94de2c5e7e5c0fcbde23f2996f31a9276c",
+      "sourceSha256": "0c571048446ffb4eac62be04319eec80c2cd88b3783e0b2e81ed9f262a8cb9bc",
+      "htmlSha256": "0fbc939441cd02596cc001a05058ca692bd0a05836d926e317e36f33cc7b2500",
+      "pdfSha256": "5f77bba8d9c3a1a68399e9b2544421e4a07ed64a2beb7575416df8aa2b32fa3c",
       "diagrams": 2
     },
     "imsop/system-diagrams": {
-      "sourceSha256": "f13957ee8d65d8a550c2a897cbe30f1921d1a2529f5b15dd3032de35114c531a",
-      "htmlSha256": "c3a91072ecef373f600eb73166457258cf9e5bfec592950ae2661de191942812",
-      "pdfSha256": "d8bb6d6752f8893fab7f0bc5bb4c139ae13ca65ce4c26cf81754208ab5396972",
+      "sourceSha256": "bd4ec4b079c9cfbbff647c87695b438d136aeaabc3f01c776d0fdf86026a0b31",
+      "htmlSha256": "ee5999a41fce20fd086e2ed926bfed23feab9956576f1992704c80d014adf248",
+      "pdfSha256": "08afcc85651a2dda1730d69c93cd9375d4663d1f6daa11ae1de933f317a517d0",
       "diagrams": 5
     },
     "smartfactoryiot/architecture": {
