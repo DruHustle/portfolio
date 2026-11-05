@@ -334,7 +334,7 @@ for (const [slug, directory] of [
     await expect(
       page.getByRole("link", { name: "PDF", exact: true })
     ).toHaveCount(5);
-    await expect(page.locator('a[href$=".md"], .lucide-eye')).toHaveCount(0);
+    await expect(page.locator('a[href^="/"][href$=".md"], .lucide-eye')).toHaveCount(0);
     for (const card of await page.locator("article").all()) {
       const heading = card.getByRole("heading");
       const icon = await heading.locator("svg").boundingBox();

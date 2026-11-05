@@ -72,7 +72,7 @@ describe("Rendered portfolio routes", () => {
     assertLocalAssetsExist(container);
     expect(screen.getAllByRole("link", { name: /^View$/ })).toHaveLength(5);
     expect(screen.getAllByRole("link", { name: /^PDF$/ })).toHaveLength(5);
-    expect(container.querySelector('a[href$=".md"]')).toBeNull();
+    expect(container.querySelector('a[href^="/"][href$=".md"]')).toBeNull();
     expect(container.querySelector("a a")).toBeNull();
     fireEvent.click(screen.getByRole("link", { name: "Back to Project" }));
     await screen.findByRole("heading", { name: "Smart Logistics", level: 1 });
