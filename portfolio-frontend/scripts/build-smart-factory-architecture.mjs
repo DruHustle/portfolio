@@ -114,8 +114,8 @@ function card(
 }
 
 const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" role="img" aria-labelledby="title description">
-<title id="title">Smart Factory — production architecture</title>
-<desc id="description">Factory equipment reaches a managed MQTT broker through Pi gateways or individual TLS devices. Oracle ARM64 hosts an application API role and one telemetry and notification worker. Vercel provides the web interface and API proxy; managed PostgreSQL, Redis, Resend and the Oracle BaSyx runtime provide data and asset services. OPC UA FX and TSN control and scheduling stay on the factory LAN.</desc>
+<title id="title">Smart Factory — reference architecture</title>
+<desc id="description">Factory devices use commissioned gateway mappings or independent direct MQTT identities. Optional Node-RED adapters feed a Python gateway that validates observations and durably spools accepted telemetry to a managed TLS broker. Oracle ARM64 hosts an application API role and one telemetry and notification worker. Vercel provides the web interface and API proxy; managed PostgreSQL, Redis, Resend and the Oracle BaSyx runtime provide data and asset services. OPC UA FX and TSN control and scheduling stay on the factory LAN.</desc>
 <defs>
   <linearGradient id="background" x2="1" y2="1"><stop stop-color="#071729"/><stop offset="1" stop-color="#0b2439"/></linearGradient>
   ${[
@@ -133,14 +133,14 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${
 <g font-family="Arial, Helvetica, sans-serif">
 ${text(28, 64, "Smart Factory", 44, colors.ink, 700)}
 ${text(337, 64, "— Production architecture", 44, colors.orange, 700)}
-${text(29, 104, "Edge acquisition, managed messaging, private runtime roles and asset standards", 22, colors.muted)}
+${text(29, 104, "Source-aware OT acquisition, managed messaging and isolated runtime roles", 22, colors.muted)}
 ${panel(24, 332, "1", "Factory OT", "Equipment and local acquisition")}
 ${panel(380, 256, "2", "Messaging", "Managed MQTT transport")}
 ${panel(660, 542, "3", "Oracle ARM64", "Private API role + singleton worker")}
 ${panel(1226, 422, "4", "Web, data & standards", "Vercel, managed services and BaSyx")}
 
-${card(44, 254, 292, 112, Factory, "Factory equipment", ["Machines + WROVER sensors", "OPC UA • Modbus • Serial"], colors.cyan, 22)}
-${card(44, 430, 292, 112, Router, "Pi gateway", ["Local MQTT TLS + edge spool", "Commissioned device mappings"])}
+${card(44, 254, 292, 112, Factory, "Factory equipment", ["Machines + PLC / sensors", "OPC UA • Modbus • Serial"], colors.cyan, 22)}
+${card(44, 430, 292, 112, Router, "Python gateway", ["Validation + durable spool", "Node-RED inputs optional"])}
 ${card(44, 598, 292, 100, Cpu, "Direct MQTT devices", ["Individual TLS identities"], colors.cyan, 21)}
 ${card(44, 722, 292, 108, Network, "OPC UA FX / TSN", ["Local control and diagnostics", "Scheduling stays on the LAN"], colors.cyan, 21)}
 ${line("M190 367 V427")}
