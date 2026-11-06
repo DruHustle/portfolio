@@ -57,7 +57,7 @@ export const smartFactoryProject = {
       },
       {
         title: "Acquisition",
-        desc: "Optional Node-RED adapters → Python edge validation and spool → MQTT TLS",
+        desc: "Optional Node-RED → local Mosquitto → Python trust boundary → Oracle Mosquitto/TLS",
         icon: null,
       },
       {
@@ -188,7 +188,7 @@ export const smartFactoryCapabilities = [
   {
     title: "OT cybersecurity workspace",
     description:
-      "Review collector coverage, certificate expiry, configuration drift and imported vulnerability evidence. Investigate security findings separately from process alarms.",
+      "The optional Python SecurityCollector reports read-only identity, configuration, transport and certificate evidence through a separate durable HTTPS path. It is off until commissioned. Findings remain separate from process alarms; Python AI advisory capability is in active development; production inference is not verified by this source review.",
     icon: "shield",
   },
   {
@@ -204,9 +204,9 @@ export const smartFactoryCapabilities = [
     icon: "demo",
   },
   {
-    title: "Service health & recovery",
+    title: "Python edge agent",
     description:
-      "Inspect infrastructure and application health, cybersecurity findings, collector coverage, queue backlogs and recovery evidence. Durable gateway and worker outboxes support retry through interruptions.",
+      "Python verifies allowlisted source identities, validates payloads, units and timestamps, and stamps provenance. Its durable SQLite queue buffers accepted observations and retries delivery to Oracle-hosted Mosquitto over TLS. It enforces commissioned command policy, expiry and replay protection. Broker acknowledgement is not proof of backend persistence or physical action.",
     icon: "health",
   },
 ];

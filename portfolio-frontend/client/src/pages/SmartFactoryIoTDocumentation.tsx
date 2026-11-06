@@ -10,18 +10,18 @@ export default function SmartFactoryIoTDocumentation() {
       description="Current hosting, security boundaries, API workflows, and data models for the industrial asset and telemetry platform."
       currentArchitecture={{
         path: "images/smart_factory_arch.svg",
-        alt: "Smart Factory architecture with Python gateway, managed MQTT, Oracle API and worker, Vercel, PostgreSQL, Redis and BaSyx",
+        alt: "Smart Factory architecture with Python identity validation provenance and durable queue, local and Oracle Mosquitto, API and worker, Vercel, PostgreSQL and BaSyx",
         width: 1672,
         height: 941,
       }}
-      currentStatus="Production cutover, independent rollback qualification and physical edge commissioning remain governed release gates. The diagram distinguishes factory-local control from software acquisition and managed services."
+      currentStatus="Reviewed against the project repositories on 6 November 2026. The current edge guide specifies local and Oracle-hosted Mosquitto. Python owns the trust boundary and durable queue; Node-RED is an optional adapter. Physical commissioning remains separately verified."
       currentSummary={[
         "Overview workspaces cover the 3D factory, floor plan, P&ID, electrical, telemetry, inventory and infrastructure views; individual metrics need an approved live source.",
         "Standalone Node-RED protocol adapters can feed the Python edge agent, which validates identity/provenance and queues accepted observations before MQTT/TLS.",
         "Oracle API and singleton worker roles are separate. AAS identities and versions use the dedicated BaSyx runtime; cybersecurity findings are distinct from process incidents.",
       ]}
       sourceGuides={[
-        { title: "Canonical platform architecture", description: "Source-of-truth application services, data ownership and runtime boundaries.", url: "https://github.com/DruHustle/smart-factory/blob/main/smart-factory-backend/ARCHITECTURE.md" },
+        { title: "Current gateway and broker", description: "Local and Oracle Mosquitto, Python validation, queue delivery and policy boundaries.", url: "https://github.com/DruHustle/smart-factory/blob/main/smart-factory-edge/raspberry-pi/README.md" },
         { title: "Node-RED edge commissioning", description: "Optional adapters, Python validation, source identity and secure messaging.", url: "https://github.com/DruHustle/smart-factory/blob/main/smart-factory-edge/deploy/node-red/README.md" },
         { title: "Release and rollback gates", description: "Consolidated checks and safe retirement requirements.", url: "https://github.com/DruHustle/smart-factory/blob/main/docs/consolidated-release.md" },
       ]}
@@ -30,7 +30,7 @@ export default function SmartFactoryIoTDocumentation() {
           title: "Architecture Overview",
           name: "architecture",
           description:
-            "Vercel delivery, the Oracle API and singleton worker, durable MQTT edge paths, managed data services, and the BaSyx runtime.",
+            "Node-RED adapters, the Python trust boundary, local and Oracle Mosquitto, durable delivery, API/worker roles and BaSyx asset identity.",
         },
         {
           title: "Database Schema",

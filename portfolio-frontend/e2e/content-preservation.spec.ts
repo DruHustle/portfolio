@@ -26,8 +26,11 @@ test("Factory diagram updates Node-RED text without altering original styles or 
   const response = await request.get("images/smart_factory_arch.svg");
   expect(response.status()).toBe(200);
   const svg = await response.text();
-  expect(svg).toContain("Node-RED + Python");
-  expect(svg).toContain("Optional adapters → gateway");
+  expect(svg).toContain("Python edge agent");
+  expect(svg).toContain("Mosquitto");
+  expect(svg).not.toContain("CloudAMQP");
+  expect(svg).toContain("Node-RED adapters (optional)");
+  expect(svg).toContain("Queue • TLS • command policy");
   const structure = svg.replace(/>[^<]*</g, "><");
   expect(createHash("sha256").update(structure).digest("hex")).toBe("1a6cb577fdfcb316e8a25b443f72146fa4d691609a3d3d076c10811464d81c2d");
 });

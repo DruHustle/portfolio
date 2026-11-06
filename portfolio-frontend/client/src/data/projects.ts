@@ -43,7 +43,7 @@ export const projects: Project[] = [
       { label: "TSN", color: "cyan" },
       { label: "Node.js", color: "cyan" },
       { label: "PostgreSQL", color: "cyan" },
-      { label: "CloudAMQP", color: "cyan" },
+      { label: "Mosquitto", color: "cyan" },
       { label: "AAS", color: "cyan" },
       { label: "BaSyx", color: "cyan" },
       { label: "Docker", color: "cyan" },

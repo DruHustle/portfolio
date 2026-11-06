@@ -115,7 +115,7 @@ function card(
 
 const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" role="img" aria-labelledby="title description">
 <title id="title">Smart Factory — reference architecture</title>
-<desc id="description">Optional Node-RED adapters feed the trusted Python edge gateway for identity, validation, provenance and durable queuing before MQTT TLS. Individually authenticated devices may also publish directly. Oracle ARM64 hosts an application API role and one telemetry and notification worker. Vercel provides the web interface and API proxy; managed PostgreSQL, Redis, Resend and the Oracle BaSyx runtime provide data and asset services. OPC UA FX and TSN control and scheduling stay on the factory LAN.</desc>
+<desc id="description">Optional Node-RED adapters feed the trusted Python edge gateway for identity, validation, provenance and durable queuing before MQTT TLS. Direct MQTT devices require separate credentials, reachability and ACLs; the current Pi-only policy does not enable them. Oracle ARM64 hosts an application API role and one telemetry and notification worker. Vercel provides the web interface and API proxy; managed PostgreSQL, Redis, Resend and the Oracle BaSyx runtime provide data and asset services. OPC UA FX and TSN control and scheduling stay on the factory LAN.</desc>
 <defs>
   <linearGradient id="background" x2="1" y2="1"><stop stop-color="#071729"/><stop offset="1" stop-color="#0b2439"/></linearGradient>
   ${[
@@ -133,29 +133,29 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${
 <g font-family="Arial, Helvetica, sans-serif">
 ${text(28, 64, "Smart Factory", 44, colors.ink, 700)}
 ${text(337, 64, "— Reference architecture", 44, colors.orange, 700)}
-${text(29, 104, "Node-RED adapters, trusted Python gateways, durable telemetry and asset standards", 22, colors.muted)}
+${text(29, 104, "Python: identity, validation, provenance, durable queue, command policy and AI in active development", 22, colors.muted)}
 ${panel(24, 332, "1", "Factory OT", "Equipment and local acquisition")}
-${panel(380, 256, "2", "Messaging", "Managed MQTT transport")}
+${panel(380, 256, "2", "Messaging", "Oracle-hosted MQTT/TLS")}
 ${panel(660, 542, "3", "Oracle ARM64", "Private API role + singleton worker")}
 ${panel(1226, 422, "4", "Web, data & standards", "Vercel, managed services and BaSyx")}
 
-${card(44, 254, 292, 112, Factory, "Factory equipment", ["Machines + WROVER sensors", "OPC UA • Modbus • Serial"], colors.cyan, 22)}
-${card(44, 430, 292, 112, Router, "Node-RED + Python", ["Optional adapters → gateway", "Identity • validation • spool"])}
-${card(44, 598, 292, 100, Cpu, "Direct MQTT devices", ["Individual TLS identities"], colors.cyan, 21)}
+${card(44, 254, 292, 112, Factory, "Factory equipment", ["Node-RED adapters (optional)", "OPC UA • Modbus • Serial"], colors.cyan, 22)}
+${card(44, 430, 292, 112, Router, "Python edge agent", ["Identity • checks • provenance", "Queue • TLS • command policy"])}
+${card(44, 598, 292, 100, Cpu, "Direct MQTT devices", ["Separate provisioning required"], colors.cyan, 21)}
 ${card(44, 722, 292, 108, Network, "OPC UA FX / TSN", ["Local control and diagnostics", "Scheduling stays on the LAN"], colors.cyan, 21)}
 ${line("M190 367 V427")}
-${text(207, 403, "Local acquisition", 16, colors.muted)}
+${text(207, 403, "Local Mosquitto", 16, colors.muted)}
 
 ${icon(Cloud, 477, 262, colors.cyan, 60)}
 ${text(508, 358, "Telemetry", 24, colors.ink, 600, "middle")}
 ${text(508, 388, "Edge → worker", 19, colors.muted, 400, "middle")}
 ${rect(399, 430, 218, 112, "#14334b", "#35c7ed", 12)}
-${text(508, 466, "CloudAMQP", 26, colors.ink, 700, "middle")}
-${text(508, 496, "Managed MQTT broker", 18, colors.muted, 400, "middle")}
+${text(508, 466, "Mosquitto", 26, colors.ink, 700, "middle")}
+${text(508, 496, "Oracle-hosted MQTT", 18, colors.muted, 400, "middle")}
 ${text(508, 523, "TLS + scoped identities", 18, colors.muted, 400, "middle")}
 ${text(508, 639, "Commands", 24, colors.ink, 600, "middle")}
 ${text(508, 670, "API → eligible gateway", 18, colors.muted, 400, "middle")}
-${text(508, 696, "or direct device", 18, colors.muted, 400, "middle")}
+${text(508, 696, "Python policy checked", 18, colors.muted, 400, "middle")}
 ${rect(400, 741, 216, 66, "#0f2b40", "#326c83", 10)}
 ${icon(ShieldCheck, 415, 758, colors.cyan, 28)}
 ${text(452, 781, "Scoped topics", 20, colors.ink, 600)}

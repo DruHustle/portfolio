@@ -1,0 +1,33 @@
+{
+  "reviewedAt": "2026-11-06",
+  "repositories": {
+    "smart-factory": "52b4e4207cb7ceb27f419a3548887e63094d83af",
+    "smart-logistics": "4c679f4044b08e15458752398f522ba5ae0e1506",
+    "smart-farmer": "cf6860a0176a12b13e419b62ffc3a5db2c9031cf"
+  },
+  "factorySourcesSha256": {
+    "smart-factory-edge/raspberry-pi/README.md": "a2369aaba20c53c7ca30002e4180f56f2ddd522798adebe3511030cb3253e5f2",
+    "smart-factory-edge/deploy/node-red/README.md": "0e0ac8e481cbbf3f16f371190d575912b77e08194cb53ea85e94242a2d980847",
+    "smart-factory-frontend/docs/architecture.md": "91444cd64cc7b67b2648cdecbbca5ec863580e6d337a0096de2bd36cb69fde04",
+    "smart-factory-frontend/docs/api-flows.md": "a22bfb44efd876cb38ae0b331606c4a1c948a115f0e8a9c114d29e49a81ffc2f",
+    "smart-factory-frontend/docs/database-schema.md": "20f87c73e4672f931e6b39bb20ce2c30298ed6c80f604fe0e206755c923d31f0"
+  },
+  "sourcePrecedence": "Current Raspberry Pi README for deployed messaging; Node-RED README for optional adapters/security/AI; application architecture and contracts for service/data ownership. Older staging documents are not current-production evidence.",
+  "factoryBroker": "Pi-local Mosquitto and separate Oracle Mosquitto container over TLS",
+  "factoryPython": [
+    "source identity",
+    "schema/units/time validation",
+    "gateway provenance",
+    "durable SQLite queue",
+    "TLS uplink and retry",
+    "commissioned command policy",
+    "optional read-only SecurityCollector"
+  ],
+  "pythonAI": "In active development: read-only Python AI advisory capability. Production inference is not verified by this documentation review.",
+  "otherPythonUplinks": {
+    "smart-logistics": "signed HTTPS; independent workspace-scoped observations",
+    "smart-farmer": "signed HTTPS; independent farm observations; no control API in Python path"
+  },
+  "limits": "Repository documentation review, not new VM/physical-equipment commissioning evidence.",
+  "developmentStatusSource": "Project owner clarification, 6 November 2026: the Python AI capability is being developed, not future-only."
+}
