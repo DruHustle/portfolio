@@ -32,34 +32,34 @@
       "diagrams": 5
     },
     "smartfactoryiot/architecture": {
-      "sourceSha256": "7ff3c0cb0a2b83bf624d73867c764accdd8eca340692513fb9f2b499094dd9d6",
-      "htmlSha256": "19b7a0f86598f26186797e87e664474937a5da02e8788306bc188c0aef1abb5e",
-      "pdfSha256": "8f7e72605090386c2af5a8b5e81e6a9717bf847644dfbfa4bc8708dfb20d519f",
+      "sourceSha256": "c12a2642903271b041de39e383ed35d3f68c6ede2aa38cb36048df6a4c84a6b0",
+      "htmlSha256": "5839629b0a37601a5dfb62433ed5cc4444bc7dafb46072a2e7b3a8baee72ac83",
+      "pdfSha256": "358a3d6baea11f85a94c86bb5b4bca4adf21ad54b5d8b1537329e70326729337",
       "diagrams": 1
     },
     "smartfactoryiot/database-schema": {
-      "sourceSha256": "67788a531ed6793a7a849a7a4dd14bdf9513a95e7b6735e6c38a91acf79fa1f5",
-      "htmlSha256": "53cf23c0f92c95d5f684414f50309d19e4b5a8db28ba6fbef0a8c98184ec457b",
-      "pdfSha256": "d23ca45e5d0b60421a00342e51c2bcab0cc09ca349f2475a263baa3bff3544fa",
-      "diagrams": 2
+      "sourceSha256": "08ba431878ff7bbb9b8462066a54f3d7cdd0bb0687d6c5ca1aefa1b2602a54f8",
+      "htmlSha256": "5efce8fc9ac30ee2ef12a8ceea9d42a7a85501895b7fece52ff709d8570f8edf",
+      "pdfSha256": "4d992480ada8ea6e591261138ff4a274854fff9e05afc5aa6b6481bfc05472c5",
+      "diagrams": 3
     },
     "smartfactoryiot/api-flows": {
-      "sourceSha256": "39272b9987f256140c950aaf8e0961ba3cb49e20b97a252f39d897ccc5128256",
-      "htmlSha256": "d766d6cf48af5c3ca7331dd1773e95ddce9029558f33a32b14f8523b4a9f7228",
-      "pdfSha256": "d2c769973b83350484aa2e7212cea430d21394f947f9d320ac6f391510a66397",
-      "diagrams": 7
+      "sourceSha256": "447fc531f6760e0e0325951da1ccc321060f7a847923c8438ea7c87c3bf4f4d6",
+      "htmlSha256": "bc3f62e32a9ee995a188642cc944c174daa24a921e006f3900800edbb917b2e9",
+      "pdfSha256": "facf540ed852fa7d16a568f3e8c88f628f758fee207bd2914b8c755e11f2dfb1",
+      "diagrams": 8
     },
     "smartfactoryiot/deployment": {
-      "sourceSha256": "633f5dbec993d0d5edbe21a736c7d81c7debadbd5f6eb43ed4b13847ed3f0350",
-      "htmlSha256": "35947fb591895fc2ecbfb75341d10c551a10a5f7852f3236d305b4b0cbd866de",
-      "pdfSha256": "2d421480a72fb07d79374940a2d3b7d434e2e2f578dd632afcc0beae14f66769",
-      "diagrams": 2
+      "sourceSha256": "bfd4b6a046a96b0686f9413b99532e500481aa1fb18b1d1b7a2b9642d9b2a1c8",
+      "htmlSha256": "f8bbee4b9d47e9d07f099307039ddd61e2bab013bdc3cb62c905a52131a45822",
+      "pdfSha256": "a7de70ecdab68b1d06582d3d4012afac4eedc1deb9a5b8024ca0cd4d75cd83b4",
+      "diagrams": 1
     },
     "smartfactoryiot/system-diagrams": {
-      "sourceSha256": "fb7b52e654cf3195ad55442a6a4982d9ff7bcafb67d7abb745c9ce5bf7fde54e",
-      "htmlSha256": "1cb4fed26e0fd46c6e2530f886d5b3837ede09c2513cc064aae4931080d73677",
-      "pdfSha256": "f013550ac8eda37309887c0ac8ce759a72c1635b380770562bebfd209e6d1e6e",
-      "diagrams": 6
+      "sourceSha256": "709d2b2d6544d5a10bcd33042acd81a6ef694961eb920f43512b41b059299437",
+      "htmlSha256": "75a260d20eb1b3518622035850f46f9146aec19b2e11543656928da536fb9176",
+      "pdfSha256": "4aa7e542c318364123a45ab59c477ae2588c83d4019dcb75a2e2db41f883ee9d",
+      "diagrams": 2
     }
   }
 }

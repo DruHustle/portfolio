@@ -1,101 +1,106 @@
 # Smart Factory Architecture
 
-## Repository responsibilities
+## Current edge and broker responsibilities
+
+Source review: **6 November 2026**, canonical Smart Factory commit `52b4e4207cb7ceb27f419a3548887e63094d83af`. The current [Raspberry Pi gateway guide](https://github.com/DruHustle/smart-factory/blob/52b4e4207cb7ceb27f419a3548887e63094d83af/smart-factory-edge/raspberry-pi/README.md) specifies **local Mosquitto on the Pi and production Mosquitto in a separate Oracle VM container**. Older backend diagrams and staging runbooks contain superseded broker-provider references; the current edge guide and source-specific configuration take precedence. This documentation review is not a new inspection of the VM or physical commissioning.
+
+| Component | Responsibility and limits |
+| --- | --- |
+| Node-RED (optional) | Protocol/vendor adapters and transformations. Per-source commissioning and publish-only local broker ACLs; no cloud credentials or actuator authority. Existing native Python drivers remain available. |
+| Python identity and validation | Check allowed source/topic, schema, types, units and timestamps. Stamp gateway provenance; reject spoofed integration claims and preserve unverified/bad quality until approved. |
+| Python durable delivery | Persist accepted observations in SQLite before acknowledging eligible local messages; retry across restarts/outages with original timestamps. Remove upstream QoS 1/2 entries only after the corresponding broker handshake. This is not an end-to-end exactly-once guarantee. |
+| Python command policy | Enforce authorized, commissioned targets and command expiry/replay protection. Safety interlocks and manual override stay at the machine. An acknowledgement is not physical feedback. |
+| Python cybersecurity | Optional read-only SecurityCollector with an independent durable HTTPS path for identity, configuration, transport and certificate evidence. Disabled until its namespace/token is commissioned. |
+| Python AI | Read-only AI advisory capability is in active development. Development status does not establish enabled production inference; any AI component remains subject to source authorization and command policy. |
+| Oracle Mosquitto and worker | TLS, dedicated credentials and scoped topics. The .NET worker independently persists/validates telemetry and retries application-API delivery. Redis is transient fan-out, not the durable telemetry record. |
+
+Direct MQTT devices need separate credentials, network reachability and device ACLs. The current Pi-only broker policy does **not** enable them. Node-RED and Python do not replace safety-rated controller functions. See [Node-RED commissioning and Python security/AI scope](https://github.com/DruHustle/smart-factory/blob/52b4e4207cb7ceb27f419a3548887e63094d83af/smart-factory-edge/deploy/node-red/README.md).
+
+
+Updated 31 October 2026 for the connected Pi/DHT11 bench, account requests, factory layout, Assistant, demo sandbox and FX/TSN experience. Exact runtime and qualification identities are separate from this architecture description.
+
+## Repositories and ownership
 
 | Repository | Responsibility |
 |---|---|
-| `smart-factory-iot` | React dashboard, Node/Express tRPC API, PostgreSQL schema, accounts, roles, asset workflows, lifecycle history, demo data, and standards API gateway |
-| `smart-factory-iot-backend` | .NET services for identity, telemetry ingestion, MQTT consumption, analytics, notifications, device APIs, and AAS generation/provisioning |
-| `smart-factory-iot-edge` | Raspberry Pi machine gateway and ESP32 WROVER sensor firmware |
+| smart-factory-frontend | React UI, Express/tRPC accounts and session authority, shared PostgreSQL inventory, AAS workflows, evidence policy, native 3D, native OT security, incidents, inbox and optional Onesa export |
+| smart-factory-backend | .NET 10 LTS Device, Telemetry, Identity, Analytics and Notification services; durable telemetry outbox; private AAS provisioning and scoped command interfaces |
+| smart-factory-edge | Raspberry Pi protocol adapters, validated routes/units, persistent MQTT spool, commissioned controls and ESP32 firmware |
 
-The Node API is the dashboard account and role authority. Dashboard sessions are HttpOnly cookies. The .NET telemetry bridge and the .NET AAS provisioner use separate service credentials. The private AAS stack has separate AAS and Submodel Repositories, AAS and Submodel Registries, a Concept Description Repository, and an AASX File Server.
+Native 3D and cybersecurity work without Onesa, external feeds or an LLM. The existing detailed model is an illustrative reference, not validated plant CAD. Component evidence requires an explicit component/source link; a parent value is not copied to every part.
 
-Production hosts the React UI on Vercel and runs one reviewed ARM64 backend image in separate API and singleton-worker containers on Oracle. The API role contains Node, DeviceService, IdentityService, and AnalyticsService; the worker contains TelemetryService and NotificationService. BaSyx and Caddy run on the same Oracle host with separate service boundaries. Aiven, Redis Cloud, and CloudAMQP remain managed external systems. Physical Pi gateways, WROVER sensors, and ADA031 controllers stay in the factory.
-
-## Request and data flow
+## Deployment and data flow
 
 ```mermaid
 flowchart TB
-  Browser[Factory user] --> Vercel[Vercel React UI and API proxy]
-  Vercel -->|HTTPS| Caddy[Oracle Caddy ingress]
-  subgraph Oracle[Oracle backend roles]
-    Caddy --> API[Node API]
-    API --> Device[DeviceService]
-    API --> Identity[IdentityService]
-    API --> Analytics[AnalyticsService]
-    Telemetry[Singleton TelemetryService] -->|Authenticated bridge| API
-    Notification[NotificationService]
+  User[Browser] --> UI[Vercel React UI and same-origin API proxy]
+  subgraph APIHost[Oracle ARM64 API role]
+    Node[Node: accounts inventory evidence workspaces]
+    Services[Device / Identity / Analytics]
+    Node --> Services
   end
-  API --> AppDB[(Dashboard PostgreSQL)]
-  Identity --> AppDB
-  Analytics --> AppDB
-  Notification --> AppDB
-  Notification --> Mail[Configured email provider]
-  Device --> DeviceDB[(Device PostgreSQL)]
-  Telemetry --> TelemetryDB[(Telemetry PostgreSQL)]
-  API --> Redis[(Redis Cloud TLS)]
-  Device --> Redis
-  Device -->|OAuth HTTPS| AAS[Six private BaSyx services]
-  API -->|Role-checked standards gateway| AAS
-  AAS --> BaSyxDB[(BaSyx PostgreSQL)]
-  Pi[Factory Pi gateway] -->|MQTT TLS| Broker[CloudAMQP]
-  Direct[Scoped native MQTT device] --> Broker
+  subgraph WorkerHost[Oracle singleton worker role]
+    Telemetry[.NET telemetry intake and durable outbox]
+    Notifications[.NET inbox email delivery]
+  end
+  UI --> Node
+  Node --> DB[(Dashboard PostgreSQL)]
+  Node --> Redis[(Redis fan-out)]
+  Services --> PrivateDB[(Device PostgreSQL)]
+  Services --> AAS[Private BaSyx services and registries]
+  Telemetry --> Queue[(Telemetry PostgreSQL)]
+  Telemetry -->|Authenticated telemetry and status receipts| Node
+  Notifications --> DB
+  Notifications --> Mail[Configured email provider]
+  Gateway[Pi: adapters and persistent spool] --> Broker[Mosquitto on Oracle - TLS]
+  Direct[Individually commissioned direct devices] --> Broker
   Broker --> Telemetry
-  Device -->|Scoped commands| Broker
-  Broker --> Pi
 ```
 
-## Production deployment topology
+The same non-root backend image runs four API processes and two worker processes, selected by the compatibility variable `RENDER_SERVICE_ROLE`. Production uses the existing Oracle Compose stack; the historical variable name does not imply Render hosting. The worker remains single-instance. PostgreSQL and Redis retain their configured providers; MQTT runs in the separate Oracle Mosquitto container alongside the private BaSyx/Caddy stack. The React UI is a separate static Vercel artifact.
 
-Supervisor activates the API and worker processes using the retained `RENDER_SERVICE_ROLE` compatibility variable. On Oracle the API role runs behind Caddy; internal service ports are private and diagnostic binds are loopback-only. The worker remains exactly one instance because it owns the persistent MQTT session. Application state lives in PostgreSQL, while the edge spool and telemetry outbox preserve retryable deliveries. Redis Pub/Sub provides transient fan-out rather than durable records.
+The [Oracle runbook](https://github.com/DruHustle/smart-factory/blob/52b4e4207cb7ceb27f419a3548887e63094d83af/smart-factory-frontend/deploy/oracle/README.md) owns deployment, image identity, additive migrations, API-first ordering and rollback. Independent Vercel Git deployment for main remains disabled. The legacy Render workflow stays gated off. Repository protection is inspected independently and is not implied by a workflow.
 
-The previous Render services are suspended. Backend image updates currently follow the manual Oracle runbook: qualify a pinned ARM64 image, preserve protected runtime settings, stop the singleton worker, update and verify the API, then start one worker and verify MQTT delivery. The Vercel frontend release workflow waits for matching main-source CI. Shared hosting is a single failure domain and does not establish high availability. See the [visual deployment guide](deployment.md) and [current Oracle source runbook](https://github.com/DruHustle/smart-factory-iot-frontend/blob/main/deploy/oracle/README.md).
+## Identity, scope and evidence
 
-## Assets and AAS
+The Node API checks bcrypt passwords and issues eight-hour HttpOnly cookie sessions. Protected requests reload current role, disabled state, session generation, recovery restriction and revocation. Sockets retain identity and expiry; delegated .NET routes independently enforce the persisted session. Unsafe cookie requests enforce exact allowed origins. Secrets never enter browser state or published profiles.
 
-The Devices page registers connectivity records as either `gateway` or `edge_device`. Both are devices; industrial equipment represented by an AAS belongs under Assets and can be mapped to a gateway.
+Public registration and password-recovery requests are rate limited. A pending registration cannot sign in. An individual administrator verifies the applicant, chooses Viewer, Operator, Engineer or Admin, and approves or rejects the request. Password recovery uses an expiring, single-use email link when delivery is configured; the database stores only its token hash and an encrypted delivery payload. The existing mail worker sends the link using its configured provider and recipient policy. An administrator can also verify identity and issue a temporary credential through an approved private channel. Shared demo administrators cannot review account requests. See [account access](https://github.com/DruHustle/smart-factory/blob/52b4e4207cb7ceb27f419a3548887e63094d83af/smart-factory-frontend/docs/account-access.md).
 
-An industrial asset is distinct from an edge gateway. Quick Create sends validated equipment identity to the private DeviceService, which generates IDTA template instances, registers them with the AAS and Submodel Repositories, and returns the canonical documents for application persistence. BaSyx can register descriptors automatically with the AAS and Submodel Registries. Import Package uploads a bounded multipart `.aasx`; DeviceService validates OPC relationships and supported AAS core JSON/XML, registers each shell, submodel, and concept description, and stores the original package in the AASX File Server. The generated AAS Core 3.1 C# SDK validates models through a compatibility view for v3.2 administrative timestamps; this is not full v3.2 metamodel conformance. Node associates returned shell documents with asset rows in the same PostgreSQL database. Imported shells preserve their vendor package and cannot be overwritten through the form editor. `asset_devices` maps an asset to a gateway, protocol, endpoint, and tag/register mappings. Credentials are not stored in endpoint URLs or published mappings. Lifecycle history remains an application audit log.
+Approved individual accounts retain their role-scoped operational access when they select Live, including on an origin that also offers shared demo accounts. Reserved demo identities and individuals selecting Demo read only approved demonstration records. Their editable sandbox stores simulated changes in the browser; it does not write operational inventory or shared fixtures. Central actor checks run before writes and publishers. Raw HTTP, exports, downloads and delegated services follow the same identity and workspace boundary. Fixture targets remain read-only for individual users too. The [access guide](https://github.com/DruHustle/smart-factory/blob/52b4e4207cb7ceb27f419a3548887e63094d83af/smart-factory-frontend/docs/access-and-publication.md) documents bootstrap, recovery, disable/revoke and public passport publication.
 
-The full standards API is not reimplemented in tRPC. `/api/aas/*` authenticates the application session, requires the engineer or admin role, and proxies methods to the configured AAS component using an OAuth client-credentials token. Repository, submodel, registry, and file-service URLs are configured independently. The dashboard gateway and DeviceService can resolve the token endpoint from OIDC discovery or use an explicit token URL; an optional scope is sent with the token request. This allows company endpoints to be changed through deployment configuration. Public IDTA demonstrators remain test targets and are not production data stores. If no AAS service is configured, the gateway returns `503`; dashboard asset records and JSON export remain available from PostgreSQL. DeviceService publishes retained QoS 1 complete desired-state profiles and short-lived non-retained ADA031 V4 jog commands to CloudAMQP gateway command topics. The dashboard signs a short-lived engineer/admin token after checking the current database role, and DeviceService enforces that role on its control route. The Pi applies profiles atomically and only accepts an ADA031 command for an exact local allowlisted asset ID and matching `ada031_v4_serial` profile. Its one-byte USB serial write acknowledgement is not physical-motion feedback. The WROVER cannot access CloudAMQP; only its Pi gateway consumes that gateway's command topic. CloudAMQP requires TLS and scoped service/gateway credentials. The Pi-local Mosquitto broker uses TLS and per-sensor publish-only ACLs; the WROVER has no cloud credentials. Its optional Pi-local command subscription accepts only commissioned bounded GPIO pulses. Eligible native MQTT devices can connect directly to CloudAMQP with individual TLS identities and per-device ACLs; the backend receives both direct and gateway-originated telemetry. CAEX 3.0 export is available for the asset hierarchy, but it omits machine address mappings and is not validated against AutomationML OWL/SHACL recommendations.
+Assets, independent devices, gateways and equipment share one typed inventory. AAS, source, gateway and representation links are explicit and separate. Registration saves identity and software configuration; broker credentials, profile application and physical commissioning are distinct outcomes. Incoming samples never rewrite commissioned topology or automatically create operational inventory.
 
-This is an asset lifecycle, telemetry, and gateway configuration platform, not a safety-rated control system. It must not perform emergency-stop, guarding, interlock, or other protective functions. Keep those functions independent and complete a site-specific risk assessment and validation before production use.
+Telemetry retains acquisition and receipt time, mode, quality, source units, canonical conversion evidence and observed route. Scope is applied before latest sample selection or SQL aggregation. Explicit live mode is subject to source-specific quality, retained-delivery, lateness, clock-skew and monotonic-state policy before changing current status or threshold incidents. Historical evidence stays inspectable. Unknown legacy units remain unknown; unknown-unit thresholds require review.
 
-When no assets exist, `ENABLE_DEMO_DATA=true` provides the initial demo-data setting and can seed example assets through the API/database layer. Administrators can subsequently change the persisted deployment-wide setting from the Overview page; all replicas refresh it from PostgreSQL. Browser code does not contain fallback equipment records. Local development may build local AAS JSON when the provisioner URL is absent; production asset creation fails closed until the private .NET provisioner is configured.
+Process incidents retain initial/latest evidence snapshots and append-only review activity. Offline connectivity does not automatically establish confirmed factory downtime. Cybersecurity owns separate findings and investigation histories; unobserved collectors remain unknown, and zero findings is not a security certificate.
 
-## Identity and access
+## Representation and integrations
 
-The Node API verifies bcrypt password hashes, issues an eight-hour HS256 JWT in an HttpOnly cookie, and reloads the current user role from PostgreSQL for protected requests. Cookie-authenticated unsafe requests with an `Origin` header must match the same origin or an exact allowed frontend origin. Browser code does not read or store the JWT. `viewer`, `operator`, `engineer`, and `admin` are the application roles. The AAS client-credentials identity is server-only and must be trusted by the AAS runtime's OIDC/ABAC configuration.
+AAS provisioning and package import preserve vendor documents, revisions, concepts and files. Dashboard-managed writes cannot bypass revision history through the standards gateway. AAS OAuth service credentials do not provide user SSO. See [authorization and AAS](https://github.com/DruHustle/smart-factory/blob/52b4e4207cb7ceb27f419a3548887e63094d83af/smart-factory-frontend/docs/authorization-and-aas.md) and [API flows](https://github.com/DruHustle/smart-factory/blob/52b4e4207cb7ceb27f419a3548887e63094d83af/smart-factory-frontend/docs/api-flows.md).
 
-## Demo data
+The Assistant reads only approved current guides and a bounded authorized evidence snapshot. It uses the same visibility and units policy and links to actual items/incidents. Local fallback remains available. It cannot control equipment or infer a physical cause from a threshold observation. Optional external-provider use is separately configured; UI qualification uses no provider.
 
-With demo data enabled, startup seeds a PostgreSQL-backed compressor, transformer, and Windformer wind turbine generator scenario when no live assets exist. Administrators can show or hide those persisted demo records with the Overview toggle without deleting them. The setting is stored centrally in PostgreSQL and refreshed across web replicas. The seed includes gateway connections, telemetry, alerts, template-based AAS documents, and lifecycle history. Windformer identity and operating measurements are synthetic, and the seeded 2.5 MW nameplate is a demo value. An idempotent upgrade adds Windformer to an existing demo scenario without replacing its records. Demo records are visibly simulated and cannot be lifecycle-edited. Demo login seeding remains independent.
+Public passports default to private preview. Authorized publication snapshots only selected reviewed fields and asset-appropriate guidance under a revocable public identity. Numeric asset IDs grant no public access. Onesa remains an optional versioned export with distinct external-consumer acceptance.
 
-The supplied `aas-specs-aasx-3.2.0.zip` includes the IDTA-01005 package example, which demonstrates generic shells, submodels, and embedded files. It does not define a Windformer machine model. The import UI renders the imported shell, nested elements, semantic identifiers, concept descriptions, and file references from the package; Windformer is generated separately from the application's IDTA template builder and its synthetic telemetry is marked as demo data.
+## Named factories, layouts, demonstration and industrial diagnostics
 
-The ADA031 V4 controller has bounded jog, calibrated repeat, demonstration, operational stop, and neutral commands—not arbitrary motion setpoints. Each engineer/admin action publishes an expiring command; the Pi checks the local asset allowlist and protocol profile, then writes one allowlisted ASCII byte at 9600 baud. The connected firmware supplies software clamps and controller telemetry, but the application cannot confirm actual position, mechanical travel, or completed movement. The first USB serial open can reset the board and move its five controlled servos to 90°. General industrial motion, speed/angle setpoints, and software emergency stops are not implemented. Gateway and direct-MQTT telemetry paths are both supported; use a gateway for local protocols/control and use direct MQTT only for native-network devices with device-scoped TLS credentials and ACLs. An application command is not a safety-rated emergency stop; emergency-stop and safe-torque functions require a machine-specific safety design and independent safety hardware. See [EU Machinery Regulation 2023/1230](https://eur-lex.europa.eu/eli/reg/2023/1230/oj) and [IEC 60204-1](https://webstore.iec.ch/en/publication/71256).
+Named factories link measured placements to the canonical assets/devices/equipment records. Engineer/Admin create factories and add inventory; Admin confirms inventory deletion. The team shares saved versions under existing permissions. Atomic database triggers retain attributed factory, inventory, connection and workflow changes in append-only activity. Shared demo identities use a resettable browser adapter. See [named factories](https://github.com/DruHustle/smart-factory/blob/52b4e4207cb7ceb27f419a3548887e63094d83af/smart-factory-frontend/docs/named-factories.md).
 
-## Storage and operations
+The complete authorized floor loads automatically in 3D, with seven illustrative reference-model families and an accessible plan fallback. Original material groups, environment reflections, surface finishes and adaptive shadows improve equipment readability. Geometry represents equipment types; it is not surveyed plant CAD or proof of installed hardware.
 
-- The dashboard API uses PostgreSQL through Drizzle ORM. Production uses Aiven with `DATABASE_SSL_MODE=verify-full` and the provider CA in `DATABASE_CA_CERT`; local Compose uses local PostgreSQL with TLS disabled.
-- Production Redis Cloud URLs must use `rediss://`; Redis Pub/Sub is transient notification transport, not durable application data.
-- Keep CloudAMQP MQTT (port 8883/TLS) and AMQPS credentials on backend services and the Pi gateway only. The WROVER receives distinct local Mosquitto credentials and the Pi broker CA.
-- Store `JWT_SECRET`, `INGESTION_API_TOKEN`, AAS OAuth client secret, database credentials, broker credentials, and machine protocol credentials in a secret manager or protected runtime variables.
-- Keep the AAS Environment and its database on a private network. Expose `/api/aas/*` only through the Node role-checking gateway.
-- The E2E script uses a disposable PostgreSQL container and does not connect to the developer's `.env.local` database.
+Users grab an item to move its layout position and grab empty floor to pan. Space pans over items; right-drag or Shift-drag rotates; scrolling/pinching zooms. Fullscreen retains the scene and placement. Layouts record floor dimensions, zones, positions and rotations. Individual accounts save versioned, scoped layouts with stale-save protection; demo drafts and simulated edits remain browser-local. See [factory layouts](https://github.com/DruHustle/smart-factory/blob/52b4e4207cb7ceb27f419a3548887e63094d83af/smart-factory-frontend/docs/factory-layouts.md), [editable sandbox](https://github.com/DruHustle/smart-factory/blob/52b4e4207cb7ceb27f419a3548887e63094d83af/smart-factory-frontend/docs/editable-demo.md) and [current screenshots](https://github.com/DruHustle/smart-factory/blob/52b4e4207cb7ceb27f419a3548887e63094d83af/smart-factory-frontend/docs/release-evidence.md).
 
-The dashboard's core HTTP/API path, PostgreSQL sessions/roles, AAS revision checks, and login throttling are shared across replicas. WebSocket broadcasts use Redis Pub/Sub and authenticated upgrade checks, so AAS change notifications reach clients connected to any dashboard replica. Notifications and email retries are durable in PostgreSQL. Production grouping uses persisted asset metadata; the former process-local device-group API has been removed. Set `TRUST_PROXY` to known ingress addresses only; its default is disabled.
+OPC UA FX describes interoperable AutomationComponents, FunctionalEntities and logical connections, with OPC UA PubSub process-data exchange. TSN provides profile-dependent Ethernet timing and traffic capabilities. **Operations → FX & TSN** shows bounded reported diagnostics and four labelled demo scenarios; missing or stale timing stays unknown. A commissioned collector or authorized manual import supplies reports. The dashboard does not configure controllers or network schedules, carry the local control loop, or certify deterministic delivery. Existing OPC UA polling and MQTT ingestion remain separate telemetry paths. See the [FX/TSN guide and diagram](https://github.com/DruHustle/smart-factory/blob/52b4e4207cb7ceb27f419a3548887e63094d83af/smart-factory-frontend/docs/fx-tsn.md).
 
-The Dashboard summarizes the asset fleet; Live Monitoring shows connectivity and latest readings; Alerts combines incident response and searchable records; Analytics aggregates persisted samples attributed to AAS assets. Threshold repeats escalate an existing incident instead of creating duplicates. Operators acknowledge incidents; assigned engineers record confirmed downtime and resolve their incidents, with admin override. Communication loss alone is not production downtime. Mean downtime-to-resolution includes only incidents with both timestamps.
+Digital passports support printing the reviewed public reference or a locally simulated demo passport. Operational publication still requires explicit authorization and selected-field review; private administration/deployment details stay outside public passports. See [access and publication](https://github.com/DruHustle/smart-factory/blob/52b4e4207cb7ceb27f419a3548887e63094d83af/smart-factory-frontend/docs/access-and-publication.md).
 
-The read-only Assistant uses approved focused guides and a bounded database snapshot. Its optional server-side Onesa connection uses a configurable model provider; credentials stay on the server. The UI shows context capture time and source excerpts. If the provider is disabled or unavailable, local guides and available data remain usable. Connection endpoints, full AAS packages, account details, and controls are excluded. See [Assistant configuration and data boundaries](assistant.md).
+## Operations and acceptance
 
-Application user sign-in currently uses the built-in email/password and role model. `AAS_OIDC_*` configures service-to-service client credentials for the AAS runtime; it does not enable Entra user SSO. See [the AAS OIDC configuration guide](authorization-and-aas.md#entra-id-for-aas-service-credentials) for the required app registrations and environment settings.
+The runtime contract checks build source identities, required capabilities and applied migration hashes. UI compatibility checks occur before authenticated workflows. Promotion additionally requires a recent compatible singleton-worker receipt, exact schema compatibility and a final current-main check after building. A ready API alone establishes none of these contracts and does not establish physical equipment availability.
 
-See [authorization and AAS](authorization-and-aas.md), [API flows](api-flows.md), and the [deployment guide](../RENDER_DEPLOYMENT.md) for configuration details.
+Accepted telemetry survives restart in the independent worker outbox; the edge persists before MQTT publication and removes entries only after broker acknowledgement. Duplicate deliveries do not create duplicate current effects. Operating evidence shows backlog depth and oldest known queue acceptance, quarantine/rejections, collector receipt times and email failures. Missing/stale worker receipts mean current queue state is unknown. Provider acceptance does not prove mailbox delivery. Backup age remains unknown without verified evidence.
 
-## Recovery and analytics limits
+Analytics uses complete-range SQL summaries and bounded buckets with visible gaps, with separately bounded/paginated details and explicit completeness metadata. Polling pauses hidden/offline work, backs off stale sources and retains a bounded authorized fast mode. The primary database connection budget remains unchanged.
 
-The Pi queues normalized telemetry privately on disk before cloud publication and removes it only after PUBACK. The backend persists before MQTT acknowledgement; an independent outbox retries dashboard and AMQP delivery. Stable ingestion/event identities tolerate replay. The dashboard rejects unlinked asset attribution and retains named asset signals. Factory downtime requires explicit confirmation; acknowledged incidents remain open until resolved.
-
-Asset analytics currently caps a query at 93 days and 200,000 samples, with explicit errors instead of silent truncation. Gateway time-bucket aggregation runs in PostgreSQL and ignores null readings. Production retention, rollups, load budgets, recovery objectives, and event-consumer idempotency still require acceptance evidence in the relevant deployment environment.
+Only an explicit CLI seeds demonstration fixtures in guarded disposable storage. Viewing never seeds. Simulations retain their source mode; physical examples remain separate. Physical commissioning, hardware performance, Onesa acceptance and production promotion require separate evidence.

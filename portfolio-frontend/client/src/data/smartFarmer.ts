@@ -23,7 +23,7 @@ export const smartFarmerProject = {
     architecture: [
       { title: "Experiences", desc: "Independent responsive web/PWA and native Android, iPhone and iPad", icon: null },
       { title: "Farm API", desc: "Versioned /v1 API with farm roles and PostgreSQL transactions", icon: null },
-      { title: "Edge", desc: "Independent Node-RED adapters and Python/transport gateways", icon: null },
+      { title: "Edge", desc: "Optional Node-RED/Python signed-HTTPS observation path; separate equipment/camera gateways", icon: null },
       { title: "Equipment & cameras", desc: "HTTP, MQTT, Modbus, ONVIF/RTSP and verified-command lifecycle", icon: null },
       { title: "Storage", desc: "PostgreSQL, private object/media storage and durable offline queues", icon: null },
       { title: "Commerce", desc: "Farm-scoped marketplace, hire workflows and manually recorded payments", icon: null },

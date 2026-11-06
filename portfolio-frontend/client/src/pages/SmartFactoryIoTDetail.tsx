@@ -208,15 +208,18 @@ export default function SmartFactoryIoTDetail() {
               System architecture
             </h2>
             <p className="mx-auto mb-8 mt-4 max-w-3xl text-center leading-relaxed text-slate-300">
-              The Vercel interface connects to Oracle-hosted API services and
-              a separate singleton telemetry/notification worker. Optional
-              Node-RED adapters and the Python gateway preserve source identity
-              and durable acquisition; BaSyx and managed data services support
-              asset identity. Safety-rated control remains on the factory LAN.
+              Node-RED provides optional protocol adapters and transformations. Local
+              Mosquitto passes their observations to the Python edge agent for
+              source identity, validation, provenance, durable SQLite queuing
+              and command-policy enforcement. Python publishes over TLS to
+              Mosquitto on Oracle; the singleton worker persists and forwards
+              telemetry to the application API. Optional read-only security
+              collection uses a separate HTTPS path. Python AI advisory capability is in active development;
+              production inference is not verified by this review. Safety-rated control stays local.
             </p>
             <ArchitectureDiagram
               path="images/smart_factory_arch.svg"
-              alt="Smart Factory production architecture with Node-RED and Python edge acquisition, MQTT, Oracle API and singleton worker, Vercel, managed data and BaSyx"
+              alt="Smart Factory architecture: Node-RED, local Mosquitto, Python identity validation provenance queue and command policy, Oracle Mosquitto, API and singleton worker"
               width={1672}
               height={941}
             />

@@ -148,7 +148,9 @@ export default function SmartFarmerDetail() {
             </h2>
             <p className="mx-auto mb-6 max-w-3xl text-center leading-relaxed text-slate-400">
               Independent web and native clients connect to the farm-scoped API,
-              PostgreSQL and private media. Farm gateways validate equipment and
+              PostgreSQL and private media. The optional Python observation agent
+              validates identity and schema, uses a SQLite outbox, and sends
+              signed HTTPS; it has no remote-start/stop API. Separate gateways handle
               camera observations. Production hosting, physical commissioning
               and payment-provider activation remain separate release gates.
             </p>

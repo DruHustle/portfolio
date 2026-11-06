@@ -285,75 +285,130 @@ footer {
     text-decoration: none;
   }
 }
-</style></head><body><a class="skip" href="#main-content">Skip to guide</a><header><p>Smart Factory / Engineering Documentation</p><nav aria-label="Guide navigation"><a href="../../#/projects/smart-factory/documentation">Back to Documentation</a><a href="database-schema.pdf">PDF edition</a></nav></header><main id="main-content" tabindex="-1"><h1 id="application-database-schema">Application Database Schema</h1><nav aria-label="Contents"><strong>In this guide</strong><ul><li><a href="#incident-response-and-downtime-records">Incident response and downtime records</a></li><li><a href="#durable-incident-notifications">Durable incident notifications</a></li></ul></nav>
+</style></head><body><a class="skip" href="#main-content">Skip to guide</a><header><p>Smart Factory / Engineering Documentation</p><nav aria-label="Guide navigation"><a href="../../#/projects/smart-factory/documentation">Back to Documentation</a><a href="database-schema.pdf">PDF edition</a></nav></header><main id="main-content" tabindex="-1"><h1 id="application-database-schema">Application Database Schema</h1><nav aria-label="Contents"><strong>In this guide</strong><ul><li><a href="#current-edge-and-broker-responsibilities">Current edge and broker responsibilities</a></li><li><a href="#incident-response-and-downtime-records">Incident response and downtime records</a></li><li><a href="#durable-incident-notifications">Durable incident notifications</a></li><li><a href="#trusted-observation-and-access-additions">Trusted observation and access additions</a></li><li><a href="#factory-layouts-and-fxtsn-diagnostics">Factory layouts and FX/TSN diagnostics</a></li><li><a href="#named-factories-and-retained-activity">Named factories and retained activity</a></li></ul></nav>
+<h2 id="current-edge-and-broker-responsibilities">Current edge and broker responsibilities</h2>
+<p>Source review: <strong>6 November 2026</strong>, canonical Smart Factory commit <code>52b4e4207cb7ceb27f419a3548887e63094d83af</code>. The current <a href="https://github.com/DruHustle/smart-factory/blob/52b4e4207cb7ceb27f419a3548887e63094d83af/smart-factory-edge/raspberry-pi/README.md">Raspberry Pi gateway guide</a> specifies <strong>local Mosquitto on the Pi and production Mosquitto in a separate Oracle VM container</strong>. Older backend diagrams and staging runbooks contain superseded broker-provider references; the current edge guide and source-specific configuration take precedence. This documentation review is not a new inspection of the VM or physical commissioning.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr class="header">
+<th>Component</th>
+<th>Responsibility and limits</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Node-RED (optional)</td>
+<td>Protocol/vendor adapters and transformations. Per-source commissioning and publish-only local broker ACLs; no cloud credentials or actuator authority. Existing native Python drivers remain available.</td>
+</tr>
+<tr class="even">
+<td>Python identity and validation</td>
+<td>Check allowed source/topic, schema, types, units and timestamps. Stamp gateway provenance; reject spoofed integration claims and preserve unverified/bad quality until approved.</td>
+</tr>
+<tr class="odd">
+<td>Python durable delivery</td>
+<td>Persist accepted observations in SQLite before acknowledging eligible local messages; retry across restarts/outages with original timestamps. Remove upstream QoS 1/2 entries only after the corresponding broker handshake. This is not an end-to-end exactly-once guarantee.</td>
+</tr>
+<tr class="even">
+<td>Python command policy</td>
+<td>Enforce authorized, commissioned targets and command expiry/replay protection. Safety interlocks and manual override stay at the machine. An acknowledgement is not physical feedback.</td>
+</tr>
+<tr class="odd">
+<td>Python cybersecurity</td>
+<td>Optional read-only SecurityCollector with an independent durable HTTPS path for identity, configuration, transport and certificate evidence. Disabled until its namespace/token is commissioned.</td>
+</tr>
+<tr class="even">
+<td>Python AI</td>
+<td>Read-only AI advisory capability is in active development. Development status does not establish enabled production inference; any AI component remains subject to source authorization and command policy.</td>
+</tr>
+<tr class="odd">
+<td>Oracle Mosquitto and worker</td>
+<td>TLS, dedicated credentials and scoped topics. The .NET worker independently persists/validates telemetry and retries application-API delivery. Redis is transient fan-out, not the durable telemetry record.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Direct MQTT devices need separate credentials, network reachability and device ACLs. The current Pi-only broker policy does <strong>not</strong> enable them. Node-RED and Python do not replace safety-rated controller functions. See <a href="https://github.com/DruHustle/smart-factory/blob/52b4e4207cb7ceb27f419a3548887e63094d83af/smart-factory-edge/deploy/node-red/README.md">Node-RED commissioning and Python security/AI scope</a>.</p>
 <p>The dashboard uses PostgreSQL with Drizzle ORM. The source of truth is drizzle/schema.ts; checked-in SQL migrations live in drizzle/.</p>
-<figure><a href="database-schema-1.svg" target="_blank" rel="noopener noreferrer" aria-label="Open full-size System flow"><img src="database-schema-1.svg" alt="System flow"></a><figcaption>System flow · Open the diagram for a full-size view.</figcaption></figure>
+<figure><a href="database-schema-1.svg" target="_blank" rel="noopener noreferrer" aria-label="Open full-size Current edge and broker responsibilities"><img src="database-schema-1.svg" alt="Current edge and broker responsibilities"></a><figcaption>Current edge and broker responsibilities · Open the diagram for a full-size view.</figcaption></figure>
 <h2 id="incident-response-and-downtime-records">Incident response and downtime records</h2>
 <figure><a href="database-schema-2.svg" target="_blank" rel="noopener noreferrer" aria-label="Open full-size Incident response and downtime records"><img src="database-schema-2.svg" alt="Incident response and downtime records"></a><figcaption>Incident response and downtime records · Open the diagram for a full-size view.</figcaption></figure>
 <p>Threshold-generated incidents use stable <code>SF-*</code> platform classifications. A vendor diagnostic code is stored as supplied when available. The engineer role provides technician assignment and resolution permissions; downtime is explicitly confirmed by the assigned engineer or administrator. A lost device connection does not automatically prove a factory outage. Existing records inferred by migration 0010 need operational review before use in downtime KPIs. Mean downtime-to-resolution uses only records with both downtime and resolution timestamps.</p>
 <div class="table-scroll"><table>
 <thead>
-<tr>
+<tr class="header">
 <th>Table</th>
 <th>Purpose</th>
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>users</td>
 <td>Local identity, bcrypt password hash in <code>password</code>, role, and sign-in timestamps. Never expose the hash in API responses.</td>
 </tr>
-<tr>
+<tr class="even">
+<td>account_requests</td>
+<td>Pending registration or password-help requests, safe applicant details, review status, reviewer and time. Registration hashes are erased after approval or dismissal.</td>
+</tr>
+<tr class="odd">
 <td>system_settings</td>
 <td>Durable application-wide settings changed by administrators. <code>demo_data_enabled</code> controls whether demo rows are included; replicas refresh it without requiring a deployment.</td>
 </tr>
-<tr>
+<tr class="even">
 <td>devices</td>
-<td>Connectivity devices. New registrations use enum type <code>gateway</code> or <code>edge_device</code>; legacy sensor/actuator/controller values remain readable. Includes status, location, firmware, and simulator marker. Migration <code>0015_melted_dragon_lord</code> adds <code>edge_device</code>.</td>
+<td>Connectivity devices. Registrations support gateways, edge devices, sensors, actuators and controllers. Includes status, location, firmware, and simulator marker. Migration <code>0015_melted_dragon_lord</code> adds <code>edge_device</code>.</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>assets</td>
 <td>Equipment identity, manufacturer name/designation, separate required postal fields, article and order codes, optional serial/rated values, lifecycle, current AAS JSON, monotonic AAS revision, and simulator marker.</td>
 </tr>
-<tr>
+<tr class="even">
 <td>asset_devices</td>
 <td>Asset-to-gateway protocol, endpoint, and tag/register mappings. Store credentials on the edge gateway, not in mappings.</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>asset_lifecycle_events</td>
 <td>Actor, transition, timestamp, and engineering note audit history.</td>
 </tr>
-<tr>
+<tr class="even">
 <td>asset_versions</td>
 <td>Append-only AAS snapshots keyed by asset and revision, with change note, actor, and SHA-256 integrity digest. Migration baseline rows have no digest because prior revisions were not recorded.</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>login_rate_limits</td>
 <td>Hashed IP/email identifiers, fixed-window counters, and expiration timestamps shared across application replicas.</td>
 </tr>
-<tr>
+<tr class="even">
 <td>sensor_readings</td>
 <td>Nullable measurements, AAS asset attribution, named signals, Unix epoch millisecond timestamps, and a unique ingestion digest for retry deduplication. Indexes cover asset/date and device/date queries.</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>alerts</td>
 <td>Stable platform/vendor error code, severity/status, metric observation, acknowledging actor/time, assigned engineer/time, confirmed downtime start, resolving actor/time, and lifecycle timestamps. Per-source transaction locks deduplicate threshold incidents by device/asset/metric; query indexes cover status/date and assignee/status.</td>
 </tr>
-<tr>
+<tr class="even">
 <td>alert_thresholds</td>
 <td>Enabled per-device warning and critical bands used to classify telemetry into incidents.</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>firmware_versions, ota_deployments</td>
 <td>Firmware catalog metadata and legacy rollout rows. OTA is disabled; a rollout row is not proof that a device downloaded, verified, installed, or booted a release.</td>
 </tr>
 </tbody>
 </table></div>
-<p>Connection and lifecycle ids are application-level relationships, not database-enforced foreign keys in the current schema. Oracle-hosted BaSyx owns separate storage in the Aiven <code>basyx</code> PostgreSQL database; it is not part of the Drizzle application schema. Demo rows are marked <code>isDemo</code>; startup seeding remains conservative when live assets exist, while an explicit admin toggle can seed and reveal isolated demo records alongside them.</p>
+<p>Connection and lifecycle ids are application-level relationships, not database-enforced foreign keys in the current schema. Oracle-hosted BaSyx owns separate storage in the Aiven <code>basyx</code> PostgreSQL database; it is not part of the Drizzle application schema. Demo rows are marked <code>isDemo</code>; startup and viewing never seed. An explicit local CLI creates isolated showcase fixtures. Administrators control visibility separately; shared identities see only approved demo records.</p>
 <p>Review migration SQL before applying changes. Set DATABASE_URL to the intended database before running pnpm db:migrate. pnpm e2e uses its own disposable PostgreSQL container.</p>
 <h2 id="durable-incident-notifications">Durable incident notifications</h2>
 <p>Migration <code>0013_incident_notifications</code> adds <code>notification_inbox</code> and an alert trigger. In the alert transaction, new warning/critical incidents and critical escalations notify current engineers/admins; assignment changes notify new/previous assignees and admins; resolution notifies the assigned technician/admins. Migration <code>0016_vengeful_victor_mancha</code> makes the alert link nullable so the same durable queue can carry account-created welcome mail without inventing an incident. The trigger does not backfill historical incidents or emit duplicate messages on unrelated incident updates.</p>
 <p>Each row belongs to one account, optionally links to an alert, and retains title/body, read time, email status, attempts, next attempt time, safe error summary and provider acceptance time. Foreign-key cascades remove rows when their account or associated alert is deleted. The delivery worker atomically claims due rows using a two-minute lease and retries after a crash. <code>accepted</code> means the provider accepted the request, not that the email reached a mailbox. Eight failed attempts become <code>failed</code>; an authorized owner may retry an incident message after correcting configuration. <code>unconfigured</code> and <code>no_recipient</code> remain visible for incident messages; account welcome rows are email-only and do not appear in the incident inbox.</p>
 <p>The inbox is queryable only by its owner. Reads do not acknowledge/resolve the factory incident. Email-provider credentials, sender identity and recipient policy are runtime secrets/configuration, not editable browser notification settings. Plan retention/archive policies for both telemetry and inbox history before long-term production operation.</p>
-<p>Migration <code>0014_account_email_identity</code> adds a case-insensitive unique email index. Null emails remain allowed for legacy identity records. Existing duplicate case-folded email addresses must be reconciled by an administrator before migration. Production self-registration is closed; further accounts are created by an authenticated administrator after private first-admin bootstrap. Passwords are never included in account API responses.</p>
-</main><footer>Andrew Gotora · Engineering reference · Source review: 21 October 2026</footer></body></html>
+<p>Migration <code>0014_account_email_identity</code> adds a case-insensitive unique email index. Null emails remain allowed for legacy identity records. Existing duplicate case-folded email addresses must be reconciled by an administrator before migration. Migration <code>0033_account_requests</code> adds a pending review queue; registration creates no user or session until an individual administrator verifies the applicant and approves a selected role. The review and assigned role are recorded in the audit trail. Migration <code>0034_password_reset_tokens</code> adds single-use recovery records tied to the account access version and email address. Only a SHA-256 token hash is stored in clear; a separate AES-GCM payload lets the existing mail worker deliver the link without exposing it through notification inbox APIs. Delivery clears that payload, while expiry, consumption and account changes prevent later redemption. Passwords and raw reset tokens are never included in account API responses. Administrator-assisted recovery remains available after identity verification.</p>
+<h2 id="trusted-observation-and-access-additions">Trusted observation and access additions</h2>
+<p>Migrations 0024–0028 add disabled/recovery/session-generation state, hashed session revocations, immutable selected-field passport publications, engineering conversion metadata, reviewed threshold units, bounded ingestion quarantine with continuing counters, incident snapshots and append-only review history, acquired/received gateway observations, and a singleton authenticated worker-status receipt. Acquisition time, receipt time, current eligibility and evidence mode are separate fields.</p>
+<p>Scopes precede sample selection and aggregation. Source values, units, conversion version and quality remain inspectable. Unitless thresholds require review. Passport publication is explicit and revocable. Runtime checks compare migration hashes with the applied ledger.</p>
+<h2 id="factory-layouts-and-fxtsn-diagnostics">Factory layouts and FX/TSN diagnostics</h2>
+<p>Migration <code>0031_factory_layouts</code> adds <code>factory_layouts</code>: UUID identity, owning user (with delete cascade), <code>live</code>/<code>configured</code> scope, name, JSON document, positive version, archive time and creation/update timestamps. The owner/scope/update index supports bounded layout listing. Saves check the expected version to reject stale updates. Geometry is visualization state, separate from asset identity, physical commissioning and telemetry history. Shared demo layout drafts and editable sandbox changes stay browser-local; they are not rows in this table. See <a href="https://github.com/DruHustle/smart-factory/blob/52b4e4207cb7ceb27f419a3548887e63094d83af/smart-factory-frontend/docs/factory-layouts.md">factory layouts</a> and <a href="https://github.com/DruHustle/smart-factory/blob/52b4e4207cb7ceb27f419a3548887e63094d83af/smart-factory-frontend/docs/editable-demo.md">editable demo</a>.</p>
+<p>FX/TSN reports use the existing <code>system_settings</code> JSON storage under a hashed <code>network-diagnostics:</code> gateway key; there is no separate diagnostics migration or high-rate packet-history table. The stored envelope contains the validated report, import time and actor. Each registered operational gateway retains one newest report, and an older replacement is rejected. Responses are bounded to 128 gateways and report coverage and staleness explicitly. Demo scenarios are synthetic examples, separate from operational reports. See <a href="https://github.com/DruHustle/smart-factory/blob/52b4e4207cb7ceb27f419a3548887e63094d83af/smart-factory-frontend/server/network-diagnostics/store.ts">the diagnostics store</a> and <a href="https://github.com/DruHustle/smart-factory/blob/52b4e4207cb7ceb27f419a3548887e63094d83af/smart-factory-frontend/docs/fx-tsn.md">FX/TSN report contract</a>.</p>
+<h2 id="named-factories-and-retained-activity">Named factories and retained activity</h2>
+<p>Migration <code>0032_named_factories</code> adds shared <code>factories</code>, canonical membership/placements in <code>factory_items</code>, and <code>factory_activity</code>. Each member references exactly one existing asset or device; native equipment uses its backing asset. Membership has unique record identity and a per-factory, case-insensitive tag. Physical dimensions, position and rotation are validated before saving. Optimistic factory versions protect concurrent team edits.</p>
+<p>Factory, membership and canonical inventory triggers record safe before/after values with a transaction-local authenticated actor. Connection changes omit endpoint/mapping values; related thresholds, incident state, model revisions/scenarios, OTA metadata and passport publication events use explicit safe projections. Ordinary UPDATE/DELETE against retained activity is rejected; no application edit/delete endpoint or automatic purge exists. Canonical inventory deletion cascades its placement while retaining factory history. Operational rows are not backfilled or renamed. Existing personal layout tables remain separate. <a href="https://github.com/DruHustle/smart-factory/blob/52b4e4207cb7ceb27f419a3548887e63094d83af/smart-factory-frontend/docs/named-factories.md">Roles and workflow</a>.</p>
+<figure><a href="database-schema-3.svg" target="_blank" rel="noopener noreferrer" aria-label="Open full-size Named factories and retained activity"><img src="database-schema-3.svg" alt="Named factories and retained activity"></a><figcaption>Named factories and retained activity · Open the diagram for a full-size view.</figcaption></figure>
+</main><footer>Andrew Gotora · Engineering reference · Source review: 6 November 2026</footer></body></html>

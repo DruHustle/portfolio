@@ -285,33 +285,54 @@ footer {
     text-decoration: none;
   }
 }
-</style></head><body><a class="skip" href="#main-content">Skip to guide</a><header><p>Smart Factory / Engineering Documentation</p><nav aria-label="Guide navigation"><a href="../../#/projects/smart-factory/documentation">Back to Documentation</a><a href="system-diagrams.pdf">PDF edition</a></nav></header><main id="main-content" tabindex="-1"><h1 id="smart-factory-system-diagrams">Smart Factory System Diagrams</h1><nav aria-label="Contents"><strong>In this guide</strong><ul><li><a href="#related-guides">Related guides</a></li><li><a href="#1-current-runtime">1. Current runtime</a></li><li><a href="#2-durable-telemetry">2. Durable telemetry</a></li><li><a href="#3-identity-and-aas-access">3. Identity and AAS access</a></li><li><a href="#4-asset-configuration-and-acknowledgement">4. Asset configuration and acknowledgement</a></li><li><a href="#5-incidents-and-durable-notifications">5. Incidents and durable notifications</a></li><li><a href="#6-release-flow">6. Release flow</a></li></ul></nav>
-<p>These visual flows show application, factory edge, service identity, and persistence boundaries. They complement the detailed architecture and API references.</p>
-<section class="references"><h2 id="related-guides">Related guides</h2><ul>
-<li><a href="architecture.html">Architecture</a></li>
-<li><a href="api-flows.html">API flows</a></li>
-<li><a href="database-schema.html">Database relationships</a></li>
-<li><a href="assistant.md">Assistant boundaries</a></li>
-<li><a href="https://github.com/DruHustle/smart-factory-iot-frontend/blob/main/deploy/oracle/README.md">Current Oracle source runbook</a></li>
-</ul><p>Source review: 21 October 2026.</p></section>
-
-
-<h2 id="1-current-runtime">1. Current runtime</h2>
-<figure><a href="system-diagrams-1.svg" target="_blank" rel="noopener noreferrer" aria-label="Open full-size 1. Current runtime"><img src="system-diagrams-1.svg" alt="1. Current runtime"></a><figcaption>1. Current runtime · Open the diagram for a full-size view.</figcaption></figure>
-<p>API and worker roles share one reviewed backend image on Oracle. The six BaSyx services retain their own configuration and data boundary. Render is a historical hosting path; it is not the current production tier.</p>
-<h2 id="2-durable-telemetry">2. Durable telemetry</h2>
-<figure><a href="system-diagrams-2.svg" target="_blank" rel="noopener noreferrer" aria-label="Open full-size 2. Durable telemetry"><img src="system-diagrams-2.svg" alt="2. Durable telemetry"></a><figcaption>2. Durable telemetry · Open the diagram for a full-size view.</figcaption></figure>
-<p>WROVER and serial controllers stay behind the Pi. Eligible native MQTT devices can use a direct path with individual credentials. A transient Redis notification is not a durable telemetry record. Publication acknowledgement and application persistence are separate checkpoints.</p>
-<h2 id="3-identity-and-aas-access">3. Identity and AAS access</h2>
-<figure><a href="system-diagrams-3.svg" target="_blank" rel="noopener noreferrer" aria-label="Open full-size 3. Identity and AAS access"><img src="system-diagrams-3.svg" alt="3. Identity and AAS access"></a><figcaption>3. Identity and AAS access · Open the diagram for a full-size view.</figcaption></figure>
-<p>Application identity and AAS service identity are distinct. Service credentials never grant a browser role. Form-managed AAS changes go through the versioned application workflow so direct standards writes cannot bypass revision history.</p>
-<h2 id="4-asset-configuration-and-acknowledgement">4. Asset configuration and acknowledgement</h2>
-<figure><a href="system-diagrams-4.svg" target="_blank" rel="noopener noreferrer" aria-label="Open full-size 4. Asset configuration and acknowledgement"><img src="system-diagrams-4.svg" alt="4. Asset configuration and acknowledgement"></a><figcaption>4. Asset configuration and acknowledgement · Open the diagram for a full-size view.</figcaption></figure>
-<p>QoS 1 publication does not establish that a gateway applied the profile. A configuration acknowledgement does not establish firmware installation or physical movement. Equipment controls require commissioned protocol adapters and remain separate from protective safety functions.</p>
-<h2 id="5-incidents-and-durable-notifications">5. Incidents and durable notifications</h2>
-<figure><a href="system-diagrams-5.svg" target="_blank" rel="noopener noreferrer" aria-label="Open full-size 5. Incidents and durable notifications"><img src="system-diagrams-5.svg" alt="5. Incidents and durable notifications"></a><figcaption>5. Incidents and durable notifications · Open the diagram for a full-size view.</figcaption></figure>
-<p>Connectivity loss alone does not start production downtime. Notification read state and incident acknowledgement are separate. Provider acceptance is not proof of mailbox delivery.</p>
-<h2 id="6-release-flow">6. Release flow</h2>
-<figure><a href="system-diagrams-6.svg" target="_blank" rel="noopener noreferrer" aria-label="Open full-size 6. Release flow"><img src="system-diagrams-6.svg" alt="6. Release flow"></a><figcaption>6. Release flow · Open the diagram for a full-size view.</figcaption></figure>
-<p>See the <a href="deployment.html">visual deployment guide</a> for configuration, rollout, and rollback. Backend updates are currently manual; the frontend workflow waits for matching source CI.</p>
-</main><footer>Andrew Gotora · Engineering reference · Source review: 21 October 2026</footer></body></html>
+</style></head><body><a class="skip" href="#main-content">Skip to guide</a><header><p>Smart Factory / Engineering Documentation</p><nav aria-label="Guide navigation"><a href="../../#/projects/smart-factory/documentation">Back to Documentation</a><a href="system-diagrams.pdf">PDF edition</a></nav></header><main id="main-content" tabindex="-1"><h1 id="smart-factory-system-diagrams">Smart Factory System Diagrams</h1><nav aria-label="Contents"><strong>In this guide</strong><ul><li><a href="#current-edge-and-broker-responsibilities">Current edge and broker responsibilities</a></li><li><a href="#acquisition-and-trusted-delivery">Acquisition and trusted delivery</a></li><li><a href="#python-policy-boundaries">Python policy boundaries</a></li><li><a href="#evidence-interpretation">Evidence interpretation</a></li><li><a href="#independent-applications">Independent applications</a></li></ul></nav>
+<h2 id="current-edge-and-broker-responsibilities">Current edge and broker responsibilities</h2>
+<p>Source review: <strong>6 November 2026</strong>, canonical Smart Factory commit <code>52b4e4207cb7ceb27f419a3548887e63094d83af</code>. The current <a href="https://github.com/DruHustle/smart-factory/blob/52b4e4207cb7ceb27f419a3548887e63094d83af/smart-factory-edge/raspberry-pi/README.md">Raspberry Pi gateway guide</a> specifies <strong>local Mosquitto on the Pi and production Mosquitto in a separate Oracle VM container</strong>. Older backend diagrams and staging runbooks contain superseded broker-provider references; the current edge guide and source-specific configuration take precedence. This documentation review is not a new inspection of the VM or physical commissioning.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr class="header">
+<th>Component</th>
+<th>Responsibility and limits</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Node-RED (optional)</td>
+<td>Protocol/vendor adapters and transformations. Per-source commissioning and publish-only local broker ACLs; no cloud credentials or actuator authority. Existing native Python drivers remain available.</td>
+</tr>
+<tr class="even">
+<td>Python identity and validation</td>
+<td>Check allowed source/topic, schema, types, units and timestamps. Stamp gateway provenance; reject spoofed integration claims and preserve unverified/bad quality until approved.</td>
+</tr>
+<tr class="odd">
+<td>Python durable delivery</td>
+<td>Persist accepted observations in SQLite before acknowledging eligible local messages; retry across restarts/outages with original timestamps. Remove upstream QoS 1/2 entries only after the corresponding broker handshake. This is not an end-to-end exactly-once guarantee.</td>
+</tr>
+<tr class="even">
+<td>Python command policy</td>
+<td>Enforce authorized, commissioned targets and command expiry/replay protection. Safety interlocks and manual override stay at the machine. An acknowledgement is not physical feedback.</td>
+</tr>
+<tr class="odd">
+<td>Python cybersecurity</td>
+<td>Optional read-only SecurityCollector with an independent durable HTTPS path for identity, configuration, transport and certificate evidence. Disabled until its namespace/token is commissioned.</td>
+</tr>
+<tr class="even">
+<td>Python AI</td>
+<td>Read-only AI advisory capability is in active development. Development status does not establish enabled production inference; any AI component remains subject to source authorization and command policy.</td>
+</tr>
+<tr class="odd">
+<td>Oracle Mosquitto and worker</td>
+<td>TLS, dedicated credentials and scoped topics. The .NET worker independently persists/validates telemetry and retries application-API delivery. Redis is transient fan-out, not the durable telemetry record.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Direct MQTT devices need separate credentials, network reachability and device ACLs. The current Pi-only broker policy does <strong>not</strong> enable them. Node-RED and Python do not replace safety-rated controller functions. See <a href="https://github.com/DruHustle/smart-factory/blob/52b4e4207cb7ceb27f419a3548887e63094d83af/smart-factory-edge/deploy/node-red/README.md">Node-RED commissioning and Python security/AI scope</a>.</p>
+<h2 id="acquisition-and-trusted-delivery">Acquisition and trusted delivery</h2>
+<figure><a href="system-diagrams-1.svg" target="_blank" rel="noopener noreferrer" aria-label="Open full-size Acquisition and trusted delivery"><img src="system-diagrams-1.svg" alt="Acquisition and trusted delivery"></a><figcaption>Acquisition and trusted delivery · Open the diagram for a full-size view.</figcaption></figure>
+<h2 id="python-policy-boundaries">Python policy boundaries</h2>
+<figure><a href="system-diagrams-2.svg" target="_blank" rel="noopener noreferrer" aria-label="Open full-size Python policy boundaries"><img src="system-diagrams-2.svg" alt="Python policy boundaries"></a><figcaption>Python policy boundaries · Open the diagram for a full-size view.</figcaption></figure>
+<h2 id="evidence-interpretation">Evidence interpretation</h2>
+<p>A broker receipt is not database persistence, a command receipt is not physical feedback, and an offline connection is not confirmed production downtime. Missing clocks, stale values and uncommissioned sources remain explicit. The browser Assistant and Python AI capability in active development are distinct; neither has implicit control authority.</p>
+<h2 id="independent-applications">Independent applications</h2>
+<p>Smart Logistics and Smart Farmer have their own Node-RED/Python, identities, storage and policies. Their documented Python observation paths send signed HTTPS, not Smart Factory's MQTT uplink. Farmer's optional Python path has no remote-start/stop API; its equipment/camera gateways are separate.</p>
+</main><footer>Andrew Gotora · Engineering reference · Source review: 6 November 2026</footer></body></html>
