@@ -206,7 +206,7 @@ export const smartFactoryCapabilities = [
   {
     title: "Python edge agent",
     description:
-      "Python authenticates allowlisted sources, validates payloads, units and timestamps, and stamps provenance. Its durable SQLite queue buffers accepted observations and retries delivery to Oracle-hosted Mosquitto over TLS. It enforces commissioned command policy, expiry and replay protection. Broker acknowledgement is not proof of backend persistence or physical action.",
+      "Python verifies allowlisted source identities, validates payloads, units and timestamps, and stamps provenance. Its durable SQLite queue buffers accepted observations and retries delivery to Oracle-hosted Mosquitto over TLS. It enforces commissioned command policy, expiry and replay protection. Broker acknowledgement is not proof of backend persistence or physical action.",
     icon: "health",
   },
 ];
