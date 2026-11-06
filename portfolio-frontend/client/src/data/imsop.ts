@@ -180,13 +180,7 @@ export const imsopCapabilities = [
   {
     title: "Signed logistics integrations",
     description:
-      "Validate configured carrier, GPS and IoT events, reject conflicting duplicates and retain field provenance through replay. Integration views distinguish configuration from receipt and connectivity evidence.",
-    icon: "integration",
-  },
-  {
-    title: "Independent warehouse & fleet edge",
-    description:
-      "Warehouse sensors, RFID/scanners and truck GPS can enter through dedicated Node-RED adapters and a Python durable queue. Signed HTTPS observations retain source and receipt times; physical commissioning and position accuracy remain unverified.",
+      "Independent Node-RED/Python gateways admit warehouse sensors and truck GPS through signed HTTPS with durable queues and workspace scope. Observations retain provenance; physical commissioning and accuracy remain unverified.",
     icon: "integration",
   },
   {

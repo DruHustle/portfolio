@@ -174,12 +174,6 @@ export const smartFactoryProject = {
 
 export const smartFactoryCapabilities = [
   {
-    title: "Whole-factory overview",
-    description:
-      "The evolving Overview is organized around Factory Floor, Floor Plan, Process/P&ID and Electrical views, with compact Telemetry trends, Factory Inventory and Infrastructure health views. Hardware metrics remain source-qualified.",
-    icon: "layers",
-  },
-  {
     title: "Operational evidence & incidents",
     description:
       "Follow trends with acquisition times, engineering units, quality and visible data gaps. Assign incidents, retain investigation notes and confirm downtime explicitly.",

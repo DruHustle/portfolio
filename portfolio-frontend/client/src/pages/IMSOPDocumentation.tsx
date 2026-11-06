@@ -11,8 +11,8 @@ export default function IMSOPDocumentation() {
       currentArchitecture={{
         path: "images/smart_logistics_arch.svg",
         alt: "Smart Logistics architecture with Vercel, Oracle gateway, signed warehouse sensors and fleet GPS edge, data and services",
-        width: 1440,
-        height: 920,
+        width: 974,
+        height: 740,
       }}
       currentStatus="The standalone logistics edge is a software and commissioning candidate. Warehouse sensors and truck GPS observations are signed and workspace-scoped; production migration and tested rollback remain gated."
       currentSummary={[

@@ -155,8 +155,8 @@ export default function IMSOPDetail() {
             <ArchitectureDiagram
               path="images/smart_logistics_arch.svg"
               alt="Smart Logistics architecture: React web, Oracle gateway, Node and .NET services, PostgreSQL, independent warehouse sensors and truck GPS edge"
-              width={1440}
-              height={920}
+              width={974}
+              height={740}
             />
           </section>
 
