@@ -36,6 +36,7 @@ export const smartFactoryProject = {
     "Source-aware telemetry, incident ownership and explicit downtime confirmation",
     "Versioned AAS/AASX assets, reviewed product passports and role-based access",
     "OT security investigations, grounded assistance and an isolated editable demo",
+    "A compact Overview with Factory Floor, Floor Plan, Process/P&ID, Electrical, Telemetry, Factory Inventory and Infrastructure views",
   ],
   solution: {
     architecture: [
@@ -56,7 +57,7 @@ export const smartFactoryProject = {
       },
       {
         title: "Acquisition",
-        desc: "MQTT TLS, Pi gateways, OPC UA, Modbus and serial",
+        desc: "Optional Node-RED adapters → Python edge validation and spool → MQTT TLS",
         icon: null,
       },
       {
@@ -97,6 +98,8 @@ export const smartFactoryProject = {
           "Modbus",
           "Raspberry Pi",
           "ESP32",
+          "Node-RED (candidate)",
+          "Python edge agent",
         ],
       },
       {
@@ -203,7 +206,7 @@ export const smartFactoryCapabilities = [
   {
     title: "Service health & recovery",
     description:
-      "Inspect dependency health, collector coverage, queue backlogs and recovery evidence. Durable edge and worker outboxes preserve accepted telemetry through interruptions.",
+      "Inspect infrastructure and application health, cybersecurity findings, collector coverage, queue backlogs and recovery evidence. Durable gateway and worker outboxes support retry through interruptions.",
     icon: "health",
   },
 ];
@@ -216,4 +219,5 @@ export const smartFactoryGuides = {
   network:
     "https://github.com/DruHustle/smart-factory/blob/main/smart-factory-frontend/docs/fx-tsn.md",
   demo: "https://github.com/DruHustle/smart-factory/blob/main/smart-factory-frontend/docs/editable-demo.md",
+  edge: "https://github.com/DruHustle/smart-factory/blob/main/smart-factory-edge/deploy/node-red/README.md",
 };

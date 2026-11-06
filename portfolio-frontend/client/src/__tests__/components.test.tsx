@@ -120,7 +120,7 @@ describe('ProjectService', () => {
   });
 
   it('should have consistent data across all projects', () => {
-    const projectIds = ['imsop', 'sap-btp-ai-hub', 'smart-factory-iot'];
+    const projectIds = ['smart-logistics', 'smart-farmer', 'sap-btp-ai-hub', 'smart-factory'];
     projectIds.forEach((id) => {
       const project = ProjectService.getProjectById(id);
       expect(project?.title).toBeDefined();
@@ -138,7 +138,7 @@ describe('ProjectService', () => {
  */
 describe('Project Data Validation', () => {
   it('should not have empty strings in project data', () => {
-    const projectIds = ['imsop', 'sap-btp-ai-hub', 'smart-factory-iot'];
+    const projectIds = ['smart-logistics', 'smart-farmer', 'sap-btp-ai-hub', 'smart-factory'];
     projectIds.forEach((id) => {
       const project = ProjectService.getProjectById(id);
       expect(project?.title).toBeTruthy();

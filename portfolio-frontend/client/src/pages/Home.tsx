@@ -455,23 +455,31 @@ export default function Home() {
             <p className="text-gray-700 text-lg max-w-2xl mx-auto mb-2">Industrial digitalization, enterprise integration, and applied AI in practice.</p>
             <p className="text-teal-700 font-medium text-sm">Click on projects below to discover more</p>
           </div>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
             {[
               {
                 title: "Smart Factory",
                 sub: "Digital Twins, Industrial Networks & Operations",
-                desc: "Interactive 3D factory layouts and equipment inspection, OPC UA FX/TSN diagnostics, AAS lifecycle, OT security, and evidence-aware operations.",
+                desc: "Whole-factory digital twins and equipment inspection, source-aware telemetry, AAS lifecycle, OT cybersecurity and FX/TSN diagnostics.",
                 tech: ["React", "Three.js", ".NET 10", "OPC UA FX", "TSN", "AAS"],
                 link: "/projects/smart-factory",
                 color:"from-orange-500 to-red-500"
               },
               {
                 title: "Smart Logistics",
-                sub: "Supply Chain Visibility, Exceptions & Purchasing",
-                desc: "Shipment tracking, durable exception review, purchase orders and partial warehouse receiving, with scoped analytics, maps and record-grounded assistance.",
-                tech: ["React", "Node.js", ".NET 8", "YARP", "PostgreSQL", "Docker"],
+                sub: "Supply Chain Visibility, Fleet & Warehousing",
+                desc: "Shipment tracking, exception review, purchasing and receiving, plus independent warehouse sensor and fleet GPS acquisition candidates.",
+                tech: ["React", "Node.js", ".NET 8", "GPS", "Node-RED", "PostgreSQL"],
                 link: "/projects/smart-logistics",
-                color: "from-cyan-500 to-teal-500" 
+                color: "from-cyan-500 to-teal-500"
+              },
+              {
+                title: "Smart Farmer",
+                sub: "Connected Agriculture & Rural Commerce",
+                desc: "Offline-first farm operations: irrigated crops, livestock, equipment, private cameras, marketplace and machinery hire across web and mobile.",
+                tech: ["React Native", "PostgreSQL", "MQTT", "Modbus", "ONVIF", "iOS / Android"],
+                link: "/projects/smart-farmer",
+                color: "from-emerald-500 to-green-700"
               },
               {
                 title: "Learning Hub",

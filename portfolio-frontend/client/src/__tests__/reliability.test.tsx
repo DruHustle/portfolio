@@ -37,6 +37,8 @@ describe("URL resolution", () => {
     ["imsop", "https://logistics.onesa.eu/"],
     ["sap-btp-ai-hub", "https://tech-learning-hub-app.vercel.app/"],
     ["smart-factory-iot", "https://factory.onesa.eu/"],
+    ["smart-logistics", "https://logistics.onesa.eu/"],
+    ["smart-factory", "https://factory.onesa.eu/"],
   ] as const)(
     "links %s to the live project instead of the portfolio",
     (project, expected) => {

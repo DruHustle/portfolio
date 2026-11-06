@@ -4,10 +4,18 @@ import { ArchitectureDiagram } from "@/components/ArchitectureDiagram";
 import { PageNavigation } from "@/components/PageNavigation";
 import { assetUrl } from "@/lib/urls";
 
+interface SourceGuide {
+  title: string;
+  description: string;
+  url: string;
+}
+
 interface Guide {
   title: string;
   description: string;
   name: string;
+  url?: string;
+  sources?: SourceGuide[];
 }
 
 interface ProjectDocumentationProps {
@@ -17,6 +25,10 @@ interface ProjectDocumentationProps {
   description: string;
   guides: Guide[];
   accent: "cyan" | "orange";
+  currentArchitecture?: { path: string; alt: string; width: number; height: number };
+  currentStatus?: string;
+  currentSummary?: string[];
+  sourceGuides?: SourceGuide[];
 }
 
 const operationalGuides: Guide[] = [
@@ -34,7 +46,7 @@ const operationalGuides: Guide[] = [
   },
 ];
 
-/** Both projects share guide formats, navigation, and visual treatment. */
+/** Preserve the established documentation layout; only project content varies. */
 export function ProjectDocumentation({
   project,
   slug,
@@ -42,6 +54,9 @@ export function ProjectDocumentation({
   description,
   guides,
   accent,
+  currentArchitecture,
+  currentStatus,
+  sourceGuides = [],
 }: ProjectDocumentationProps) {
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -60,6 +75,12 @@ export function ProjectDocumentation({
           badge: "bg-cyan-500/10 border-cyan-500/20 text-cyan-400",
           header: "via-blue-950",
         };
+  const displayedGuides: Guide[] = guides.length
+    ? guides.map((guide, index) => ({
+        ...guide,
+        sources: index === 0 ? sourceGuides : [],
+      }))
+    : sourceGuides.map((guide, index) => ({ ...guide, name: `source-${index}` }));
   const path = (name: string, extension: string) =>
     assetUrl(`/docs/${directory}/${name}.${extension}`);
   const card = (guide: Guide, visual = false) => {
@@ -71,7 +92,7 @@ export function ProjectDocumentation({
       >
         {visual && (
           <a
-            href={path(guide.name, "html")}
+            href={guide.url ?? path(guide.name, "html")}
             target="_blank"
             rel="noopener noreferrer"
             aria-label={`Preview ${guide.title}`}
@@ -97,24 +118,31 @@ export function ProjectDocumentation({
           </Heading>
           <p className="text-slate-400 mb-7 leading-relaxed text-sm">
             {guide.description}
+            {guide.sources?.map(source => (
+              <span key={source.url}>
+                {" "}Current source: <a href={source.url} target="_blank" rel="noopener noreferrer" className="underline underline-offset-4">{source.title}</a>.
+              </span>
+            ))}
           </p>
           <div className="mt-auto flex flex-wrap gap-3">
             <a
-              href={path(guide.name, "html")}
+              href={guide.url ?? path(guide.name, "html")}
               target="_blank"
               rel="noopener noreferrer"
               className="flex-1 inline-flex items-center justify-center px-4 py-3 bg-slate-700/50 font-bold rounded-xl hover:bg-slate-600"
             >
-              View
+              {guide.url ? "Read source guide" : "View"}
             </a>
-            <a
-              href={path(guide.name, "pdf")}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex-1 inline-flex items-center justify-center px-4 py-3 bg-slate-700/30 font-bold rounded-xl hover:bg-slate-600"
-            >
-              PDF
-            </a>
+            {!guide.url && (
+              <a
+                href={path(guide.name, "pdf")}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1 inline-flex items-center justify-center px-4 py-3 bg-slate-700/30 font-bold rounded-xl hover:bg-slate-600"
+              >
+                PDF
+              </a>
+            )}
           </div>
         </div>
       </article>
@@ -141,25 +169,30 @@ export function ProjectDocumentation({
               {project} Documentation
             </h1>
             <p className="text-xl text-slate-400 max-w-3xl mx-auto">
-              {description}
+              {description} {currentStatus}
             </p>
           </div>
         </header>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+          {guides.length === 0 && (
+            <h2 className="text-2xl font-bold mb-3">Canonical engineering guides</h2>
+          )}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {guides.map(guide => card(guide))}
+            {displayedGuides.map(guide => card(guide))}
           </div>
-          <section className="mt-12" aria-labelledby="operational-guides">
-            <h2 id="operational-guides" className="text-2xl font-bold mb-3">
-              Operational Guides
-            </h2>
-            <p className="text-slate-400 mb-6">
-              Explore deployment and system flows as visual guides.
-            </p>
-            <div className="grid md:grid-cols-2 gap-8">
-              {operationalGuides.map(guide => card(guide, true))}
-            </div>
-          </section>
+          {guides.length > 0 && (
+            <section className="mt-12" aria-labelledby="operational-guides">
+              <h2 id="operational-guides" className="text-2xl font-bold mb-3">
+                Operational Guides
+              </h2>
+              <p className="text-slate-400 mb-6">
+                Explore deployment and system flows as rendered HTML/PDF reference snapshots. The current source guides describe subsequent changes.
+              </p>
+              <div className="grid md:grid-cols-2 gap-8">
+                {operationalGuides.map(guide => card(guide, true))}
+              </div>
+            </section>
+          )}
           <section
             className="mt-16 p-4 sm:p-8 rounded-2xl bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700/50"
             aria-labelledby="system-architecture"
@@ -171,15 +204,15 @@ export function ProjectDocumentation({
               System Architecture
             </h2>
             <p className="text-slate-400 mb-8 text-center">
-              Current hosting, application services, and external data
-              boundaries.
+              Application services, integration paths, and external data boundaries.
+              Source documentation distinguishes software candidates from verified deployments.
             </p>
             <div className="rounded-2xl overflow-hidden border border-slate-700/50 bg-slate-900 p-3 sm:p-6">
               <ArchitectureDiagram
-                path={`docs/${directory}/architecture-1.svg`}
-                alt={`${project} Architecture`}
-                width={1200}
-                height={800}
+                path={currentArchitecture?.path ?? `docs/${directory}/architecture-1.svg`}
+                alt={currentArchitecture?.alt ?? `${project} Architecture`}
+                width={currentArchitecture?.width ?? 1200}
+                height={currentArchitecture?.height ?? 800}
               />
             </div>
           </section>

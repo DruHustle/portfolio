@@ -66,9 +66,10 @@ describe("Deployment HTTP contracts", () => {
         data: {
           json: {
             projects: [
-              { id: "imsop" },
+              { id: "smart-logistics" },
+              { id: "smart-farmer" },
               { id: "sap-btp-ai-hub" },
-              { id: "smart-factory-iot" },
+              { id: "smart-factory" },
             ],
           },
         },

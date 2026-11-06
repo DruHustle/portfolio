@@ -30,11 +30,11 @@ export interface Project {
 
 export const projects: Project[] = [
   {
-    id: "smart-factory-iot",
+    id: "smart-factory",
     title: "Smart Factory",
     subtitle: "Digital Twins, Industrial Networks & Operations",
     description:
-      "Interactive 3D factory layouts and equipment inspection, OPC UA FX/TSN diagnostics, AAS lifecycle, source-aware telemetry, OT security and operational investigations.",
+      "Interactive factory digital twins, telemetry evidence, OT cybersecurity and AAS asset lifecycle, with a Node-RED/Python edge candidate and FX/TSN diagnostics.",
     tags: [
       { label: "React (Vite)", color: "cyan" },
       { label: ".NET 10", color: "cyan" },
@@ -58,11 +58,11 @@ export const projects: Project[] = [
     },
   },
   {
-    id: "imsop",
+    id: "smart-logistics",
     title: "Smart Logistics",
     subtitle: "Supply Chain Visibility, Exceptions & Purchasing",
     description:
-      "Shipment visibility, durable exception review, purchase orders and warehouse receiving, with scoped analytics, maps, signed logistics intake and record-grounded assistance.",
+      "Shipment and warehouse operations, audit-ready exception handling, purchasing and fleet/GPS sensor integration candidates with source-aware analysis.",
     tags: [
       { label: "React 19", color: "purple" },
       { label: "Node.js", color: "purple" },
@@ -78,6 +78,27 @@ export const projects: Project[] = [
     gradient: {
       from: "from-purple-500",
       to: "to-indigo-600",
+    },
+  },
+  {
+    id: "smart-farmer",
+    title: "Smart Farmer",
+    subtitle: "Connected Agriculture, Livestock & Rural Commerce",
+    description:
+      "Offline-first crop and livestock operations, irrigated equipment, private cameras, marketplace and machinery hire across independent mobile and web apps.",
+    tags: [
+      { label: "React Native", color: "green" },
+      { label: "Node.js", color: "green" },
+      { label: "PostgreSQL", color: "green" },
+      { label: "MQTT / Modbus", color: "green" },
+      { label: "ONVIF", color: "green" },
+      { label: "Offline sync", color: "green" },
+      { label: "iOS / Android", color: "green" },
+    ],
+    link: "/projects/smart-farmer",
+    gradient: {
+      from: "from-emerald-500",
+      to: "to-green-700",
     },
   },
   {
@@ -107,7 +128,8 @@ export const projects: Project[] = [
  * Follows Open/Closed Principle: Can be extended with caching or API calls
  */
 export function getProjectById(id: string): Project | undefined {
-  return projects.find((project) => project.id === id);
+  const canonicalId = id === "imsop" ? "smart-logistics" : id === "smart-factory-iot" ? "smart-factory" : id;
+  return projects.find((project) => project.id === canonicalId);
 }
 
 /**

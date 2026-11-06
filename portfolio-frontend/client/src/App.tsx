@@ -10,6 +10,8 @@ import Home from "./pages/Home";
 import NotFound from "./pages/NotFound";
 
 const IMSOPDetail = lazy(() => import("./pages/IMSOPDetail"));
+const SmartFarmerDetail = lazy(() => import("./pages/SmartFarmerDetail"));
+const SmartFarmerDocumentation = lazy(() => import("./pages/SmartFarmerDocumentation"));
 const LearningHubDetail = lazy(() => import("./pages/LearningHubDetail"));
 const SmartFactoryIoTDetail = lazy(
   () => import("./pages/SmartFactoryIoTDetail")
@@ -23,6 +25,8 @@ const AnalyticsPage = lazy(() => import("./pages/AnalyticsPage"));
 const titles: Record<string, string> = {
   "/": "Andrew Gotora | Senior Industrial Software & Digitalization Engineer",
   "/analytics": "Analytics | Andrew Gotora",
+  "/projects/smart-farmer": "Smart Farmer | Andrew Gotora",
+  "/projects/smart-farmer/documentation": "Smart Farmer Documentation | Andrew Gotora",
   "/projects/smart-logistics": "Smart Logistics | Andrew Gotora",
   "/projects/smart-logistics/documentation":
     "Smart Logistics Documentation | Andrew Gotora",
@@ -92,6 +96,8 @@ function AppRouter() {
             <Switch>
               <Route path="/" component={Home} />
               <Route path="/analytics" component={AnalyticsPage} />
+              <Route path="/projects/smart-farmer" component={SmartFarmerDetail} />
+              <Route path="/projects/smart-farmer/documentation" component={SmartFarmerDocumentation} />
               <Route path="/projects/imsop">
                 <Redirect to="/projects/smart-logistics" replace />
               </Route>

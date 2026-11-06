@@ -1,5 +1,6 @@
 import { imsopProject } from "@/data/imsop";
 import { smartFactoryProject } from "@/data/smartFactory";
+import { smartFarmerProject } from "@/data/smartFarmer";
 import type { LucideIcon } from "lucide-react";
 
 /**
@@ -58,8 +59,11 @@ export class ProjectService {
   static getProjectById(projectId: string): ProjectData | null {
     const projects: Record<string, ProjectData> = {
       imsop: this.getIMSOPProject(),
+      'smart-logistics': this.getIMSOPProject(),
       'sap-btp-ai-hub': this.getSAPBTPProject(),
       'smart-factory-iot': this.getSmartFactoryIoTProject(),
+      'smart-factory': this.getSmartFactoryIoTProject(),
+      'smart-farmer': smartFarmerProject,
     };
 
     return Object.hasOwn(projects, projectId) ? projects[projectId] : null;
