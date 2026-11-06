@@ -1,0 +1,43 @@
+name: Repair reference Word diagrams
+on:
+  pull_request:
+    types: [opened, synchronize]
+    branches: [main]
+permissions:
+  contents: write
+jobs:
+  repair:
+    if: github.repository == 'DruHustle/portfolio' && github.event.pull_request.head.repo.full_name == github.repository && github.head_ref == 'content/factory-source-audit-20261106'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: content/factory-source-audit-20261106
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413
+        with:
+          package_json_file: portfolio-frontend/package.json
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version: 22
+      - name: Render compatible Word diagrams
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y pandoc
+          cd portfolio-frontend
+          pnpm install --frozen-lockfile
+          pnpm exec playwright install --with-deps chromium
+          node scripts/repair-reference-docx.mjs
+      - name: Commit only the reviewed reference editions
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add portfolio-frontend/client/public/docs/smartfactoryiot/*.docx portfolio-frontend/client/src/data/smartFactory.ts
+          git diff --cached --check
+          git commit -m 'Render Word reference diagrams compatibly and clarify identity validation'
+          git push origin HEAD:content/factory-source-audit-20261106
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: reviewed-word-editions
+          path: portfolio-frontend/client/public/docs/smartfactoryiot/*.docx
+          retention-days: 7
