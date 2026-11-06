@@ -2,11 +2,15 @@ name: Generate reviewed content assets
 
 on:
   pull_request:
-    types: [opened]
+    types: [opened, synchronize]
     branches: [main]
 
 permissions:
   contents: write
+
+concurrency:
+  group: reviewed-content-assets
+  cancel-in-progress: true
 
 jobs:
   generate:
@@ -33,8 +37,10 @@ jobs:
           pnpm --dir portfolio-frontend install --frozen-lockfile
           cd portfolio-frontend
           pnpm exec playwright install --with-deps chromium
-      - name: Apply source-pinned content review
-        run: python3 scripts/refresh-reviewed-content.py
+      - name: Apply source-pinned content review and owner clarification
+        run: |
+          python3 scripts/refresh-reviewed-content.py
+          python3 scripts/finalize-reviewed-content.py
       - name: Generate architecture and current guide editions
         working-directory: portfolio-frontend
         run: |
@@ -45,7 +51,8 @@ jobs:
             cp "/tmp/$name.docx" "client/public/docs/smartfactoryiot/$name.docx"
           done
           for pdf in client/public/docs/smartfactoryiot/*.pdf; do
-            pdftotext "$pdf" - | grep -qi CloudAMQP && exit 1 || test "${PIPESTATUS[0]}" -eq 0
+            pdftotext "$pdf" /tmp/rendered-guide.txt
+            if grep -qi CloudAMQP /tmp/rendered-guide.txt; then echo "Obsolete provider in $pdf"; exit 1; fi
           done
       - name: Commit only reviewed source and generated assets
         run: |
@@ -53,7 +60,7 @@ jobs:
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add docs/portfolio-content-review.json portfolio-frontend/client portfolio-frontend/design portfolio-frontend/scripts portfolio-frontend/e2e/content-preservation.spec.ts
           git diff --cached --check
-          git commit -m 'Correct Mosquitto and Python roles from pinned project documentation; regenerate guides'
+          git commit -m 'Correct Mosquitto and Python roles, active AI development, and source-pinned guides'
           git push origin HEAD:content/factory-source-audit-20261106
       - name: Save generation evidence
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
